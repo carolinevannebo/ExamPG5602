@@ -17,8 +17,6 @@
 		E4EAFC4A2B023AF80095D10B /* RatatouilleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC492B023AF80095D10B /* RatatouilleUITests.swift */; };
 		E4EAFC4C2B023AF80095D10B /* RatatouilleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC4B2B023AF80095D10B /* RatatouilleUITestsLaunchTests.swift */; };
 		E4EAFC5E2B0243CF0095D10B /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC5D2B0243CF0095D10B /* APIClient.swift */; };
-		E4EAFC672B0259A50095D10B /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC5F2B0259A50095D10B /* Category+CoreDataClass.swift */; };
-		E4EAFC682B0259A50095D10B /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC602B0259A50095D10B /* Category+CoreDataProperties.swift */; };
 		E4EAFC692B0259A50095D10B /* Meal+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC612B0259A50095D10B /* Meal+CoreDataClass.swift */; };
 		E4EAFC6A2B0259A50095D10B /* Meal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC622B0259A50095D10B /* Meal+CoreDataProperties.swift */; };
 		E4EAFC6B2B0259A50095D10B /* Ingredient+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC632B0259A50095D10B /* Ingredient+CoreDataClass.swift */; };
@@ -26,6 +24,8 @@
 		E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC652B0259A50095D10B /* Area+CoreDataClass.swift */; };
 		E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC662B0259A50095D10B /* Area+CoreDataProperties.swift */; };
 		E4EAFC712B025FF60095D10B /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC702B025FF60095D10B /* DataController.swift */; };
+		E4EAFC762B02718C0095D10B /* Category+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC742B02718C0095D10B /* Category+CoreDataClass.swift */; };
+		E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC752B02718C0095D10B /* Category+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +59,6 @@
 		E4EAFC492B023AF80095D10B /* RatatouilleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleUITests.swift; sourceTree = "<group>"; };
 		E4EAFC4B2B023AF80095D10B /* RatatouilleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E4EAFC5D2B0243CF0095D10B /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		E4EAFC5F2B0259A50095D10B /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E4EAFC602B0259A50095D10B /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E4EAFC612B0259A50095D10B /* Meal+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meal+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E4EAFC622B0259A50095D10B /* Meal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E4EAFC632B0259A50095D10B /* Ingredient+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ingredient+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -68,6 +66,8 @@
 		E4EAFC652B0259A50095D10B /* Area+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Area+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E4EAFC662B0259A50095D10B /* Area+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Area+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E4EAFC702B025FF60095D10B /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		E4EAFC742B02718C0095D10B /* Category+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E4EAFC752B02718C0095D10B /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,8 +199,8 @@
 		E4EAFC6F2B0259B70095D10B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				E4EAFC5F2B0259A50095D10B /* Category+CoreDataClass.swift */,
-				E4EAFC602B0259A50095D10B /* Category+CoreDataProperties.swift */,
+				E4EAFC742B02718C0095D10B /* Category+CoreDataClass.swift */,
+				E4EAFC752B02718C0095D10B /* Category+CoreDataProperties.swift */,
 				E4EAFC612B0259A50095D10B /* Meal+CoreDataClass.swift */,
 				E4EAFC622B0259A50095D10B /* Meal+CoreDataProperties.swift */,
 				E4EAFC632B0259A50095D10B /* Ingredient+CoreDataClass.swift */,
@@ -342,13 +342,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4EAFC6C2B0259A50095D10B /* Ingredient+CoreDataProperties.swift in Sources */,
-				E4EAFC682B0259A50095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E4EAFC332B023AF80095D10B /* Persistence.swift in Sources */,
-				E4EAFC672B0259A50095D10B /* Category+CoreDataClass.swift in Sources */,
 				E4EAFC2C2B023AF10095D10B /* ContentView.swift in Sources */,
+				E4EAFC762B02718C0095D10B /* Category+CoreDataClass.swift in Sources */,
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E4EAFC6A2B0259A50095D10B /* Meal+CoreDataProperties.swift in Sources */,
 				E4EAFC712B025FF60095D10B /* DataController.swift in Sources */,
+				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E4EAFC5E2B0243CF0095D10B /* APIClient.swift in Sources */,
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,
 				E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */,

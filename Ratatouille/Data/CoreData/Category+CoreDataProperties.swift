@@ -17,6 +17,9 @@ extension Category {
     }
 
     @NSManaged public var name: String?
+    @NSManaged public var id: String?
+    @NSManaged public var image: String?
+    @NSManaged public var information: String?
     @NSManaged public var meals: NSSet?
 
 }

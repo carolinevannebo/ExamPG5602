@@ -24,8 +24,8 @@ public class Ingredient: NSManagedObject, Decodable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let id = try container.decodeIfPresent(String.self, forKey: .idIngredient)
-        let name = try container.decodeIfPresent(String.self, forKey: .strIngredient)
+        let id = try container.decode(String.self, forKey: .idIngredient)
+        let name = try container.decode(String.self, forKey: .strIngredient)
         let information = try container.decodeIfPresent(String.self, forKey: .strDescription)
         
         let dataController = DataController.shared
@@ -36,5 +36,8 @@ public class Ingredient: NSManagedObject, Decodable {
         self.name = name
         self.information = information
     }
+}
 
+struct IngredientsWrapper: Decodable {
+    let meals: [Ingredient] // Has to be meals, to recognize the field in the API
 }
