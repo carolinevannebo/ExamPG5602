@@ -40,6 +40,11 @@ struct ContentView: View {
             }
             Text("Select an item")
         }
+        .onAppear {
+            Task {
+                await APIClient.test()
+            }
+        }
     }
 
     private func addItem() {
