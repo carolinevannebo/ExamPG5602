@@ -20,6 +20,7 @@ extension Meal {
     @NSManaged public var name: String?
     @NSManaged public var instructions: String?
     @NSManaged public var image: String?
+    @NSManaged public var measurements: String?
     @NSManaged public var area: Area?
     @NSManaged public var category: Category?
     @NSManaged public var ingredients: NSSet?

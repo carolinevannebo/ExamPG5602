@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 class APIClient: ObservableObject {
     private static var searchByNameEndpoint = "https://www.themealdb.com/api/json/v1/1/search.php?s=" // Search meal by name
@@ -22,6 +23,87 @@ class APIClient: ObservableObject {
     private static var searchByIngredientEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?i=" // Filter by main ingredient
     private static var searchByCategoryEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?c=" // Filter by category
     private static var searchByAreaEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?a=" // Filter by area
+    
+    static func saveAreas() async -> Void {
+        do {
+            let json = try await getJson(endpoint: listAreasEndpoint)
+            let areas = parseJsonToAreas(json)
+            
+            let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
+            
+            for areaData in areas {
+                guard let name = areaData.name else {
+                    print("Skipping area due to missing data")
+                    continue
+                }
+                
+                // Fetch or create Area
+                let areaFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
+                areaFetchRequest.predicate = NSPredicate(format: "name == %@", name)
+                
+                if let fetchedArea = try managedObjectContext.fetch(areaFetchRequest).first {
+                    // Area already exists, update it if needed
+                    fetchedArea.name = name
+                    print("Area already exists: \(fetchedArea.name ?? "")")
+                } else {
+                    // Create a new Area
+                    let newArea = Area(context: managedObjectContext)
+                    newArea.name = name
+                    print("New area created: \(newArea.name ?? "")")
+                }
+            }
+            
+            // Save changes to Core Data
+            try managedObjectContext.save()
+            
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func saveCategories() async -> Void {
+        do {
+            let json = try await getJson(endpoint: listCategoriesEndpoint)
+            let categories = parseJsonToCategories(json)
+            
+            let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
+            
+            for categoryData in categories {
+                guard let id = categoryData.id, let name = categoryData.name else {
+                    print("Skipping category due to missing data")
+                    continue
+                }
+                        
+                // Fetch or create Category
+                let categoryFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+                categoryFetchRequest.predicate = NSPredicate(format: "id == %@", id)
+                
+                if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
+                    // Category already exists, update it if needed
+                    fetchedCategory.name = name
+                    fetchedCategory.image = categoryData.image
+                    fetchedCategory.information = categoryData.information
+                            
+                    print("Category already exists: \(fetchedCategory.name ?? "")")
+                } else {
+                    // Create a new Category
+                    let newCategory = Category(context: managedObjectContext)
+                    newCategory.id = id
+                    newCategory.name = name
+                    newCategory.image = categoryData.image
+                    newCategory.information = categoryData.information
+                            
+                    print("New category created: \(newCategory.name ?? "")")
+                }
+            }
+                    
+            // Save changes to Core Data
+            try managedObjectContext.save()
+            
+        } catch let error {
+            print(error)
+        }
+    }
     
     private static func getJson(endpoint: String) async throws -> Data {
         guard let url = URL(string: endpoint) else {
@@ -102,7 +184,26 @@ class APIClient: ObservableObject {
         return []
     }
     
-    static func test() async {
+    private static func parseJsonToMeal(_ json: Data) -> [Meal] {
+        do {
+//            if let jsonString = String(data: json, encoding: .utf8) {
+//                print("Raw JSON Data: \(jsonString)")
+//            }
+            
+            let mealWrapper = try JSONDecoder().decode(MealsWrapper.self, from: json)
+            
+            if !mealWrapper.meals.isEmpty {
+                return mealWrapper.meals
+            } else {
+                throw APIClientError.parseError
+            }
+        } catch let error {
+            print(error)
+        }
+        return []
+    }
+    
+    static func test() async { // TODO: write actual tests for this
         do {
 //            let json = try await getJson(endpoint: listIngredientsEndpoint)
 //            let ingredients = parseJsonToIngredients(json)
@@ -120,13 +221,38 @@ class APIClient: ObservableObject {
 //                print("-------------------")
 //            }
             
-            let json = try await getJson(endpoint: listCategoriesEndpoint)
-            let categories = parseJsonToCategories(json)
-            categories.forEach { category in
-                print("ID: \(category.id ?? "N/A")")
-                print("Name: \(category.name ?? "N/A")")
-                print("Description: \(category.information ?? "N/A")")
-                print("Image link: \(category.image ?? "N/A")")
+//            let json = try await getJson(endpoint: listCategoriesEndpoint)
+//            let categories = parseJsonToCategories(json)
+//            categories.forEach { category in
+//                print("ID: \(category.id ?? "N/A")")
+//                print("Name: \(category.name ?? "N/A")")
+//                print("Description: \(category.information ?? "N/A")")
+//                print("Image link: \(category.image ?? "N/A")")
+//                print("-------------------")
+//            }
+            
+            let json = try await getJson(endpoint: searchRandomEndpoint)
+            //let jsonString = String(data: json, encoding: .utf8)
+            //print("Raw JSON Data: \(jsonString ?? "nil")")
+            
+            let meals = parseJsonToMeal(json)
+            meals.forEach { meal in
+                print("id: \(meal.id ?? "N/A")")
+                print("name: \(meal.name ?? "N/A")")
+                print("instructions: \(meal.instructions ?? "N/A")")
+                print("image link: \(meal.image ?? "N/A")")
+                //print("measurements: \(meal.measurements ?? "N/A")")
+                print("area: \(meal.area?.name ?? "N/A")")
+                print("category: \(meal.category?.name ?? "N/A")")
+                
+//                if let ingredients = meal.ingredients as? Set<Ingredient> {
+//                    print("ingredients:")
+//                    for ingredient in ingredients {
+//                        print("  - \(ingredient.name ?? "N/A") (\(ingredient.measurement ?? "N/A"))")
+//                    }
+//                } else {
+//                    print("ingredients: N/A")
+//                }
                 print("-------------------")
             }
             
