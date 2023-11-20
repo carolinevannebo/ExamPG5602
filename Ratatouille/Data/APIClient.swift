@@ -241,18 +241,39 @@ class APIClient: ObservableObject {
                 print("name: \(meal.name ?? "N/A")")
                 print("instructions: \(meal.instructions ?? "N/A")")
                 print("image link: \(meal.image ?? "N/A")")
-                //print("measurements: \(meal.measurements ?? "N/A")")
                 print("area: \(meal.area?.name ?? "N/A")")
                 print("category: \(meal.category?.name ?? "N/A")")
                 
-//                if let ingredients = meal.ingredients as? Set<Ingredient> {
-//                    print("ingredients:")
-//                    for ingredient in ingredients {
-//                        print("  - \(ingredient.name ?? "N/A") (\(ingredient.measurement ?? "N/A"))")
-//                    }
-//                } else {
-//                    print("ingredients: N/A")
-//                }
+                if let ingredients = meal.ingredients,
+                   let measurements = meal.measurements {
+                        
+                    for (ingredient, measurement) in zip(ingredients, measurements) {
+                        print("\(String(describing: ingredient.name)) \(String(describing: measurement.amount))")
+                    }
+                }
+                
+                //EXPECTED OUTPUT
+//                Meal requires Optional("320g") Optional("Spaghetti")
+//                Meal requires Optional("6") Optional("Egg Yolks")
+//                Meal requires Optional("As required") Optional("Salt")
+//                Meal requires Optional("150g") Optional("Bacon")
+//                Meal requires Optional("50g") Optional("Pecorino")
+//                Meal requires Optional("As required") Optional("Black Pepper")
+                
+                //ACTUAL OUTPUT
+//            Ingredient: Black Pepper
+//            Measurement: 320g
+//            Ingredient: Salt
+//            Measurement: 50g
+//            Ingredient: Bacon
+//            Measurement: As required
+//            Ingredient:
+//            Measurement: 150g
+//            Ingredient: Spaghetti
+//            Measurement:
+//            Ingredient: Pecorino
+//            Measurement: 6
+                
                 print("-------------------")
             }
             

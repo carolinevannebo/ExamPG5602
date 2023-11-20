@@ -43,8 +43,8 @@ struct ContentView: View {
         .onAppear {
             Task {
                 //Testing API
-                await APIClient.saveCategories()
-                await APIClient.saveAreas()
+                //await APIClient.saveCategories()
+                //await APIClient.saveAreas()
                 await APIClient.test()
             }
         }

@@ -18,6 +18,24 @@ extension Measurement {
 
     @NSManaged public var amount: String?
     @NSManaged public var ingredient: Ingredient?
+    @NSManaged public var meals: NSSet?
+
+}
+
+// MARK: Generated accessors for meals
+extension Measurement {
+
+    @objc(addMealsObject:)
+    @NSManaged public func addToMeals(_ value: Meal)
+
+    @objc(removeMealsObject:)
+    @NSManaged public func removeFromMeals(_ value: Meal)
+
+    @objc(addMeals:)
+    @NSManaged public func addToMeals(_ values: NSSet)
+
+    @objc(removeMeals:)
+    @NSManaged public func removeFromMeals(_ values: NSSet)
 
 }
 

@@ -22,8 +22,8 @@ extension Meal {
     @NSManaged public var name: String?
     @NSManaged public var area: Area?
     @NSManaged public var category: Category?
-    @NSManaged public var ingredients: NSSet?
-    @NSManaged public var measurements: NSSet?
+    @NSManaged public var ingredients: Set<Ingredient>?
+    @NSManaged public var measurements: Set<Measurement>?
 
 }
 
