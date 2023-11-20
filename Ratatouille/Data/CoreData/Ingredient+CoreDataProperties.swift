@@ -2,7 +2,7 @@
 //  Ingredient+CoreDataProperties.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 13/11/2023.
+//  Created by Caroline Vannebo on 20/11/2023.
 //
 //
 
@@ -17,9 +17,8 @@ extension Ingredient {
     }
 
     @NSManaged public var id: String?
-    @NSManaged public var name: String?
     @NSManaged public var information: String?
-    @NSManaged public var measurement: String?
+    @NSManaged public var name: String?
     @NSManaged public var meals: NSSet?
 
 }

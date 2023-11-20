@@ -54,7 +54,7 @@ class APIClient: ObservableObject {
             }
             
             // Save changes to Core Data
-            try managedObjectContext.save()
+            try managedObjectContext.save() // TODO: den crasher av og til her, finn ut av det
             
         } catch let error {
             print(error)

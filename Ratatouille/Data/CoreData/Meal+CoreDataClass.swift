@@ -19,39 +19,34 @@ public class Meal: NSManagedObject, Decodable {
         case strArea
         case strInstructions
         case strMealThumb
-        case strIngredient = "strIngredient"
-        case strMeasure = "strMeasure"
-        
-        init?(stringValue: String) { self.init(rawValue: stringValue) }
-        var stringValue: String { return rawValue }
-        init?(intValue: Int) { return nil }
     }
     
-//    struct DynamicKeys: CodingKey, Hashable {
-//        var stringValue: String
-//
-//        init(stringValue: String) {
-//            self.stringValue = stringValue
-//        }
-//
-//        var intValue: Int? {
-//            return nil
-//        }
-//
-//        init?(intValue: Int) {
-//            return nil
-//        }
-//    }
+    struct DynamicCodingKeys: CodingKey {
+        var stringValue: String
+
+        init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+
+        var intValue: Int? {
+            return nil
+        }
+
+        init?(intValue: Int) {
+            return nil
+        }
+    }
     
-    
-//    enum DynamicCodingKeys: String, CodingKey {
-//        case strIngredient = "strIngredient"
-//        case strMeasure = "strMeasure"
-//
-////        init?(stringValue: String) { self.init(rawValue: stringValue) }
-////        var stringValue: String { return rawValue }
-////        init?(intValue: Int) { return nil }
-//    }
+    static func makeDynamicKeys() -> ([String], [String]) {
+        var dynamicIngredientKeys: [String] = []
+        var dynamicMeasureKeys: [String] = []
+
+        for i in 0..<20 {
+            dynamicIngredientKeys.append("strIngredient\(i+1)")
+            dynamicMeasureKeys.append("strMeasure\(i+1)")
+        }
+        return (dynamicIngredientKeys, dynamicMeasureKeys)
+    }
     
     private func fetchOrCreateEntity<T: NSManagedObject>(
         type: T.Type,
@@ -84,67 +79,10 @@ public class Meal: NSManagedObject, Decodable {
         }
     }
     
-//    private func decodeDynamicValues(
-//        container: KeyedDecodingContainer<CodingKeys>,
-//        ingredientKey: CodingKeys,
-//        measurementKey: CodingKeys
-//    ) throws -> ([String], [String]) {
-//        do {
-//            print("About to decode dynamically into dictionaries")
-//            // Decode dynamically into dictionaries
-//            let ingredientsDict = try container.decode([String: String?].self, forKey: ingredientKey)
-//
-//            let measurementsDict = try container.decode([String: String?].self, forKey: measurementKey)
-//
-//            print("About to filter keys that match the pattern strIngredient + measurements")
-//            // Filter keys that match the pattern "strIngredient\d+" + measurements
-//            let dynamicIngredientKeys = ingredientsDict.keys.filter { $0.hasPrefix("strIngredient") }
-//            let dynamicMeasurementKeys = measurementsDict.keys.filter { $0.hasPrefix("strMeasure") }
-//
-//            print("About to sort keys based on the numeric part")
-//            // Sort keys based on the numeric part
-//            let sortedDynamicIngredientKeys = dynamicIngredientKeys.sorted { (key1, key2) in
-//                Int(key1.suffix(from: key1.index(after: key1.firstIndex(of: "t")!))) ?? 0 <
-//                    Int(key2.suffix(from: key2.index(after: key2.firstIndex(of: "t")!))) ?? 0
-//            }
-//
-//            let sortedDynamicMeasurementKeys = dynamicMeasurementKeys.sorted { (key1, key2) in
-//                Int(key1.suffix(from: key1.index(after: key1.lastIndex(of: "e")!))) ?? 0 <
-//                    Int(key2.suffix(from: key2.index(after: key2.lastIndex(of: "e")!))) ?? 0
-//            }
-//
-//            print("About to extract values in order")
-//            // Extract values in order
-//            var dynamicIngredients: [String] = []
-//            var dynamicMeasurements: [String] = []
-//
-//            print("About to iterate keys to append to arrays")
-//            for key in sortedDynamicIngredientKeys {
-//                // Append ingredient to the array, use an empty string if it's nil or NSNull
-//                if let ingredient = ingredientsDict[key], ingredient != nil {
-//                    dynamicIngredients.append(ingredient!)
-//                }
-//            }
-//
-//            for key in sortedDynamicMeasurementKeys {
-//                // Append measurement to the array, use an empty string if it's nil or NSNull/
-//                if let measurement = measurementsDict[key], measurement != nil {
-//                    dynamicMeasurements.append(measurement!)
-//                }
-//            }
-//
-//            print("About to return")
-//            return (dynamicIngredients, dynamicMeasurements)
-//        } catch {
-//            print("Error decoding dynamic values: \(error)")
-//            return ([], [])
-//        }
-//    }
-    
     private func decodeDynamicValues(
-        container: KeyedDecodingContainer<CodingKeys>,
-        ingredientKey: String,
-        measurementKey: String
+        container: KeyedDecodingContainer<DynamicCodingKeys>,
+        ingredientKeys: [String],
+        measurementKeys: [String]
     ) throws -> ([String], [String]) {
         do {
             
@@ -152,43 +90,34 @@ public class Meal: NSManagedObject, Decodable {
             var dynamicIngredients: [String] = []
             var dynamicMeasurements: [String] = []
             
-            for i in 1...20 {
+            let count = min(ingredientKeys.count, measurementKeys.count) // only iterate the present values
+            for i in 0..<count {
                 print("Declaring keys: ")
                 
-                let currentIngredientKey = "\(ingredientKey)\(i)"
-                let currentMeasurementKey = "\(measurementKey)\(i)"
+                let currentIngredientKey = ingredientKeys[i]
+                let currentMeasurementKey = measurementKeys[i]
 
-                print("We want: \(currentIngredientKey)")
-                print("We want: \(currentMeasurementKey)")
+                print("We got: \(currentIngredientKey)")
+                print("We got: \(currentMeasurementKey)")
                 
-                print("About to decode \(i)")
+                print("About to decode \(i+1)")
                 
                 do {
-                    //nil
-                    let ingredientCodingKey = CodingKeys(stringValue: currentIngredientKey) ?? .strIngredient
-                    let measurementCodingKey = CodingKeys(stringValue: currentMeasurementKey) ?? .strMeasure
-
-                    print("We got: \(ingredientCodingKey)")
-                    print("We got: \(String(describing: measurementCodingKey.stringValue))")
-                    
-                    if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientCodingKey), //CRASHING HERE // ingredientCodingKey
-                       let measurement = try container.decodeIfPresent(String.self, forKey: measurementCodingKey) { // measurementCodingKey
+                    let ingredientKey = DynamicCodingKeys(stringValue: currentIngredientKey)
+                    let measurementKey = DynamicCodingKeys(stringValue: currentMeasurementKey)
                         
-                        // Append ingredient and measurement to your arrays if they are not nil
-                        print("About to append values to arrays if they are not nil")
+                    if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
+                       let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
+                        // TODO: make arrays of their entities
                         dynamicIngredients.append(ingredient)
                         dynamicMeasurements.append(measurement)
-                      
-                    } else {
-                        print("ingredient and/or measurement cant be decoded")
                     }
+                    
                 } catch {
-                    print("Something went wrong")
                     throw error
                 }
-            }
+            } // end of loop
 
-            print("About to return")
             return (dynamicIngredients, dynamicMeasurements)
         } catch {
             print("Error decoding dynamic values: \(error)")
@@ -225,89 +154,26 @@ public class Meal: NSManagedObject, Decodable {
             self.category = try fetchOrCreateEntity(type: Category.self, attributeName: "name", attributeValue: category, attributeName2: nil,    attributeValue2: nil, context: managedObjectContext)
             self.area = try fetchOrCreateEntity(type: Area.self, attributeName: "name", attributeValue: area, attributeName2: nil, attributeValue2: nil, context: managedObjectContext)
             
-            print("About to attempt the headache")
-//            let (dynamicIngredients, dynamicMeasurements) = try decodeDynamicValues(
-//                container: container,
-//                ingredientKey: CodingKeys.strIngredient.stringValue,
-//                measurementKey: CodingKeys.strMeasure.stringValue
-//            )
+            let (dynamicIngredientKeys, dynamicMeasureKeys) = Meal.makeDynamicKeys()
+            let dynamicContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
             
-            // start of function
-            do {
-                
-                print("Declaring arrays")
-                var dynamicIngredients: [String] = []
-                var dynamicMeasurements: [String] = []
-                
-                for i in 1...20 {
-                    print("Declaring keys: ")
-                    
-                    let currentIngredientKey = "\(CodingKeys.strIngredient.stringValue)\(i)"
-                    let currentMeasurementKey = "\(CodingKeys.strMeasure.stringValue)\(i)"
-
-                    print("We want: \(currentIngredientKey)")
-                    print("We want: \(currentMeasurementKey)")
-                    
-                    print("About to decode \(i)")
-                    
-                    do {
-                        //nil
-                        var ingredientCodingKey = CodingKeys(stringValue: currentIngredientKey) ?? CodingKeys.strIngredient.stringValue.appending(String(i)).codingKey
-                        var measurementCodingKey = CodingKeys(stringValue: currentMeasurementKey) ?? CodingKeys.strMeasure.stringValue.appending(String(i)).codingKey
-                        //?? .strMeasure
-
-                        print("We got: \(ingredientCodingKey.stringValue)")
-                        print("We got: \(measurementCodingKey.stringValue)")
-                        
-                        if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientCodingKey as! CodingKeys), // ingredientCodingKey
-                           let measurement = try container.decodeIfPresent(String.self, forKey: measurementCodingKey as! CodingKeys) { // measurementCodingKey
-                            
-                            // Append ingredient and measurement to your arrays if they are not nil
-                            print("About to append values to arrays if they are not nil")
-                            dynamicIngredients.append(ingredient)
-                            dynamicMeasurements.append(measurement)
-                          
-                        } else {
-                            print("ingredient and/or measurement cant be decoded")
-                        }
-                        
-                    } catch {
-                        print("Something went wrong")
-                        throw error
-                    }
-                }
-                
-                dynamicIngredients.isEmpty ? print("ingredients empty") : print("ingredients not empty")
-                guard dynamicIngredients.count == dynamicMeasurements.count else {
-                    throw DecodingError.dataCorruptedError(
-                        forKey: .strIngredient,
-                        in: container,
-                        debugDescription: "Mismatched number of ingredients and measurements."
-                    )
-                }
-
-            } catch {
-                print("Error decoding dynamic values: \(error)")
-            }
-            
-            // end of function
-            
-            //dynamicIngredients.isEmpty ? print("ingredients empty") : print("ingredients not empty")
+            let (dynamicIngredients, dynamicMeasurements) = try decodeDynamicValues(
+                container: dynamicContainer,
+                ingredientKeys: dynamicIngredientKeys.compactMap { $0 }, // compactMap filters out nil values :)
+                measurementKeys: dynamicMeasureKeys.compactMap { $0 }
+            )
             
             // Ensure there are the same number of ingredients and measurements
-//            guard dynamicIngredients.count == dynamicMeasurements.count else {
-//                throw DecodingError.dataCorruptedError(
-//                    forKey: .strIngredient,
-//                    in: container,
-//                    debugDescription: "Mismatched number of ingredients and measurements."
-//                )
-//            }
+            guard dynamicIngredients.count == dynamicMeasurements.count else {
+                throw MealErrors.ingredientMismatchError // TODO: errors
+            }
+            
+            print("Equal amount of ingredients and measurements :)")
 
-//            self.ingredients = NSSet(array: zip(dynamicIngredients, dynamicMeasurements).map { ingredient, measurement in
+//            self.ingredients = NSSet(array: dynamicIngredients.map { ingredient in
 //
 //                let ingredientEntity = Ingredient(context: managedObjectContext)
 //                ingredientEntity.name = ingredient
-//                //ingredientEntity.measurement = measurement hvor faen skal du????
 //                return ingredientEntity
 //            })
             
@@ -325,13 +191,8 @@ struct MealsWrapper: Decodable {
     let meals: [Meal]
 }
 
-//if let students = try container.decodeIfPresent([Student].self, forKey: .students)
-//        {
-//            self.students = NSSet(array: students)
-//            for student in students {
-//                student.school = self
-//            }
-//
-//        } else {
-//            self.students = NSSet()
-//        }
+enum MealErrors: Error {
+    case decodingError
+    case ingredientMismatchError
+    
+}
