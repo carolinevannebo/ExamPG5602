@@ -50,9 +50,9 @@ struct MealListView: View {
                 List {
                     ForEach(viewModel.meals) { meal in
                         NavigationLink {
-                            Text(meal.name ?? "N/A")
+                            Text(meal.name ?? "N/A") // DetailView
                         } label: {
-                            Text(meal.name ?? "N/A")
+                            MealItemView(meal: meal)
                         }
                     }
                 }

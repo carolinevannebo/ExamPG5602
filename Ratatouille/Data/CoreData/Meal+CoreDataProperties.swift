@@ -42,6 +42,41 @@ extension Meal {
 
 }
 
+extension Meal {
+    static func demoMeal() -> Meal {
+        let managedObjectContext = PersistenceController.shared.container.viewContext
+        
+        let demoMeal = Meal(context: managedObjectContext)
+        demoMeal.id = "1"
+        demoMeal.name = "Demo Meal"
+        demoMeal.instructions = "Demo Instructions"
+        demoMeal.image = "demo_image_url"
+        
+        // Assuming you have an Area and Category in your data model
+        let demoArea = Area(context: managedObjectContext)
+        demoArea.name = "Demo Area"
+        demoMeal.area = demoArea
+        
+        let demoCategory = Category(context: managedObjectContext)
+        demoCategory.id = "1"
+        demoCategory.name = "Demo Category"
+        demoCategory.image = "demo_category_image_url"
+        demoCategory.information = "Lorem ipsum category"
+        demoMeal.category = demoCategory
+        
+        // Add some ingredients (modify according to your Ingredient model)
+        let ingredient1 = Ingredient(context: managedObjectContext)
+        ingredient1.name = "Ingredient 1"
+        
+        let ingredient2 = Ingredient(context: managedObjectContext)
+        ingredient2.name = "Ingredient 2"
+        
+        demoMeal.addToIngredients(NSSet(array: [ingredient1, ingredient2]))
+        
+        return demoMeal
+    }
+}
+
 extension Meal : Identifiable {
 
 }

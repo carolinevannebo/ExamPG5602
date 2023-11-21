@@ -276,7 +276,7 @@ class APIClient: ObservableObject {
         do {
             let json = try await getJson(endpoint: searchRandomEndpoint)
             let meals = parseJsonToMeals(json)
-                
+
             if let meal = meals.first {
                 return .success(meal)
             } else {
@@ -289,23 +289,43 @@ class APIClient: ObservableObject {
         }
     }
     
+    static func isNumeric(_ input: String) -> Bool {
+        let numericRegex = "^[0-9]+$"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", numericRegex)
+        return predicate.evaluate(with: input)
+    }
+    
     static func getMeals(input: String) async -> Result<[Meal], APIClientError> {
         do {
             var searchString = ""
             
-            if input.count == 1 {
-                searchString = "\(searchByLetterEndpoint)\(input)" // 1 or more results
+            if isNumeric(input) { // searching by id
+                searchString = "\(searchByIdEndpoint)\(input)"
             } else {
-                searchString = "\(searchByNameEndpoint)\(input)" // 1 result
+                if input.count == 1 {
+                    searchString = "\(searchByLetterEndpoint)\(input)" // 1 or more results
+                } else {
+                    searchString = "\(searchByNameEndpoint)\(input)" // 1 result
+                }
             }
+            
             let json = try await getJson(endpoint: searchString)
             let meals = parseJsonToMeals(json)
             
-            if !meals.isEmpty {
-                return .success(meals)
-            } else {
+            if isNumeric(input) && meals.isEmpty {
+                return .failure(APIClientError.unMatchedId)
+            }
+            
+            if input.count >= 1 && meals.isEmpty {
+                return .failure(APIClientError.badInput)
+            }
+            
+            if meals.isEmpty {
                 return .failure(APIClientError.parseError)
             }
+            
+            return .success(meals)
+            
         } catch let error as APIClientError {
             return .failure(error)
         } catch {
@@ -405,7 +425,8 @@ class APIClient: ObservableObject {
         case serverError
         case parseError
         case failed(underlying: Error)
+        case badInput
+        case unMatchedId
         case unknown
     }
-    
 }

@@ -23,14 +23,26 @@ class SearchMeals: ICommand {
             let result = await APIClient.getMeals(input: input)
             
             switch result {
-                case .success(let meals):
-                    print("Got \(meals.count) meals")
-                    return meals
-                case .failure(let error):
-                    throw error
+                
+            case .success(let meals):
+                print("Got \(meals.count) meals")
+                return meals
+                
+            case .failure(let error):
+                switch error {
+                    case .badInput:
+                        print("No results for the provided input")
+                        throw error
+                    case .unMatchedId:
+                        print("No id matched search")
+                        throw error
+                    default:
+                        print("Unexpected error: \(error)")
+                        throw error
+                }
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Error: \(error)") // TODO: feilhåndtering med meldinger til UI
             return nil
         }
     }
@@ -39,11 +51,11 @@ class SearchMeals: ICommand {
 class SearchRandom: ICommand {
     typealias Input = Void
     typealias Output = Meal?
-    
+
     func execute(input: Void) async -> Output {
         do {
             let result = await APIClient.getRandomMeal()
-                
+
             switch result {
                 case .success(let meal):
                     print("Got meal: \(meal.name ?? "N/A")")
