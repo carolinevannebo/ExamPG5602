@@ -184,12 +184,8 @@ class APIClient: ObservableObject {
         return []
     }
     
-    private static func parseJsonToMeal(_ json: Data) -> [Meal] {
+    private static func parseJsonToMeals(_ json: Data) -> [Meal] {
         do {
-//            if let jsonString = String(data: json, encoding: .utf8) {
-//                print("Raw JSON Data: \(jsonString)")
-//            }
-            
             let mealWrapper = try JSONDecoder().decode(MealsWrapper.self, from: json)
             
             if !mealWrapper.meals.isEmpty {
@@ -254,7 +250,7 @@ class APIClient: ObservableObject {
         do {
             let json = try await getJson(endpoint: searchRandomEndpoint)
             
-            let meals = parseJsonToMeal(json)
+            let meals = parseJsonToMeals(json)
             meals.forEach { meal in
                 print("id: \(meal.id ?? "N/A")")
                 print("name: \(meal.name ?? "N/A")")
@@ -273,6 +269,133 @@ class APIClient: ObservableObject {
             
         } catch let error {
             print(error)
+        }
+    }
+    
+    static func getRandomMeal() async -> Result<Meal, APIClientError> {
+        do {
+            let json = try await getJson(endpoint: searchRandomEndpoint)
+            let meals = parseJsonToMeals(json)
+                
+            if let meal = meals.first {
+                return .success(meal)
+            } else {
+                return .failure(APIClientError.parseError)
+            }
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func getMeals(input: String) async -> Result<[Meal], APIClientError> {
+        do {
+            var searchString = ""
+            
+            if input.count == 1 {
+                searchString = "\(searchByLetterEndpoint)\(input)" // 1 or more results
+            } else {
+                searchString = "\(searchByNameEndpoint)\(input)" // 1 result
+            }
+            let json = try await getJson(endpoint: searchString)
+            let meals = parseJsonToMeals(json)
+            
+            if !meals.isEmpty {
+                return .success(meals)
+            } else {
+                return .failure(APIClientError.parseError)
+            }
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func getIngredients(input: String) async -> Result<[Ingredient], APIClientError> {
+        do {
+            let searchString = "\(searchByIngredientEndpoint)\(input)"
+            let json = try await getJson(endpoint: searchString)
+            let ingredients = parseJsonToIngredients(json)
+            
+            if !ingredients.isEmpty {
+                return .success(ingredients)
+            } else {
+                return .failure(APIClientError.parseError)
+            }
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func getAreas(input: String) async -> Result<[Area], APIClientError> {
+        do {
+            let searchString = "\(searchByAreaEndpoint)\(input)"
+            let json = try await getJson(endpoint: searchString)
+            let areas = parseJsonToAreas(json)
+            
+            if !areas.isEmpty {
+                return .success(areas)
+            } else {
+                return .failure(APIClientError.parseError)
+            }
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func getCategories(input: String) async -> Result<[Category], APIClientError> {
+        do {
+            let searchString = "\(searchByCategoryEndpoint)\(input)"
+            let json = try await getJson(endpoint: searchString)
+            let categories = parseJsonToCategories(json)
+            
+            if !categories.isEmpty {
+                return .success(categories)
+            } else {
+                return .failure(APIClientError.parseError)
+            }
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func deleteAllRecords() {
+        let moc = PersistenceController.shared.container.viewContext
+        
+        let categoriesFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Category")
+        let areasFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Area")
+        let ingredientsFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ingredient")
+        let mealsFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Meal")
+        
+        let categoriesDeleteRequest = NSBatchDeleteRequest(fetchRequest: categoriesFetchRequest)
+        let areasDeleteRequest = NSBatchDeleteRequest(fetchRequest: areasFetchRequest)
+        let ingredientsDeleteRequest = NSBatchDeleteRequest(fetchRequest: ingredientsFetchRequest)
+        let mealsDeleteRequest = NSBatchDeleteRequest(fetchRequest: mealsFetchRequest)
+            
+        do {
+            try moc.execute(categoriesDeleteRequest)
+            try moc.save()
+            
+            try moc.execute(areasDeleteRequest)
+            try moc.save()
+            
+            try moc.execute(ingredientsDeleteRequest)
+            try moc.save()
+            
+            try moc.execute(mealsDeleteRequest)
+            try moc.save()
+            
+            print("All records deleted")
+        } catch {
+            print("Error deleting records: \(error.localizedDescription)")
         }
     }
     

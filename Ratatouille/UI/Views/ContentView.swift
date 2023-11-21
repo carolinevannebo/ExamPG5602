@@ -43,9 +43,12 @@ struct ContentView: View {
         .onAppear {
             Task {
                 //Testing API
-                //await APIClient.saveCategories()
-                //await APIClient.saveAreas()
-                await APIClient.testMeals()
+                APIClient.deleteAllRecords()
+                await APIClient.saveCategories()
+                await APIClient.saveAreas()
+                //await APIClient.testMeals()
+                //let searchRandom = SearchRandom()
+                //await searchRandom.execute(input: ())
             }
         }
     }

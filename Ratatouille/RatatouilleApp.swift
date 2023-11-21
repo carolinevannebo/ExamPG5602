@@ -10,11 +10,22 @@ import SwiftUI
 @main
 struct RatatouilleApp: App {
     let persistenceController = PersistenceController.shared
-
+    
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-        }
+            TabView {
+                MealListView().tabItem {
+                    Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
+                }
+            } // TabView
+        } // WindowGroup
     }
 }
+
+//var body: some Scene {
+//    WindowGroup {
+//        ContentView()
+//            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+//    }
+//}
