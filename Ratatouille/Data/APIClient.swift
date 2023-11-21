@@ -203,37 +203,56 @@ class APIClient: ObservableObject {
         return []
     }
     
-    static func test() async { // TODO: write actual tests for this
+    static func testIngredients() async {
         do {
-//            let json = try await getJson(endpoint: listIngredientsEndpoint)
-//            let ingredients = parseJsonToIngredients(json)
-//            ingredients.forEach { ingredient in
-//                print("ID: \(ingredient.id ?? "N/A")")
-//                print("Name: \(ingredient.name ?? "N/A")")
-//                print("Description: \(ingredient.information ?? "N/A")")
-//                print("-------------------")
-//            }
+            let json = try await getJson(endpoint: listIngredientsEndpoint)
+            let ingredients = parseJsonToIngredients(json)
             
-//            let json = try await getJson(endpoint: listAreasEndpoint)
-//            let areas = parseJsonToAreas(json)
-//            areas.forEach { area in
-//                print(area.name ?? "N/A")
-//                print("-------------------")
-//            }
+            ingredients.forEach { ingredient in
+                print("ID: \(ingredient.id ?? "N/A")")
+                print("Name: \(ingredient.name ?? "N/A")")
+                print("Description: \(ingredient.information ?? "N/A")")
+                print("-------------------")
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func testAreas() async {
+        do {
+            let json = try await getJson(endpoint: listAreasEndpoint)
+            let areas = parseJsonToAreas(json)
             
-//            let json = try await getJson(endpoint: listCategoriesEndpoint)
-//            let categories = parseJsonToCategories(json)
-//            categories.forEach { category in
-//                print("ID: \(category.id ?? "N/A")")
-//                print("Name: \(category.name ?? "N/A")")
-//                print("Description: \(category.information ?? "N/A")")
-//                print("Image link: \(category.image ?? "N/A")")
-//                print("-------------------")
-//            }
+            areas.forEach { area in
+                print(area.name ?? "N/A")
+                print("-------------------")
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func testCategories() async {
+        do {
+            let json = try await getJson(endpoint: listCategoriesEndpoint)
+            let categories = parseJsonToCategories(json)
             
+            categories.forEach { category in
+                print("ID: \(category.id ?? "N/A")")
+                print("Name: \(category.name ?? "N/A")")
+                print("Description: \(category.information ?? "N/A")")
+                print("Image link: \(category.image ?? "N/A")")
+                print("-------------------")
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func testMeals() async { // TODO: write actual tests for this
+        do {
             let json = try await getJson(endpoint: searchRandomEndpoint)
-            //let jsonString = String(data: json, encoding: .utf8)
-            //print("Raw JSON Data: \(jsonString ?? "nil")")
             
             let meals = parseJsonToMeal(json)
             meals.forEach { meal in
@@ -243,36 +262,11 @@ class APIClient: ObservableObject {
                 print("image link: \(meal.image ?? "N/A")")
                 print("area: \(meal.area?.name ?? "N/A")")
                 print("category: \(meal.category?.name ?? "N/A")")
+                print("ingredients: ")
                 
-                if let ingredients = meal.ingredients,
-                   let measurements = meal.measurements {
-                        
-                    for (ingredient, measurement) in zip(ingredients, measurements) {
-                        print("\(String(describing: ingredient.name)) \(String(describing: measurement.amount))")
-                    }
+                meal.ingredients?.forEach { ingredient in
+                    print("\((ingredient as! Ingredient).name ?? "N/A")")
                 }
-                
-                //EXPECTED OUTPUT
-//                Meal requires Optional("320g") Optional("Spaghetti")
-//                Meal requires Optional("6") Optional("Egg Yolks")
-//                Meal requires Optional("As required") Optional("Salt")
-//                Meal requires Optional("150g") Optional("Bacon")
-//                Meal requires Optional("50g") Optional("Pecorino")
-//                Meal requires Optional("As required") Optional("Black Pepper")
-                
-                //ACTUAL OUTPUT
-//            Ingredient: Black Pepper
-//            Measurement: 320g
-//            Ingredient: Salt
-//            Measurement: 50g
-//            Ingredient: Bacon
-//            Measurement: As required
-//            Ingredient:
-//            Measurement: 150g
-//            Ingredient: Spaghetti
-//            Measurement:
-//            Ingredient: Pecorino
-//            Measurement: 6
                 
                 print("-------------------")
             }

@@ -20,7 +20,6 @@ extension Ingredient {
     @NSManaged public var information: String?
     @NSManaged public var name: String?
     @NSManaged public var meals: NSSet?
-    @NSManaged public var measurements: NSSet?
 
 }
 
@@ -38,23 +37,6 @@ extension Ingredient {
 
     @objc(removeMeals:)
     @NSManaged public func removeFromMeals(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for measurements
-extension Ingredient {
-
-    @objc(addMeasurementsObject:)
-    @NSManaged public func addToMeasurements(_ value: Measurement)
-
-    @objc(removeMeasurementsObject:)
-    @NSManaged public func removeFromMeasurements(_ value: Measurement)
-
-    @objc(addMeasurements:)
-    @NSManaged public func addToMeasurements(_ values: NSSet)
-
-    @objc(removeMeasurements:)
-    @NSManaged public func removeFromMeasurements(_ values: NSSet)
 
 }
 

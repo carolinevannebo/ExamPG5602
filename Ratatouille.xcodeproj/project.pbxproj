@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E40644472B0BAF0A00028CBD /* Measurement+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644412B0BAF0A00028CBD /* Measurement+CoreDataClass.swift */; };
 		E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406444C2B0BE48500028CBD /* Meal+CoreDataProperties.swift */; };
 		E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406444E2B0BE48500028CBD /* Ingredient+CoreDataProperties.swift */; };
-		E40644562B0BE48500028CBD /* Measurement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644502B0BE48500028CBD /* Measurement+CoreDataProperties.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2C2B023AF10095D10B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC2B2B023AF10095D10B /* ContentView.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
@@ -48,10 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E40644412B0BAF0A00028CBD /* Measurement+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Measurement+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E406444C2B0BE48500028CBD /* Meal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Meal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E406444E2B0BE48500028CBD /* Ingredient+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ingredient+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		E40644502B0BE48500028CBD /* Measurement+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Measurement+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2B2B023AF10095D10B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -211,8 +207,6 @@
 				E406444C2B0BE48500028CBD /* Meal+CoreDataProperties.swift */,
 				E4EAFC652B0259A50095D10B /* Area+CoreDataClass.swift */,
 				E4EAFC662B0259A50095D10B /* Area+CoreDataProperties.swift */,
-				E40644412B0BAF0A00028CBD /* Measurement+CoreDataClass.swift */,
-				E40644502B0BE48500028CBD /* Measurement+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -356,12 +350,10 @@
 				E4EAFC5E2B0243CF0095D10B /* APIClient.swift in Sources */,
 				E4EAFC7E2B028EC40095D10B /* Ingredient+CoreDataClass.swift in Sources */,
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,
-				E40644472B0BAF0A00028CBD /* Measurement+CoreDataClass.swift in Sources */,
 				E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */,
 				E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */,
 				E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */,
 				E4EAFC692B0259A50095D10B /* Meal+CoreDataClass.swift in Sources */,
-				E40644562B0BE48500028CBD /* Measurement+CoreDataProperties.swift in Sources */,
 				E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

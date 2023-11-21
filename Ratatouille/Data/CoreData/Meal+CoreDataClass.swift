@@ -89,24 +89,15 @@ public class Meal: NSManagedObject, Decodable {
         container: KeyedDecodingContainer<DynamicCodingKeys>,
         ingredientKeys: [String],
         measurementKeys: [String]
-    ) throws -> ([String], [String]) {
+    ) throws -> [String] {
         do {
-            
-//            print("Declaring arrays")
             var dynamicIngredients: [String] = []
-            var dynamicMeasurements: [String] = []
             
             let count = min(ingredientKeys.count, measurementKeys.count) // only iterate the present values
             for i in 0..<count {
-//                print("Declaring keys: ")
                 
                 let currentIngredientKey = ingredientKeys[i]
                 let currentMeasurementKey = measurementKeys[i]
-
-//                print("We got: \(currentIngredientKey)")
-//                print("We got: \(currentMeasurementKey)")
-//
-//                print("About to decode \(i+1)")
                 
                 do {
                     let ingredientKey = DynamicCodingKeys(stringValue: currentIngredientKey)
@@ -115,11 +106,8 @@ public class Meal: NSManagedObject, Decodable {
                     if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
                        let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
                         // TODO: make arrays of their entities
-                        dynamicIngredients.append(ingredient)
-                        dynamicMeasurements.append(measurement)
-                        
-                        print("--------- The order we want -----------")
-                        print("Ingredient: \(String.init(ingredient).utf8), Measurement: \(String.init(measurement).utf8)")
+                        let attribute = "\(ingredient) \(measurement)"
+                        dynamicIngredients.append(attribute)
                     }
                     
                 } catch {
@@ -127,57 +115,12 @@ public class Meal: NSManagedObject, Decodable {
                 }
             } // end of loop
 
-            return (dynamicIngredients, dynamicMeasurements)
+            return dynamicIngredients
         } catch {
             print("Error decoding dynamic values: \(error)")
-            return ([], [])
+            return []
         }
     }
-    
-    private func assertArrays(managedObjectContext: NSManagedObjectContext, ingredientStrings: [String], measurementStrings: [String]) -> ([Ingredient], [Measurement]) {
-        var ingredientSet: [Ingredient] = []
-        var measurementSet: [Measurement] = []
-
-        do {
-            let count = min(ingredientStrings.count, measurementStrings.count) // only iterate the present values
-            for i in 0..<count {
-            //for (ingredientString, measurementString) in zip(ingredientStrings, measurementStrings) {
-                
-                let ingredientEntity = try fetchOrCreateEntity(
-                    type: Ingredient.self,
-                    attributeName: "name",
-                    attributeValue: ingredientStrings[i],
-                    attributeName2: nil,
-                    attributeValue2: "nil",
-                    context: managedObjectContext,
-                    shouldSave: true
-                ) // TODO: irr med "" istedenfor nil
-                
-                ingredientSet.append(ingredientEntity)
-                
-                let measurementEntity = try fetchOrCreateEntity(
-                    type: Measurement.self,
-                    attributeName: "amount",
-                    attributeValue: measurementStrings[i],
-                    attributeName2: "ingredient",
-                    attributeValue2: ingredientEntity as Ingredient,
-                    context: managedObjectContext,
-                    shouldSave: false
-                ) // TODO: gir dette mening mtp CoreData ??
-                
-                measurementSet.append(measurementEntity)
-                
-                print("--------- The order we got -----------")
-                print("Ingredient: \(String(describing: ingredientEntity.name)), Measurement: \(String(describing: measurementEntity.amount))")
-            }
-            
-            return (ingredientSet, measurementSet)
-        } catch {
-            print("Error asserting ingredient/measurement arrays: \(error)")
-            return ([], [])
-        }
-    }
-
     
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
@@ -227,27 +170,29 @@ public class Meal: NSManagedObject, Decodable {
             let (dynamicIngredientKeys, dynamicMeasureKeys) = Meal.makeDynamicKeys()
             let dynamicContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
             
-            let (dynamicIngredients, dynamicMeasurements) = try decodeDynamicValues(
+            let dynamicIngredients = try decodeDynamicValues(
                 container: dynamicContainer,
                 ingredientKeys: dynamicIngredientKeys.compactMap { $0 }, // compactMap filters out nil values :) redundant now
                 measurementKeys: dynamicMeasureKeys.compactMap { $0 }
             )
             
-            // Ensure there are the same number of ingredients and measurements
-            guard dynamicIngredients.count == dynamicMeasurements.count else {
-                throw MealErrors.ingredientMismatchError // TODO: errors
+            var ingredientSet: [Ingredient] = []
+            
+            for ingredient in dynamicIngredients {
+                let ingredientEntity = try fetchOrCreateEntity(
+                    type: Ingredient.self,
+                    attributeName: "name",
+                    attributeValue: ingredient,
+                    attributeName2: nil,
+                    attributeValue2: "nil",
+                    context: managedObjectContext,
+                    shouldSave: true
+                )
+                
+                ingredientSet.append(ingredientEntity)
             }
             
-            let (ingredientSet, measurementSet) = assertArrays(managedObjectContext: managedObjectContext, ingredientStrings: dynamicIngredients, measurementStrings: dynamicMeasurements)
-            
-            // Ensure there are the same number of ingredients and measurements
-            guard ingredientSet.count == measurementSet.count else {
-                throw MealErrors.ingredientMismatchError // TODO: errors
-            }
-            
-            self.ingredients = Set(ingredientSet) //NSSet(array: ingredientSet)
-            self.measurements = Set(measurementSet)
-            
+            self.ingredients = NSSet(array: ingredientSet)
         } catch {
             let context = DecodingError.Context(
                     codingPath: decoder.codingPath,
@@ -256,7 +201,6 @@ public class Meal: NSManagedObject, Decodable {
             throw DecodingError.dataCorrupted(context)
         }
     }
-    
 }
 
 struct MealsWrapper: Decodable {
@@ -269,12 +213,10 @@ protocol AttributeType {
 }
 
 extension String: AttributeType {
-    //typealias CoreDataType = String // might be redundant
     var value: String { return self }
 }
 
 extension NSManagedObject: AttributeType {
-    //typealias CoreDataType = NSManagedObject // might be redundant
     var value: NSManagedObject { return self }
 }
 

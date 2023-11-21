@@ -45,7 +45,7 @@ struct ContentView: View {
                 //Testing API
                 //await APIClient.saveCategories()
                 //await APIClient.saveAreas()
-                await APIClient.test()
+                await APIClient.testMeals()
             }
         }
     }

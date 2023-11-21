@@ -22,12 +22,10 @@ extension Meal {
     @NSManaged public var name: String?
     @NSManaged public var area: Area?
     @NSManaged public var category: Category?
-    @NSManaged public var ingredients: Set<Ingredient>?
-    @NSManaged public var measurements: Set<Measurement>?
-
+    @NSManaged public var ingredients: NSSet?
 }
 
-// MARK: Generated accessors for ingredients
+// MARK: Generated accessors for ingredients --> ubrukt
 extension Meal {
 
     @objc(addIngredientsObject:)
@@ -41,23 +39,6 @@ extension Meal {
 
     @objc(removeIngredients:)
     @NSManaged public func removeFromIngredients(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for measurements
-extension Meal {
-
-    @objc(addMeasurementsObject:)
-    @NSManaged public func addToMeasurements(_ value: Measurement)
-
-    @objc(removeMeasurementsObject:)
-    @NSManaged public func removeFromMeasurements(_ value: Measurement)
-
-    @objc(addMeasurements:)
-    @NSManaged public func addToMeasurements(_ values: NSSet)
-
-    @objc(removeMeasurements:)
-    @NSManaged public func removeFromMeasurements(_ values: NSSet)
 
 }
 
