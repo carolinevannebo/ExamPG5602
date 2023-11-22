@@ -10,7 +10,7 @@ import CoreData
 
 @main
 struct RatatouilleApp: App {
-    let initCD = InitCD()
+    //let initCD = InitCD()
     
     var body: some Scene {
         WindowGroup {
@@ -25,7 +25,7 @@ struct RatatouilleApp: App {
                 Task {
                     // Debugging
                     //UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
-                    await initCD.execute(input: DataController.shared.managedObjectContext)
+                    //await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
         } // WindowGroup

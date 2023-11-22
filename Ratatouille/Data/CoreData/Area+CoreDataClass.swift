@@ -12,9 +12,9 @@ import CoreData
 @objc(Area)
 public class Area: NSManagedObject, Decodable {
     
-    enum CodingKeys: CodingKey {
-        case strArea
-    }
+//    enum CodingKeys: CodingKey {
+//        case strArea
+//    }
     
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)

@@ -21,7 +21,7 @@ class InitCD: ICommand {
     
     func execute(input: NSManagedObjectContext) async -> Void {
         Task {
-            await APIClient.deleteAllRecords(managedObjectContext: input)
+//            await APIClient.deleteAllRecords(managedObjectContext: input)
 //            await APIClient.saveCategories(managedObjectContext: input)
 //            await APIClient.saveAreas(managedObjectContext: input)
 //            await APIClient.saveIngredients(managedObjectContext: input)
@@ -31,11 +31,11 @@ class InitCD: ICommand {
 
 class SearchMeals: ICommand {
     typealias Input = String
-    typealias Output = [Meal]?
+    typealias Output = [MealModel]?
     
     func execute(input: String) async -> Output {
         do {
-            let result = await APIClient.getMeals(input: input)
+            let result = await NewAPIClient.getMeals(input: input)
             
             switch result {
                 
@@ -65,15 +65,15 @@ class SearchMeals: ICommand {
 
 class SearchRandom: ICommand {
     typealias Input = Void
-    typealias Output = Meal?
+    typealias Output = MealModel?
 
     func execute(input: Void) async -> Output {
         do {
-            let result = await APIClient.getRandomMeal()
+            let result = await NewAPIClient.getRandomMeal()
 
             switch result {
                 case .success(let meal):
-                    print("Got meal: \(meal.name ?? "N/A")")
+                print("Got meal: \(meal.name )")
                     return meal
                 case .failure(let error):
                     throw error
@@ -87,11 +87,11 @@ class SearchRandom: ICommand {
 
 class SearchIngredients: ICommand {
     typealias Input = String
-    typealias Output = [Ingredient]?
+    typealias Output = [IngredientModel]?
     
     func execute(input: String) async -> Output {
         do {
-            let result = await APIClient.getIngredients(input: input)
+            let result = await NewAPIClient.getIngredients(input: input)
             
             switch result {
                 case .success(let ingredients):
@@ -109,11 +109,11 @@ class SearchIngredients: ICommand {
 
 class SearchAreas: ICommand {
     typealias Input = String
-    typealias Output = [Area]?
+    typealias Output = [AreaModel]?
     
     func execute(input: String) async -> Output {
         do {
-            let result = await APIClient.getAreas(input: input)
+            let result = await NewAPIClient.getAreas(input: input)
             
             switch result {
                 case .success(let areas):
@@ -131,11 +131,11 @@ class SearchAreas: ICommand {
 
 class SearchCategories: ICommand {
     typealias Input = String
-    typealias Output = [Category]?
+    typealias Output = [CategoryModel]?
     
     func execute(input: String) async -> Output {
         do {
-            let result = await APIClient.getCategories(input: input)
+            let result = await NewAPIClient.getCategories(input: input)
             
             switch result {
                 case .success(let categories):

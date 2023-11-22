@@ -39,5 +39,7 @@ extension Area {
 }
 
 extension Area : Identifiable {
-
+    enum CodingKeys: CodingKey {
+        case strArea
+    }
 }

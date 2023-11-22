@@ -42,42 +42,83 @@ extension Meal {
 
 }
 
-extension Meal {
-    static func demoMeal(managedObjectContext: NSManagedObjectContext) -> Meal {
-//        let dataController = DataController.shared
-//        let managedObjectContext = dataController.container.viewContext
-        
-        let demoMeal = Meal(context: managedObjectContext)
-        demoMeal.id = "1"
-        demoMeal.name = "Demo Meal"
-        demoMeal.instructions = "Demo Instructions"
-        demoMeal.image = "demo_image_url"
-        
-        // Assuming you have an Area and Category in your data model
-        let demoArea = Area(context: managedObjectContext)
-        demoArea.name = "Demo Area"
-        demoMeal.area = demoArea
-        
-        let demoCategory = Category(context: managedObjectContext)
-        demoCategory.id = "1"
-        demoCategory.name = "Demo Category"
-        demoCategory.image = "demo_category_image_url"
-        demoCategory.information = "Lorem ipsum category"
-        demoMeal.category = demoCategory
-        
-        // Add some ingredients (modify according to your Ingredient model)
-        let ingredient1 = Ingredient(context: managedObjectContext)
-        ingredient1.name = "Ingredient 1"
-        
-        let ingredient2 = Ingredient(context: managedObjectContext)
-        ingredient2.name = "Ingredient 2"
-        
-        demoMeal.addToIngredients(NSSet(array: [ingredient1, ingredient2]))
-        
-        return demoMeal
-    }
-}
-
 extension Meal : Identifiable {
+    enum CodingKeys: String, CodingKey {
+        case idMeal
+        case strMeal
+        case strCategory
+        case strArea
+        case strInstructions
+        case strMealThumb
+    }
+    
+    struct DynamicCodingKeys: CodingKey {
+        var stringValue: String
 
+        init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+
+        var intValue: Int? {
+            return nil
+        }
+
+        init?(intValue: Int) {
+            return nil
+        }
+    }
+    
+    static func makeDynamicKeys() -> ([String], [String]) {
+        var dynamicIngredientKeys: [String] = []
+        var dynamicMeasureKeys: [String] = []
+
+        for i in 0..<20 {
+            dynamicIngredientKeys.append("strIngredient\(i+1)")
+            dynamicMeasureKeys.append("strMeasure\(i+1)")
+        }
+        return (dynamicIngredientKeys, dynamicMeasureKeys)
+    }
+    
+    func decodeDynamicValues(
+        container: KeyedDecodingContainer<DynamicCodingKeys>,
+        ingredientKeys: [String],
+        measurementKeys: [String]
+    ) throws -> [String] {
+        do {
+            var dynamicIngredients: [String] = []
+            
+            let count = min(ingredientKeys.count, measurementKeys.count) // only iterate the present values
+            for i in 0..<count {
+                
+                let currentIngredientKey = ingredientKeys[i]
+                let currentMeasurementKey = measurementKeys[i]
+                
+                do {
+                    let ingredientKey = DynamicCodingKeys(stringValue: currentIngredientKey)
+                    let measurementKey = DynamicCodingKeys(stringValue: currentMeasurementKey)
+                        
+                    if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
+                       let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
+                        // TODO: make arrays of their entities
+                        let attribute = "\(ingredient), \(measurement)"
+                        dynamicIngredients.append(attribute)
+                    }
+                    
+                } catch {
+                    throw error
+                }
+            } // end of loop
+
+            return dynamicIngredients
+        } catch {
+            print("Error decoding dynamic values: \(error)")
+            return []
+        }
+    }
+    
+    enum MealErrors: Error { // TODO: error handling
+        case decodingError
+        case ingredientMismatchError
+        
+    }
 }

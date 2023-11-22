@@ -8,9 +8,9 @@
 import SwiftUI
 
 class MealItemViewModel: ObservableObject {
-    @Published var meal: Meal
+    @Published var meal: MealModel
     
-    init(meal: Meal) {
+    init(meal: MealModel) {
         self.meal = meal
     }
     
@@ -22,7 +22,7 @@ class MealItemViewModel: ObservableObject {
 struct MealItemView: View {
     @StateObject var viewModel: MealItemViewModel
         
-    init(meal: Meal) {
+    init(meal: MealModel) {
         _viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
     }
     
@@ -38,7 +38,7 @@ struct MealItemView: View {
             Spacer()
                 
             VStack {
-                Text(viewModel.meal.name ?? "N/A").foregroundColor(.myAccentColor).font(.callout)
+                Text(viewModel.meal.name ).foregroundColor(.myAccentColor).font(.callout)
                 Text(viewModel.meal.category?.name ?? "N/A").foregroundColor(.myContrastColor)
                 Text(viewModel.meal.area?.name ?? "N/A").foregroundColor(.myContrastColor)
             }

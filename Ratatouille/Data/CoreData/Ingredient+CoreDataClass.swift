@@ -11,13 +11,7 @@ import CoreData
 
 @objc(Ingredient)
 public class Ingredient: NSManagedObject, Decodable {
-    
-    enum CodingKeys: CodingKey {
-        case idIngredient
-        case strIngredient
-        case strDescription
-    }
-    
+
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
     }

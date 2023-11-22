@@ -9,7 +9,7 @@ import SwiftUI
 
 class MealListViewModel: ObservableObject {
     @Published var input = ""
-    @Published var meals: [Meal] = []
+    @Published var meals: [MealModel] = []
     @Published var hasSearched: Bool = false
     let searchLogic = SearchMeals()
     
@@ -37,7 +37,7 @@ class MealListViewModel: ObservableObject {
 
 struct MealListView: View {
     @StateObject var viewModel = MealListViewModel()
-    @Environment(\.managedObjectContext) private var managedObjectContext // TODO: temporarily
+    //@Environment(\.managedObjectContext) private var managedObjectContext // TODO: temporarily
     
     var body: some View {
         NavigationView {
@@ -54,7 +54,7 @@ struct MealListView: View {
                     ScrollView {
                         ForEach(viewModel.meals) { meal in
                             NavigationLink {
-                                Text(meal.name ?? "N/A") // DetailView
+                                Text(meal.name ) // DetailView
                             } label: {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 25, style: .continuous)

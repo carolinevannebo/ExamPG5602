@@ -11,14 +11,7 @@ import CoreData
 
 @objc(Category)
 public class Category: NSManagedObject, Decodable {
-    
-    enum CodingKeys: CodingKey {
-        case idCategory
-        case strCategory
-        case strCategoryThumb
-        case strCategoryDescription
-    }
-    
+
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
     }
