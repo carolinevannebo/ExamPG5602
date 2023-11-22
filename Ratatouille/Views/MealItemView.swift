@@ -42,6 +42,7 @@ struct MealItemView: View {
                 Text(viewModel.meal.category?.name ?? "N/A").foregroundColor(.myContrastColor)
                 Text(viewModel.meal.area?.name ?? "N/A").foregroundColor(.myContrastColor)
             }
+            .padding()
         }
     }
 }

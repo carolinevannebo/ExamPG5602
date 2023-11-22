@@ -146,10 +146,6 @@ public class Meal: NSManagedObject, Decodable {
     }
 }
 
-//struct MealsWrapper: Decodable {
-//    let meals: [Meal]
-//}
-
 protocol AttributeType {
     associatedtype CoreDataType: CVarArg
     var value: CoreDataType { get }

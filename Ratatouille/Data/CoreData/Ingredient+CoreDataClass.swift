@@ -31,7 +31,3 @@ public class Ingredient: NSManagedObject, Decodable {
         self.information = information
     }
 }
-
-//struct IngredientsWrapper: Decodable {
-//    let meals: [Ingredient] // Has to be meals, to recognize the field in the API
-//}

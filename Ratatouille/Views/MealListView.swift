@@ -62,9 +62,10 @@ struct MealListView: View {
                                         .shadow(radius: 10)
                                     MealItemView(meal: meal)
                                 }
+                                .padding(.horizontal)
                             }
                         }
-                    }
+                    }//.padding(.horizontal)
                 } else { Spacer() }
             }
         } // navView, onAppear can apply here

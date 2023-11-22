@@ -12,10 +12,6 @@ import CoreData
 @objc(Area)
 public class Area: NSManagedObject, Decodable {
     
-//    enum CodingKeys: CodingKey {
-//        case strArea
-//    }
-    
     public override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
     }
@@ -31,7 +27,3 @@ public class Area: NSManagedObject, Decodable {
         self.name = name
     }
 }
-
-//struct AreasWrapper: Decodable {
-//    let meals: [Area] // Has to be meals, to recognize the field in the API
-//}

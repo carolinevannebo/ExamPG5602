@@ -34,7 +34,3 @@ public class Category: NSManagedObject, Decodable {
     }
 
 }
-
-//struct CategoriesWrapper: Decodable {
-//    let categories: [Category]
-//}

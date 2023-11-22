@@ -25,7 +25,7 @@ extension Meal {
     @NSManaged public var ingredients: NSSet?
 }
 
-// MARK: Generated accessors for ingredients --> ubrukt
+// MARK: Generated accessors for ingredients
 extension Meal {
 
     @objc(addIngredientsObject:)
