@@ -14,40 +14,49 @@ struct CircleImage: View {
     let strokeColor: Color
     let lineWidth: CGFloat
     
-    @State private var image: Image = Image(systemName: "photo")
+    @State private var image: UIImage?
+    @State private var isLoading = false
     
     var body: some View {
-        Group {
-            if let uiImage = loadImage() {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
-                    .shadow(radius: 5)
-                    .padding()
-            } else {
-                // Placeholder or error handling if image loading fails
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
-                    .shadow(radius: 5)
-                    .padding()
-            }
+        if let image = image {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: width, height: height)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
+                .shadow(radius: 5)
+                .padding()
+        } else {
+            // You might want to replace this with a placeholder or loading spinner
+            Text("Loading...").onAppear { loadImage() }
         }
     }
 
-    func loadImage() -> UIImage? {
-        guard let url = URL(string: url),
-                let data = try? Data(contentsOf: url),
-                let uiImage = UIImage(data: data) else {
-            return nil
+    func loadImage() {
+        guard let url = URL(string: url) else {
+            return
         }
-        return uiImage
+
+        isLoading = true
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            defer {
+                DispatchQueue.main.async {
+                    isLoading = false
+                }
+            }
+
+            guard let data = data, error == nil else {
+                return
+            }
+
+            if let uiImage = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.image = uiImage
+                }
+            }
+        }.resume()
     }
 }
 

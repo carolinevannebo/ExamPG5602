@@ -28,8 +28,9 @@ public class Ingredient: NSManagedObject, Decodable {
         let name = try container.decode(String.self, forKey: .strIngredient)
         let information = try container.decodeIfPresent(String.self, forKey: .strDescription)
         
-        let dataController = DataController.shared
+        let dataController = DataController.shared // testing shared instance after multi-threading crash
         let managedObjectContext = dataController.container.viewContext
+        
         super.init(entity: .entity(forEntityName: "Ingredient", in: managedObjectContext)!, insertInto: managedObjectContext)
         
         self.id = id

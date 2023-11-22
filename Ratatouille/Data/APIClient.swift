@@ -7,8 +7,11 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 class APIClient: ObservableObject {
+    //public var managedObjectContext = PersistenceController.shared.container.viewContext
+    
     private static var searchByNameEndpoint = "https://www.themealdb.com/api/json/v1/1/search.php?s=" // Search meal by name
     private static var searchByLetterEndpoint = "https://www.themealdb.com/api/json/v1/1/search.php?f=" // List all meals by first letter
     private static var searchByIdEndpoint = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" // Lookup full meal details by id
@@ -24,12 +27,12 @@ class APIClient: ObservableObject {
     private static var searchByCategoryEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?c=" // Filter by category
     private static var searchByAreaEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?a=" // Filter by area
     
-    static func saveAreas() async -> Void {
+    static func saveAreas(managedObjectContext: NSManagedObjectContext) async -> Void {
         do {
             let json = try await getJson(endpoint: listAreasEndpoint)
             let areas = parseJsonToAreas(json)
             
-            let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
+            //let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
             
             for areaData in areas {
                 guard let name = areaData.name else {
@@ -54,19 +57,63 @@ class APIClient: ObservableObject {
             }
             
             // Save changes to Core Data
-            try managedObjectContext.save() // TODO: den crasher av og til her, finn ut av det
+            try await managedObjectContext.perform {
+                try managedObjectContext.save() // TODO: den crasher av og til her, finn ut av det
+            }
             
         } catch let error {
             print(error)
         }
     }
     
-    static func saveCategories() async -> Void {
+    static func saveIngredients(managedObjectContext: NSManagedObjectContext) async -> Void {
+        do {
+            let json = try await getJson(endpoint: listIngredientsEndpoint)
+            let ingredients = parseJsonToIngredients(json)
+            
+            for ingredientData in ingredients {
+                guard let id = ingredientData.id, let name = ingredientData.name else {
+                    print("Skipping ingredient due to missing data")
+                    continue
+                }
+                
+                let ingredientFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+                ingredientFetchRequest.predicate = NSPredicate(format: "id == %@", id)
+                
+                try await managedObjectContext.perform {
+                    if let fetchedIngredient = try managedObjectContext.fetch(ingredientFetchRequest).first {
+                        // Category already exists, update it if needed
+                        fetchedIngredient.name = name
+                        fetchedIngredient.information = ingredientData.information
+                        print("Ingredient already exists: \(fetchedIngredient.name ?? "")")
+                    } else {
+                        // Create new ingredient
+                        let newIngredient = Ingredient(context: managedObjectContext)
+                        newIngredient.id = id
+                        newIngredient.name = name
+                        newIngredient.information = newIngredient.information
+                        
+                        print("New ingredient created: \(newIngredient.name ?? "")")
+                    }
+                }
+            }
+            
+            try await managedObjectContext.perform {
+                // Save changes to Core Data
+                try managedObjectContext.save()
+            }
+            
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func saveCategories(managedObjectContext: NSManagedObjectContext) async -> Void {
         do {
             let json = try await getJson(endpoint: listCategoriesEndpoint)
             let categories = parseJsonToCategories(json)
             
-            let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
+            //let managedObjectContext = PersistenceController.shared.container.viewContext // må refaktoreres til å brukes flere steder
             
             for categoryData in categories {
                 guard let id = categoryData.id, let name = categoryData.name else {
@@ -78,27 +125,31 @@ class APIClient: ObservableObject {
                 let categoryFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
                 categoryFetchRequest.predicate = NSPredicate(format: "id == %@", id)
                 
-                if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
-                    // Category already exists, update it if needed
-                    fetchedCategory.name = name
-                    fetchedCategory.image = categoryData.image
-                    fetchedCategory.information = categoryData.information
-                            
-                    print("Category already exists: \(fetchedCategory.name ?? "")")
-                } else {
-                    // Create a new Category
-                    let newCategory = Category(context: managedObjectContext)
-                    newCategory.id = id
-                    newCategory.name = name
-                    newCategory.image = categoryData.image
-                    newCategory.information = categoryData.information
-                            
-                    print("New category created: \(newCategory.name ?? "")")
+                try await managedObjectContext.perform {
+                    if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
+                        // Category already exists, update it if needed
+                        fetchedCategory.name = name
+                        fetchedCategory.image = categoryData.image
+                        fetchedCategory.information = categoryData.information
+                        
+                        print("Category already exists: \(fetchedCategory.name ?? "")")
+                    } else {
+                        // Create a new Category
+                        let newCategory = Category(context: managedObjectContext)
+                        newCategory.id = id
+                        newCategory.name = name
+                        newCategory.image = categoryData.image
+                        newCategory.information = categoryData.information
+                        
+                        print("New category created: \(newCategory.name ?? "")")
+                    }
                 }
             }
                     
-            // Save changes to Core Data
-            try managedObjectContext.save()
+            try await managedObjectContext.perform {
+                // Save changes to Core Data
+                try managedObjectContext.save()
+            }
             
         } catch let error {
             print(error)
@@ -387,8 +438,8 @@ class APIClient: ObservableObject {
         }
     }
     
-    static func deleteAllRecords() {
-        let moc = PersistenceController.shared.container.viewContext
+    static func deleteAllRecords(managedObjectContext: NSManagedObjectContext) async {
+        //let managedObjectContext = PersistenceController.shared.container.viewContext
         
         let categoriesFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Category")
         let areasFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Area")
@@ -401,19 +452,23 @@ class APIClient: ObservableObject {
         let mealsDeleteRequest = NSBatchDeleteRequest(fetchRequest: mealsFetchRequest)
             
         do {
-            try moc.execute(categoriesDeleteRequest)
-            try moc.save()
+            try await managedObjectContext.perform {
+                
+                try managedObjectContext.execute(categoriesDeleteRequest)
+                try managedObjectContext.save()
+                
+                try managedObjectContext.execute(areasDeleteRequest)
+                try managedObjectContext.save()
+                
+                try managedObjectContext.execute(ingredientsDeleteRequest)
+                try managedObjectContext.save()
+                
+                try managedObjectContext.execute(mealsDeleteRequest)
+                try managedObjectContext.save()
+                
+                print("All records deleted")
+            }
             
-            try moc.execute(areasDeleteRequest)
-            try moc.save()
-            
-            try moc.execute(ingredientsDeleteRequest)
-            try moc.save()
-            
-            try moc.execute(mealsDeleteRequest)
-            try moc.save()
-            
-            print("All records deleted")
         } catch {
             print("Error deleting records: \(error.localizedDescription)")
         }

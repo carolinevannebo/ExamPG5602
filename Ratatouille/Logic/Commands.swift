@@ -6,12 +6,28 @@
 //
 
 import Foundation
+import CoreData
 
 public protocol ICommand {
     associatedtype Input
     associatedtype Output
     
     func execute(input: Input) async -> Output
+}
+
+class InitCD: ICommand {
+    typealias Input = NSManagedObjectContext
+    typealias Output = Void
+    
+    func execute(input: NSManagedObjectContext) async -> Void {
+        Task {
+            await APIClient.deleteAllRecords(managedObjectContext: input)
+            await APIClient.saveCategories(managedObjectContext: input)
+            await APIClient.saveAreas(managedObjectContext: input)
+            await APIClient.saveIngredients(managedObjectContext: input)
+        }
+    }
+    
 }
 
 class SearchMeals: ICommand {

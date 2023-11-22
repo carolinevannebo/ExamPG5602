@@ -56,32 +56,45 @@ public class Meal: NSManagedObject, Decodable {
         attributeValue2: U?, // String?
         context: NSManagedObjectContext,
         shouldSave: Bool) throws -> T {
-            
+        
         let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-            fetchRequest.predicate = NSPredicate(format: "\(attributeName) == %@", attributeValue) // la til value //as! CVarArg
-
-        if let fetchedEntity = try context.fetch(fetchRequest).first {
-            return fetchedEntity
-        } else {
-            let newEntity = T(context: context)
-            newEntity.setValue(attributeValue, forKey: attributeName) // la til value
+        //fetchRequest.predicate = NSPredicate(format: "name == %@", attributeValue)
             
-//            if attributeName2 != nil {
-//                newEntity.setValue(attributeValue2, forKey: attributeName2!)
-//            }
-            if let attributeName2 = attributeName2, let attributeValue2 = attributeValue2 {
-                newEntity.setValue(attributeValue2.value, forKey: attributeName2) // la til value
-            }
-
-            if shouldSave {
-                do {
-                    try context.save()
-                } catch {
-                    print("Error saving new entity: \(error)")
+        if T.self == Ingredient.self {
+            let commaIndex = attributeValue.firstIndex(of: ",") ?? attributeValue.endIndex
+            let substringValue = attributeValue[..<commaIndex]
+            fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", attributeName, substringValue as CVarArg)
+        } else {
+            fetchRequest.predicate = NSPredicate(format: "%K == %@", attributeName, attributeValue)
+        }
+            
+        do {
+            let fetchedEntities = try context.fetch(fetchRequest)
+            if let fetchedEntity = fetchedEntities.first { //collection was mutated while being enumerated
+                //print("Fetched Entity Name: \(fetchedEntity.name)")
+                return fetchedEntity
+            } else {
+                let newEntity = T(context: context)
+                newEntity.setValue(attributeValue, forKey: attributeName)
+                
+                if attributeName2 != nil {
+                    newEntity.setValue(attributeValue2?.value, forKey: attributeName2!)
                 }
+                
+                if shouldSave {
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Error saving new entity: \(error)")
+                        throw error
+                    }
+                }
+                    
+                return newEntity
             }
-
-            return newEntity
+        } catch {
+            print("Error fetching entities: \(error)")
+            throw error
         }
     }
     
@@ -106,7 +119,7 @@ public class Meal: NSManagedObject, Decodable {
                     if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
                        let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
                         // TODO: make arrays of their entities
-                        let attribute = "\(ingredient) \(measurement)"
+                        let attribute = "\(ingredient), \(measurement)"
                         dynamicIngredients.append(attribute)
                     }
                     
@@ -126,7 +139,7 @@ public class Meal: NSManagedObject, Decodable {
         super.init(entity: entity, insertInto: context)
     }
     
-    public required init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws { // TODO: tror async ble lagt til her ved uhell
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         do {
@@ -137,8 +150,7 @@ public class Meal: NSManagedObject, Decodable {
             let instructions = try container.decode(String.self, forKey: .strInstructions)
             let image = try container.decodeIfPresent(String.self, forKey: .strMealThumb)
             
-            
-            let dataController = DataController.shared
+            let dataController = DataController.shared // testing shared instance after multi-threading crash
             let managedObjectContext = dataController.container.viewContext
             super.init(entity: .entity(forEntityName: "Meal", in: managedObjectContext)!, insertInto: managedObjectContext)
             
@@ -147,25 +159,28 @@ public class Meal: NSManagedObject, Decodable {
             self.instructions = instructions
             self.image = image
             
-            self.category = try fetchOrCreateEntity(
+            let categoryEntity = try fetchOrCreateEntity(
                 type: Category.self,
                 attributeName: "name",
                 attributeValue: category,
                 attributeName2: nil,
                 attributeValue2: "nil",
                 context: managedObjectContext,
-                shouldSave: true
+                shouldSave: false
             ) // TODO: irr med "" istedenfor nil
             
-            self.area = try fetchOrCreateEntity(
+            let areaEntity = try fetchOrCreateEntity(
                 type: Area.self,
                 attributeName: "name",
                 attributeValue: area,
                 attributeName2: nil,
                 attributeValue2: "nil",
                 context: managedObjectContext,
-                shouldSave: true
+                shouldSave: false
             ) // TODO: irr med "" istedenfor nil
+            
+            self.category = categoryEntity
+            self.area = areaEntity
             
             let (dynamicIngredientKeys, dynamicMeasureKeys) = Meal.makeDynamicKeys()
             let dynamicContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
@@ -186,13 +201,17 @@ public class Meal: NSManagedObject, Decodable {
                     attributeName2: nil,
                     attributeValue2: "nil",
                     context: managedObjectContext,
-                    shouldSave: true
+                    shouldSave: false
                 )
-                
                 ingredientSet.append(ingredientEntity)
-            }
+            } // success
             
-            self.ingredients = NSSet(array: ingredientSet)
+            print("meal will be given \(ingredientSet.count) ingredients")
+            managedObjectContext.perform {
+                self.ingredients = NSSet(array: ingredientSet.compactMap { $0 } ) //ingredientSet [Ratatouille.Ingredient] 140703128941760 values -> FILTRER UT NIL
+            }
+            print("meal has been given \(String(describing: self.ingredients?.count)) ingredients")
+            
         } catch {
             let context = DecodingError.Context(
                     codingPath: decoder.codingPath,

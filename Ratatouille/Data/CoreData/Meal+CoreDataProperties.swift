@@ -43,8 +43,9 @@ extension Meal {
 }
 
 extension Meal {
-    static func demoMeal() -> Meal {
-        let managedObjectContext = PersistenceController.shared.container.viewContext
+    static func demoMeal(managedObjectContext: NSManagedObjectContext) -> Meal {
+//        let dataController = DataController.shared
+//        let managedObjectContext = dataController.container.viewContext
         
         let demoMeal = Meal(context: managedObjectContext)
         demoMeal.id = "1"

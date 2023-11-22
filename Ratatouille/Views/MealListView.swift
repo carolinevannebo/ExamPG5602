@@ -10,12 +10,14 @@ import SwiftUI
 class MealListViewModel: ObservableObject {
     @Published var input = ""
     @Published var meals: [Meal] = []
+    @Published var hasSearched: Bool = false
     let searchLogic = SearchMeals()
     
     func searchMeals() async {
         do {
             if let meals = await searchLogic.execute(input: input) {
                 DispatchQueue.main.async {
+                    self.hasSearched = true
                     self.meals = meals
                 }
             } else {
@@ -35,6 +37,7 @@ class MealListViewModel: ObservableObject {
 
 struct MealListView: View {
     @StateObject var viewModel = MealListViewModel()
+    @Environment(\.managedObjectContext) private var managedObjectContext // TODO: temporarily
     
     var body: some View {
         NavigationView {
@@ -46,18 +49,28 @@ struct MealListView: View {
                 })
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                List {
-                    ForEach(viewModel.meals) { meal in
-                        NavigationLink {
-                            Text(meal.name ?? "N/A") // DetailView
-                        } label: {
-                            MealItemView(meal: meal)
+                
+                if viewModel.hasSearched {
+                    ScrollView {
+                        ForEach(viewModel.meals) { meal in
+                            NavigationLink {
+                                Text(meal.name ?? "N/A") // DetailView
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                                        .foregroundColor(.myPrimaryColor)
+                                        .shadow(radius: 10)
+                                    MealItemView(meal: meal)
+                                }
+                            }
                         }
                     }
-                }
+                } else { Spacer() }
             }
         } // navView, onAppear can apply here
+        .background(Color.myBackgroundColor)
+        .padding(.horizontal)
+        
     }
 }
 

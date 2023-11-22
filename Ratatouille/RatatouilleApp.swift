@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import CoreData
 
 @main
 struct RatatouilleApp: App {
-    let persistenceController = PersistenceController.shared
-    
+    let dataController = DataController.shared
+//    let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    let initCD = InitCD()
     
     var body: some Scene {
         WindowGroup {
@@ -19,13 +21,16 @@ struct RatatouilleApp: App {
                     Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
                 }
             } // TabView
+            .environment(\.managedObjectContext, dataController.persistentContainer.viewContext)
+            .environment(\.colorScheme, .dark)
+            .onAppear {
+                Task {
+                    // Add this line at the beginning of your app or in a suitable place
+                    UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
+                    await initCD.execute(input: dataController.persistentContainer.viewContext)
+                }
+            }
         } // WindowGroup
     }
 }
 
-//var body: some Scene {
-//    WindowGroup {
-//        ContentView()
-//            .environment(\.managedObjectContext, persistenceController.container.viewContext)
-//    }
-//}
