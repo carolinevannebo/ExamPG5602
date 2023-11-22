@@ -57,10 +57,8 @@ class APIClient: ObservableObject {
             }
             
             // Save changes to Core Data
-            try await managedObjectContext.perform {
-                try managedObjectContext.save() // TODO: den crasher av og til her, finn ut av det
-            }
-            
+            DataController.shared.saveContext()
+
         } catch let error {
             print(error)
         }
@@ -98,10 +96,11 @@ class APIClient: ObservableObject {
                 }
             }
             
-            try await managedObjectContext.perform {
-                // Save changes to Core Data
-                try managedObjectContext.save()
-            }
+            // Save changes to Core Data
+            DataController.shared.saveContext()
+//            try await managedObjectContext.perform {
+//                try managedObjectContext.save()
+//            }
             
         } catch let error {
             print(error)
@@ -146,10 +145,7 @@ class APIClient: ObservableObject {
                 }
             }
                     
-            try await managedObjectContext.perform {
-                // Save changes to Core Data
-                try managedObjectContext.save()
-            }
+            DataController.shared.saveContext()
             
         } catch let error {
             print(error)
@@ -455,17 +451,11 @@ class APIClient: ObservableObject {
             try await managedObjectContext.perform {
                 
                 try managedObjectContext.execute(categoriesDeleteRequest)
-                try managedObjectContext.save()
-                
                 try managedObjectContext.execute(areasDeleteRequest)
-                try managedObjectContext.save()
-                
                 try managedObjectContext.execute(ingredientsDeleteRequest)
-                try managedObjectContext.save()
-                
                 try managedObjectContext.execute(mealsDeleteRequest)
-                try managedObjectContext.save()
                 
+                DataController.shared.saveContext()
                 print("All records deleted")
             }
             

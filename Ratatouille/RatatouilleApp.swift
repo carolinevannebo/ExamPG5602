@@ -10,8 +10,6 @@ import CoreData
 
 @main
 struct RatatouilleApp: App {
-    let dataController = DataController.shared
-//    let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     let initCD = InitCD()
     
     var body: some Scene {
@@ -21,13 +19,13 @@ struct RatatouilleApp: App {
                     Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
                 }
             } // TabView
-            .environment(\.managedObjectContext, dataController.persistentContainer.viewContext)
+            .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
             .environment(\.colorScheme, .dark)
             .onAppear {
                 Task {
-                    // Add this line at the beginning of your app or in a suitable place
+                    // Debugging
                     UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
-                    await initCD.execute(input: dataController.persistentContainer.viewContext)
+                    await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
         } // WindowGroup

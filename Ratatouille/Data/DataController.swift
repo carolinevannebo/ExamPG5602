@@ -7,8 +7,11 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 class DataController: ObservableObject {
+//    private var _managedObjectContext: NSManagedObjectContext?
+    
     lazy var persistentContainer: NSPersistentContainer = {
         
         let container = NSPersistentContainer(name: "Ratatouille")
@@ -26,17 +29,36 @@ class DataController: ObservableObject {
         return container
     }()
     
-    static let shared = DataController()
+//    var managedObjectContext: NSManagedObjectContext {
+//        if let context = _managedObjectContext {
+//            return context
+//        }
+//
+//        // Attempt to retrieve the context from the environment
+//        if let context = Environment(\.managedObjectContext) as? NSManagedObjectContext {
+//            _managedObjectContext = context
+//            return context
+//        }
+//
+//        fatalError("Managed object context not set in the environment.")
+//    }
+    
+    var managedObjectContext: NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
     
     func saveContext() {
-        if persistentContainer.viewContext.hasChanges {
+        if managedObjectContext.hasChanges {
             do {
-                try persistentContainer.viewContext.save()
+                try managedObjectContext.save()
             } catch let error as NSError {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
     }
+    
+    static let shared = DataController()
+    
 //    init() {
 //        container.loadPersistentStores { description, error in
 //            if let error = error {

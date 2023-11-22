@@ -150,8 +150,7 @@ public class Meal: NSManagedObject, Decodable {
             let instructions = try container.decode(String.self, forKey: .strInstructions)
             let image = try container.decodeIfPresent(String.self, forKey: .strMealThumb)
             
-            let dataController = DataController.shared // testing shared instance after multi-threading crash
-            let managedObjectContext = dataController.container.viewContext
+            let managedObjectContext = DataController.shared.managedObjectContext
             super.init(entity: .entity(forEntityName: "Meal", in: managedObjectContext)!, insertInto: managedObjectContext)
             
             self.id = id

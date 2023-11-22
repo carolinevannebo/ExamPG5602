@@ -30,8 +30,7 @@ public class Category: NSManagedObject, Decodable {
         let image = try container.decode(String.self, forKey: .strCategoryThumb)
         let information = try container.decode(String.self, forKey: .strCategoryDescription)
         
-        let dataController = DataController.shared // testing shared instance after multi-threading crash
-        let managedObjectContext = dataController.container.viewContext
+        let managedObjectContext = DataController.shared.managedObjectContext
         
         super.init(entity: .entity(forEntityName: "Category", in: managedObjectContext)!, insertInto: managedObjectContext)
         

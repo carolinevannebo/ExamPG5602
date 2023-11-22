@@ -24,8 +24,7 @@ public class Area: NSManagedObject, Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let name = try container.decode(String.self, forKey: .strArea)
         
-        let dataController = DataController.shared // testing shared instance after multi-threading crash
-        let managedObjectContext = dataController.container.viewContext
+        let managedObjectContext = DataController.shared.managedObjectContext
         
         super.init(entity: .entity(forEntityName: "Area", in: managedObjectContext)!, insertInto: managedObjectContext)
         
