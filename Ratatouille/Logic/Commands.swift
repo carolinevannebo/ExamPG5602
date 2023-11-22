@@ -22,12 +22,11 @@ class InitCD: ICommand {
     func execute(input: NSManagedObjectContext) async -> Void {
         Task {
             await APIClient.deleteAllRecords(managedObjectContext: input)
-            await APIClient.saveCategories(managedObjectContext: input)
-            await APIClient.saveAreas(managedObjectContext: input)
-            await APIClient.saveIngredients(managedObjectContext: input)
+//            await APIClient.saveCategories(managedObjectContext: input)
+//            await APIClient.saveAreas(managedObjectContext: input)
+//            await APIClient.saveIngredients(managedObjectContext: input)
         }
     }
-    
 }
 
 class SearchMeals: ICommand {

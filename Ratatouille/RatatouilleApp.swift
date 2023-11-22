@@ -24,7 +24,7 @@ struct RatatouilleApp: App {
             .onAppear {
                 Task {
                     // Debugging
-                    UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
+                    //UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
                     await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }

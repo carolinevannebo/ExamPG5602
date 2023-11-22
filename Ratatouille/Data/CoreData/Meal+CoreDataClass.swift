@@ -205,11 +205,9 @@ public class Meal: NSManagedObject, Decodable {
                 ingredientSet.append(ingredientEntity)
             } // success
             
-            print("meal will be given \(ingredientSet.count) ingredients")
             managedObjectContext.perform {
                 self.ingredients = NSSet(array: ingredientSet.compactMap { $0 } ) //ingredientSet [Ratatouille.Ingredient] 140703128941760 values -> FILTRER UT NIL
             }
-            print("meal has been given \(String(describing: self.ingredients?.count)) ingredients")
             
         } catch {
             let context = DecodingError.Context(
