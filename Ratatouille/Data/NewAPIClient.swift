@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-struct NewAPIClient {
+struct APIClient {
     static func getJson(endpoint: String) async throws -> Data {
         guard let url = URL(string: endpoint) else {
             throw NSError(domain: "InvalidURL", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -53,7 +53,7 @@ struct NewAPIClient {
     }
 }
 
-extension NewAPIClient {
+extension APIClient {
     private static var searchByNameEndpoint = "https://www.themealdb.com/api/json/v1/1/search.php?s=" // Search meal by name
     private static var searchByLetterEndpoint = "https://www.themealdb.com/api/json/v1/1/search.php?f=" // List all meals by first letter
     private static var searchByIdEndpoint = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" // Lookup full meal details by id
@@ -134,9 +134,35 @@ extension NewAPIClient {
             return .failure(APIClientError.failed(underlying: error))
         }
     }
+    
+    static func testMeals() async { // TODO: write actual tests for this
+        do {
+            let json = try await getJson(endpoint: searchRandomEndpoint)
+            let meals = parseJsonToMeals(json)
+                
+            meals.forEach { meal in
+                print("id: \(meal.id )")
+                print("name: \(meal.name )")
+                print("instructions: \(meal.instructions )")
+                print("image link: \(meal.image ?? "N/A")")
+                print("area: \(meal.area?.name ?? "N/A")")
+                print("category: \(meal.category?.name ?? "N/A")")
+                print("ingredients: ")
+    
+                meal.ingredients.forEach { ingredient in
+                    print("\((ingredient).name ?? "N/A")")
+                }
+    
+                print("-------------------")
+            }
+    
+        } catch let error {
+            print(error)
+        }
+    }
 }
 
-extension NewAPIClient {
+extension APIClient {
     private static var listAreasEndpoint = "https://www.themealdb.com/api/json/v1/1/list.php?a=list" // List all areas
     private static var searchByAreaEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?a=" // Filter by area
     
@@ -202,9 +228,23 @@ extension NewAPIClient {
             print(error)
         }
     }
+    
+    static func testAreas() async {
+        do {
+            let json = try await getJson(endpoint: listAreasEndpoint)
+            let areas = parseJsonToAreas(json)
+    
+            areas.forEach { area in
+                print(area.name )
+                print("-------------------")
+            }
+        } catch let error {
+            print(error)
+        }
+    }
 }
 
-extension NewAPIClient {
+extension APIClient {
     private static var listCategoriesEndpoint = "https://www.themealdb.com/api/json/v1/1/categories.php" // List all meal categories
     private static var searchByCategoryEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?c=" // Filter by category
     
@@ -283,9 +323,26 @@ extension NewAPIClient {
             print(error)
         }
     }
+    
+    static func testCategories() async {
+        do {
+            let json = try await getJson(endpoint: listCategoriesEndpoint)
+            let categories = parseJsonToCategories(json)
+    
+            categories.forEach { category in
+                print("ID: \(category.id ?? "N/A")")
+                print("Name: \(category.name )")
+                print("Description: \(category.information ?? "N/A")")
+                print("Image link: \(category.image ?? "N/A")")
+                print("-------------------")
+            }
+        } catch let error {
+            print(error)
+        }
+    }
 }
 
-extension NewAPIClient {
+extension APIClient {
     private static var listIngredientsEndpoint = "https://www.themealdb.com/api/json/v1/1/list.php?i=list" // List all ingredients
     private static var searchByIngredientEndpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?i=" // Filter by main ingredient
     
@@ -357,6 +414,22 @@ extension NewAPIClient {
             
             DataController.shared.saveContext()
             
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func testIngredients() async {
+        do {
+            let json = try await getJson(endpoint: listIngredientsEndpoint)
+            let ingredients = parseJsonToIngredients(json)
+            
+            ingredients.forEach { ingredient in
+                print("ID: \(ingredient.id ?? "N/A")")
+                print("Name: \(ingredient.name ?? "N/A")")
+                print("Description: \(ingredient.information ?? "N/A")")
+                print("-------------------")
+            }
         } catch let error {
             print(error)
         }

@@ -21,10 +21,9 @@ class InitCD: ICommand {
     
     func execute(input: NSManagedObjectContext) async -> Void {
         Task {
-//            await APIClient.deleteAllRecords(managedObjectContext: input)
-//            await APIClient.saveCategories(managedObjectContext: input)
-//            await APIClient.saveAreas(managedObjectContext: input)
-//            await APIClient.saveIngredients(managedObjectContext: input)
+            await APIClient.saveCategories(managedObjectContext: input)
+            await APIClient.saveAreas(managedObjectContext: input)
+            await APIClient.saveIngredients(managedObjectContext: input)
         }
     }
 }
@@ -35,7 +34,7 @@ class SearchMeals: ICommand {
     
     func execute(input: String) async -> Output {
         do {
-            let result = await NewAPIClient.getMeals(input: input)
+            let result = await APIClient.getMeals(input: input)
             
             switch result {
                 
@@ -69,7 +68,7 @@ class SearchRandom: ICommand {
 
     func execute(input: Void) async -> Output {
         do {
-            let result = await NewAPIClient.getRandomMeal()
+            let result = await APIClient.getRandomMeal()
 
             switch result {
                 case .success(let meal):
@@ -91,7 +90,7 @@ class SearchIngredients: ICommand {
     
     func execute(input: String) async -> Output {
         do {
-            let result = await NewAPIClient.getIngredients(input: input)
+            let result = await APIClient.getIngredients(input: input)
             
             switch result {
                 case .success(let ingredients):
@@ -113,7 +112,7 @@ class SearchAreas: ICommand {
     
     func execute(input: String) async -> Output {
         do {
-            let result = await NewAPIClient.getAreas(input: input)
+            let result = await APIClient.getAreas(input: input)
             
             switch result {
                 case .success(let areas):
@@ -135,7 +134,7 @@ class SearchCategories: ICommand {
     
     func execute(input: String) async -> Output {
         do {
-            let result = await NewAPIClient.getCategories(input: input)
+            let result = await APIClient.getCategories(input: input)
             
             switch result {
                 case .success(let categories):

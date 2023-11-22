@@ -43,9 +43,9 @@ extension Category {
 
 extension Category : Identifiable {
     enum CodingKeys: CodingKey {
-        case idCategory
-        case strCategory
-        case strCategoryThumb
-        case strCategoryDescription
+        case id
+        case name
+        case image
+        case information
     }
 }

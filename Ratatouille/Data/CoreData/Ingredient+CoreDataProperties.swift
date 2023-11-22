@@ -23,8 +23,8 @@ extension Ingredient {
 
 extension Ingredient : Identifiable {
     enum CodingKeys: CodingKey {
-        case idIngredient
-        case strIngredient
-        case strDescription
+        case id
+        case name
+        case information
     }
 }

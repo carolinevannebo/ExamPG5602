@@ -22,7 +22,7 @@ public class Area: NSManagedObject, Decodable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let name = try container.decode(String.self, forKey: .strArea)
+        let name = try container.decode(String.self, forKey: .name)
         
         let managedObjectContext = DataController.shared.managedObjectContext
         
@@ -32,6 +32,6 @@ public class Area: NSManagedObject, Decodable {
     }
 }
 
-struct AreasWrapper: Decodable {
-    let meals: [Area] // Has to be meals, to recognize the field in the API
-}
+//struct AreasWrapper: Decodable {
+//    let meals: [Area] // Has to be meals, to recognize the field in the API
+//}

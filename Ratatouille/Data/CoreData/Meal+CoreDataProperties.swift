@@ -44,12 +44,12 @@ extension Meal {
 
 extension Meal : Identifiable {
     enum CodingKeys: String, CodingKey {
-        case idMeal
-        case strMeal
-        case strCategory
-        case strArea
-        case strInstructions
-        case strMealThumb
+        case id
+        case name
+        case category
+        case area
+        case instructions
+        case image
     }
     
     struct DynamicCodingKeys: CodingKey {

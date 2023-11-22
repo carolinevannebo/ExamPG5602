@@ -102,13 +102,11 @@ struct MealModel: Codable, Identifiable {
                         
                     if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
                        let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
-                        // TODO: make arrays of their entities
-                        if !ingredient.isEmpty, !measurement.isEmpty {
-                            let attribute = "\(ingredient), \(measurement)"
-                            dynamicIngredients.append(attribute)
-                        }
+                            if !ingredient.isEmpty, !measurement.isEmpty {
+                                let attribute = "\(ingredient), \(measurement)"
+                                dynamicIngredients.append(attribute)
+                            }
                     }
-                    
                 } catch {
                     throw error
                 }

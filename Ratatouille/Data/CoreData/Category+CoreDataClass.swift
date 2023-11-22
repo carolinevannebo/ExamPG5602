@@ -18,10 +18,10 @@ public class Category: NSManagedObject, Decodable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let id = try container.decode(String.self, forKey: .idCategory)
-        let name = try container.decode(String.self, forKey: .strCategory)
-        let image = try container.decode(String.self, forKey: .strCategoryThumb)
-        let information = try container.decode(String.self, forKey: .strCategoryDescription)
+        let id = try container.decode(String.self, forKey: .id)
+        let name = try container.decode(String.self, forKey: .name)
+        let image = try container.decode(String.self, forKey: .image)
+        let information = try container.decode(String.self, forKey: .information)
         
         let managedObjectContext = DataController.shared.managedObjectContext
         
@@ -35,6 +35,6 @@ public class Category: NSManagedObject, Decodable {
 
 }
 
-struct CategoriesWrapper: Decodable {
-    let categories: [Category]
-}
+//struct CategoriesWrapper: Decodable {
+//    let categories: [Category]
+//}

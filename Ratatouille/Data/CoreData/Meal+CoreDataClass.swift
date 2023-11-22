@@ -20,12 +20,12 @@ public class Meal: NSManagedObject, Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         do {
-            let id = try container.decode(String.self, forKey: .idMeal)
-            let name = try container.decode(String.self, forKey: .strMeal)
-            let category = try container.decode(String.self, forKey: .strCategory)
-            let area = try container.decode(String.self, forKey: .strArea)
-            let instructions = try container.decode(String.self, forKey: .strInstructions)
-            let image = try container.decodeIfPresent(String.self, forKey: .strMealThumb)
+            let id = try container.decode(String.self, forKey: .id)
+            let name = try container.decode(String.self, forKey: .name)
+            let category = try container.decode(Category.self, forKey: .category)
+            let area = try container.decode(Area.self, forKey: .area)
+            let instructions = try container.decode(String.self, forKey: .instructions)
+            let image = try container.decodeIfPresent(String.self, forKey: .image)
             
             let managedObjectContext = DataController.shared.managedObjectContext
             super.init(entity: .entity(forEntityName: "Meal", in: managedObjectContext)!, insertInto: managedObjectContext)
@@ -40,20 +40,20 @@ public class Meal: NSManagedObject, Decodable {
                 attributeName: "name",
                 attributeValue: category,
                 attributeName2: nil,
-                attributeValue2: "nil",
+                attributeValue2: nil,
                 context: managedObjectContext,
                 shouldSave: false
-            ) // TODO: irr med "" istedenfor nil
+            )
             
             let areaEntity = try fetchOrCreateEntity(
                 type: Area.self,
                 attributeName: "name",
                 attributeValue: area,
                 attributeName2: nil,
-                attributeValue2: "nil",
+                attributeValue2: nil,
                 context: managedObjectContext,
                 shouldSave: false
-            ) // TODO: irr med "" istedenfor nil
+            )
             
             self.category = categoryEntity
             self.area = areaEntity
@@ -63,7 +63,7 @@ public class Meal: NSManagedObject, Decodable {
             
             let dynamicIngredients = try decodeDynamicValues(
                 container: dynamicContainer,
-                ingredientKeys: dynamicIngredientKeys.compactMap { $0 }, // compactMap filters out nil values :) redundant now
+                ingredientKeys: dynamicIngredientKeys.compactMap { $0 }, // compactMap filters out nil values :) redundant now?
                 measurementKeys: dynamicMeasureKeys.compactMap { $0 }
             )
             
@@ -75,7 +75,7 @@ public class Meal: NSManagedObject, Decodable {
                     attributeName: "name",
                     attributeValue: ingredient,
                     attributeName2: nil,
-                    attributeValue2: "nil",
+                    attributeValue2: nil,
                     context: managedObjectContext,
                     shouldSave: false
                 )
@@ -98,21 +98,21 @@ public class Meal: NSManagedObject, Decodable {
     private func fetchOrCreateEntity<T: NSManagedObject, U: AttributeType>(
         type: T.Type,
         attributeName: String,
-        attributeValue: String, // String
+        attributeValue: U, // String
         attributeName2: String?,
         attributeValue2: U?, // String?
         context: NSManagedObjectContext,
         shouldSave: Bool) throws -> T {
         
         let fetchRequest: NSFetchRequest<T> = T.fetchRequest() as! NSFetchRequest<T>
-        //fetchRequest.predicate = NSPredicate(format: "name == %@", attributeValue)
             
-        if T.self == Ingredient.self {
-            let commaIndex = attributeValue.firstIndex(of: ",") ?? attributeValue.endIndex
-            let substringValue = attributeValue[..<commaIndex]
+        if T.self == Ingredient.self, U.self == String.self {
+            let attrValueStr = "\(attributeValue.value)"
+            let commaIndex = attrValueStr.firstIndex(of: ",") ?? attrValueStr.endIndex
+            let substringValue = attrValueStr[..<commaIndex]
             fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", attributeName, substringValue as CVarArg)
         } else {
-            fetchRequest.predicate = NSPredicate(format: "%K == %@", attributeName, attributeValue)
+            fetchRequest.predicate = NSPredicate(format: "%K == %@", attributeName, attributeValue.value)
         }
             
         do {
@@ -146,9 +146,9 @@ public class Meal: NSManagedObject, Decodable {
     }
 }
 
-struct MealsWrapper: Decodable {
-    let meals: [Meal]
-}
+//struct MealsWrapper: Decodable {
+//    let meals: [Meal]
+//}
 
 protocol AttributeType {
     associatedtype CoreDataType: CVarArg
