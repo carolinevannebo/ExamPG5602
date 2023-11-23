@@ -49,6 +49,7 @@ struct SettingsView: View {
             .scrollContentBackground(.hidden)
             .navigationTitle("Innstillinger")
             .background(Color.myBackgroundColor)
+            .toolbarBackground(.visible, for: .tabBar)
         }
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, isDarkMode ? .dark : .light)

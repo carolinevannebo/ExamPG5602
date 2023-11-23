@@ -37,19 +37,23 @@ struct MainView: View {
     
     var body: some View {
         TabView(selection: $selection) {
-            Favorites().tabItem {
-                Label("Favoritter", systemImage: "heart.circle.fill")
-            }.tag(1)
             
-            MealListView().tabItem {
-                Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
-                    .tint(.myAccentColor)
-            }.tag(2)
-            
-            SettingsView().tabItem {
-                Label("Innstillinger", systemImage: "gear.circle.fill")
-                    .tint(.myAccentColor)
-            }.tag(3)
+            Group {
+                FavoritesView().tabItem {
+                    Label("Favoritter", systemImage: "heart.circle.fill").padding()
+                }.tag(1)
+                
+                MealListView().tabItem {
+                    Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill").padding()
+                }.tag(2)
+                
+                SettingsView().tabItem {
+                    Label("Innstillinger", systemImage: "gear.circle.fill").padding()
+                }.tag(3)
+                
+            }
+            .toolbar(.visible, for: .tabBar)
+            .toolbarBackground(Color.myBackgroundColor, for: .tabBar)
         }
         .modifier(DarkModeViewModifier())
     }

@@ -18,7 +18,7 @@ struct RatatouilleApp: App {
                 .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
                 .onAppear {
                 Task {
-                    //await initCD.execute(input: DataController.shared.managedObjectContext)
+                    await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
         }

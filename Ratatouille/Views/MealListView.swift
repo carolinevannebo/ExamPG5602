@@ -61,9 +61,9 @@ struct MealListView: View {
                 ScrollView {
                     ForEach(viewModel.meals) { meal in
                         NavigationLink {
-                            Text(meal.name ) // DetailView
+                            Text(meal.name ) // TODO: DetailView
                         } label: {
-                                MealItemView(meal: meal)
+                                MealItemView(meal: meal)//.shadow(radius: 10)
                             .padding(.horizontal)
                         }
                     }
@@ -71,6 +71,7 @@ struct MealListView: View {
             }
             .navigationTitle("Oppskrifter")
             .background(Color.myBackgroundColor)
+            .toolbarBackground(.visible, for: .tabBar)
             
         } // navView, onAppear can apply here
         .background(Color.myBackgroundColor)

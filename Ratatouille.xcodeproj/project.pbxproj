@@ -20,7 +20,7 @@
 		E40644702B0E951600028CBD /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406446F2B0E951600028CBD /* CategoryModel.swift */; };
 		E40644722B0E953D00028CBD /* IngredientModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644712B0E953D00028CBD /* IngredientModel.swift */; };
 		E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406447C2B0EB94700028CBD /* SettingsView.swift */; };
-		E406447F2B0EBDDF00028CBD /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406447E2B0EBDDF00028CBD /* Favorites.swift */; };
+		E406447F2B0EBDDF00028CBD /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406447E2B0EBDDF00028CBD /* FavoritesView.swift */; };
 		E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */; };
 		E40644862B0F7B3700028CBD /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = E40644852B0F7B3700028CBD /* SwiftyGif */; };
 		E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644892B0F82E700028CBD /* AnimatedGif.swift */; };
@@ -73,7 +73,7 @@
 		E406446F2B0E951600028CBD /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
 		E40644712B0E953D00028CBD /* IngredientModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientModel.swift; sourceTree = "<group>"; };
 		E406447C2B0EB94700028CBD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E406447E2B0EBDDF00028CBD /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
+		E406447E2B0EBDDF00028CBD /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeViewModifier.swift; sourceTree = "<group>"; };
 		E40644892B0F82E700028CBD /* AnimatedGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGif.swift; sourceTree = "<group>"; };
 		E406448C2B0F868200028CBD /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "remy-eating.gif"; path = "../../../../../../remy-eating.gif"; sourceTree = "<group>"; };
@@ -238,7 +238,7 @@
 				E406445A2B0CF28600028CBD /* MealListView.swift */,
 				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
-				E406447E2B0EBDDF00028CBD /* Favorites.swift */,
+				E406447E2B0EBDDF00028CBD /* FavoritesView.swift */,
 				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
 			);
 			path = Views;
@@ -414,7 +414,7 @@
 				E40644722B0E953D00028CBD /* IngredientModel.swift in Sources */,
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E40644612B0D2FBC00028CBD /* MyColors.swift in Sources */,
-				E406447F2B0EBDDF00028CBD /* Favorites.swift in Sources */,
+				E406447F2B0EBDDF00028CBD /* FavoritesView.swift in Sources */,
 				E4EAFC712B025FF60095D10B /* DataController.swift in Sources */,
 				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,

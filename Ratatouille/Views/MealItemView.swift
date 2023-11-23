@@ -11,6 +11,9 @@ class MealItemViewModel: ObservableObject {
     @Published var meal: MealModel
     @Published var offset: CGSize = .zero
     @Published var isDragging: Bool = false
+    @Published var hasTappedHeart: Bool = false
+    
+    let favoritesLogic = SaveFavorite()
     
     init(meal: MealModel) {
         self.meal = meal
@@ -18,6 +21,25 @@ class MealItemViewModel: ObservableObject {
     
     enum MealItemViewModelError: Error {
         case unreachableDemo
+        case saveFailed
+    }
+    
+    func handleTappedHeart() async {
+        if hasTappedHeart {
+            do {
+                let result = await favoritesLogic.execute(input: self.meal)
+                
+                switch result {
+                case .success(let favorite):
+                    print("Saving \(String(describing: favorite.name)) succeeded")
+                case .failure(let error):
+                    throw error
+                }
+                
+            } catch {
+                print("Unexpected error: \(error)")
+            }
+        }
     }
     
     func handleDragGesture(value: DragGesture.Value) {
@@ -69,10 +91,33 @@ struct MealItemView: View {
             HStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                     .foregroundColor(.myPrimaryColor)
-                    .shadow(radius: 10)
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .foregroundColor(.myAccentColor) //my primarycolor
-                    .shadow(radius: 10)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .foregroundColor(.myAccentColor) //my primarycolor
+                    
+                    HStack {
+                        Spacer()
+                        if (viewModel.hasTappedHeart) {
+                            Image(systemName: "heart.fill")
+                                .onTapGesture {
+                                    viewModel.hasTappedHeart = false
+                                }
+                        } else {
+                            Image(systemName: "heart")
+                                .onTapGesture {
+                                    Task {
+                                        viewModel.hasTappedHeart = true
+                                        let result = await viewModel.favoritesLogic.execute(input: viewModel.meal)
+                                        print(result)
+                                    }
+                                }
+                        }
+                    }
+                    .foregroundColor(.mySwipeIconColor)
+                    .font(.system(size: 35))
+                    .padding(.trailing, 30)
+                }
             }
             MealCard(meal: viewModel.meal)
         }

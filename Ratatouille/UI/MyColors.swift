@@ -28,4 +28,8 @@ extension Color {
     public static var myContrastColor: Color {
         return Color(UIColor(named: "myContrastColor")!)
     }
+    
+    public static var mySwipeIconColor: Color {
+        return Color(UIColor(named: "mySwipeIconColor")!)
+    }
 }
