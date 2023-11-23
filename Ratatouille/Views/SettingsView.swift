@@ -38,7 +38,7 @@ struct SettingsView: View {
                 
                 Toggle("Aktiver mørk modus", isOn: $isDarkMode)
                     .toggleStyle(SwitchToggleStyle(tint: Color.myAccentColor))
-                
+
                 NavigationLink {
                     Text("Administrer arkiv")
                 } label : {

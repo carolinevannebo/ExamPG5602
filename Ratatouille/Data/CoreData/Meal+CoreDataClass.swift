@@ -118,7 +118,6 @@ public class Meal: NSManagedObject, Decodable {
         do {
             let fetchedEntities = try context.fetch(fetchRequest)
             if let fetchedEntity = fetchedEntities.first { //collection was mutated while being enumerated
-                //print("Fetched Entity Name: \(fetchedEntity.name)")
                 return fetchedEntity
             } else {
                 let newEntity = T(context: context)

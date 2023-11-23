@@ -63,12 +63,7 @@ struct MealListView: View {
                         NavigationLink {
                             Text(meal.name ) // DetailView
                         } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                                    .foregroundColor(.myPrimaryColor)
-                                    .shadow(radius: 10)
                                 MealItemView(meal: meal)
-                            }
                             .padding(.horizontal)
                         }
                     }
