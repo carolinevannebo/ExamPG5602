@@ -35,14 +35,20 @@ struct MealItemView: View {
                 CircleImage(url: viewModel.meal.image!, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0)
             }.frame(width: 90)
                 
-            Spacer()
+            Spacer().frame(width: 20)
                 
             VStack (alignment: .leading) {
-                Text(viewModel.meal.name ).foregroundColor(.myAccentColor).font(.callout)
-                Text(viewModel.meal.category?.name ?? "N/A").foregroundColor(.myContrastColor)
-                Text(viewModel.meal.area?.name ?? "N/A").foregroundColor(.myContrastColor)
+                Text(viewModel.meal.name )
+                    .font(.system(size: 15, weight: .semibold))
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(.myContrastColor)
+                
+                Text("\(viewModel.meal.area?.name ?? "N/A") \((viewModel.meal.category?.name ?? "N/A"))")
+                    .font(.callout)
+                    .foregroundColor(.myAccentColor)
+               
             }
-            .frame(width: 150)
+            //.frame(width: 150)
             .padding()
             
             Spacer()

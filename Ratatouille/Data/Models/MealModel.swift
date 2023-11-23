@@ -29,7 +29,6 @@ struct MealModel: Codable, Identifiable {
             
             var areaModel = try AreaModel(from: decoder)
             areaModel.self.name = area
-            //areaModel.name = area
             
             var categoryModel = try CategoryModel(from: decoder)
             categoryModel.self.name = category
@@ -48,7 +47,6 @@ struct MealModel: Codable, Identifiable {
             for ingredient in dynamicIngredients {
                 var ingredientModel = try IngredientModel(from: decoder)
                 if !ingredient.isEmpty {
-                    print("This ingredient: \(ingredient)")
                     ingredientModel.self.name = ingredient
                     ingredientsArr.append(ingredientModel)
                 }

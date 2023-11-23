@@ -13,15 +13,24 @@ class MealListViewModel: ObservableObject {
     @Published var hasSearched: Bool = false
     let searchLogic = SearchMeals()
     
-    func searchMeals() async {
+    @AppStorage("isDarkMode") var isDarkMode: Bool = true
+    
+    func searchMeals(isDemo: Bool) async {
         do {
-            if let meals = await searchLogic.execute(input: input) {
+            var mutableInput: String
+            
+            if isDemo {
+                mutableInput = "A"
+            } else {
+                mutableInput = input
+            }
+            
+            if let meals = await searchLogic.execute(input: mutableInput) {
                 DispatchQueue.main.async {
                     self.hasSearched = true
-                    self.meals = meals
+                    self.meals = meals // TODO: BUG - dersom man toggler tema, tilbakestilles søket
                 }
             } else {
-                print("You should have a backup json") // TODO: backup json
                 throw MealListViewModelError.mealsEmpty
             }
         } catch {
@@ -39,38 +48,43 @@ struct MealListView: View {
     @StateObject var viewModel = MealListViewModel()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 TextField("Search meals", text: $viewModel.input, onCommit: {
                     Task {
-                        await viewModel.searchMeals()
+                        await viewModel.searchMeals(isDemo: false)
                     }
                 })
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 
-                if viewModel.hasSearched {
-                    ScrollView {
-                        ForEach(viewModel.meals) { meal in
-                            NavigationLink {
-                                Text(meal.name ) // DetailView
-                            } label: {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 25, style: .continuous)
-                                        .foregroundColor(.myPrimaryColor)
-                                        .shadow(radius: 10)
-                                    MealItemView(meal: meal)
-                                }
-                                .padding(.horizontal)
+                ScrollView {
+                    ForEach(viewModel.meals) { meal in
+                        NavigationLink {
+                            Text(meal.name ) // DetailView
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                                    .foregroundColor(.myPrimaryColor)
+                                    .shadow(radius: 10)
+                                MealItemView(meal: meal)
                             }
+                            .padding(.horizontal)
                         }
-                    }//.padding(.horizontal)
-                } else { Spacer() }
+                    }
+                }
             }
+            .navigationTitle("Oppskrifter")
+            .background(Color.myBackgroundColor)
+            
         } // navView, onAppear can apply here
-        .navigationTitle("Oppskrifter")
         .background(Color.myBackgroundColor)
-        .padding(.horizontal)
+        .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
+        .onAppear() {
+            Task {
+                await viewModel.searchMeals(isDemo: true)
+            }
+        }
         
     }
 }

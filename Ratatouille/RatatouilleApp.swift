@@ -14,35 +14,13 @@ struct RatatouilleApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
-                .modifier(DarkModeViewModifier())
+            ViewCoordinator()
                 .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
                 .onAppear {
                 Task {
-                    await initCD.execute(input: DataController.shared.managedObjectContext)
+                    //await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
-        }
-    }
-}
-
-struct MainView: View {
-    @State private var selection = 2
-    
-    var body: some View {
-        TabView(selection: $selection) {
-            Favorites().tabItem {
-                Label("Favoritter", systemImage: "heart.circle.fill")
-            }.tag(1)
-            
-            
-            MealListView().tabItem {
-                Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
-            }.tag(2)
-            
-            SettingsView().tabItem {
-                Label("Innstillinger", systemImage: "gear.circle.fill")
-            }.tag(3)
         }
     }
 }

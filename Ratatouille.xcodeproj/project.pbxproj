@@ -22,6 +22,10 @@
 		E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406447C2B0EB94700028CBD /* SettingsView.swift */; };
 		E406447F2B0EBDDF00028CBD /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406447E2B0EBDDF00028CBD /* Favorites.swift */; };
 		E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */; };
+		E40644862B0F7B3700028CBD /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = E40644852B0F7B3700028CBD /* SwiftyGif */; };
+		E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644892B0F82E700028CBD /* AnimatedGif.swift */; };
+		E406448D2B0F868200028CBD /* remy-eating.gif in Resources */ = {isa = PBXBuildFile; fileRef = E406448C2B0F868200028CBD /* remy-eating.gif */; };
+		E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406448E2B0F86E200028CBD /* ViewCoordinator.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -71,6 +75,9 @@
 		E406447C2B0EB94700028CBD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E406447E2B0EBDDF00028CBD /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 		E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeViewModifier.swift; sourceTree = "<group>"; };
+		E40644892B0F82E700028CBD /* AnimatedGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGif.swift; sourceTree = "<group>"; };
+		E406448C2B0F868200028CBD /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "remy-eating.gif"; path = "../../../../../../remy-eating.gif"; sourceTree = "<group>"; };
+		E406448E2B0F86E200028CBD /* ViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCoordinator.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E40644862B0F7B3700028CBD /* SwiftyGif in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +132,14 @@
 				E40644672B0E725200028CBD /* MealModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		E406448B2B0F862B00028CBD /* GIF */ = {
+			isa = PBXGroup;
+			children = (
+				E406448C2B0F868200028CBD /* remy-eating.gif */,
+			);
+			path = GIF;
 			sourceTree = "<group>";
 		};
 		E4EAFC1D2B023AF10095D10B = {
@@ -196,9 +212,11 @@
 		E4EAFC592B02403D0095D10B /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				E406448B2B0F862B00028CBD /* GIF */,
 				E4EAFC2D2B023AF80095D10B /* Assets.xcassets */,
 				E406445E2B0D1AED00028CBD /* CircleImage.swift */,
 				E40644602B0D2FBC00028CBD /* MyColors.swift */,
+				E40644892B0F82E700028CBD /* AnimatedGif.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -221,6 +239,7 @@
 				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
 				E406447E2B0EBDDF00028CBD /* Favorites.swift */,
+				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -265,6 +284,9 @@
 			dependencies = (
 			);
 			name = Ratatouille;
+			packageProductDependencies = (
+				E40644852B0F7B3700028CBD /* SwiftyGif */,
+			);
 			productName = Ratatouille;
 			productReference = E4EAFC262B023AF10095D10B /* Ratatouille.app */;
 			productType = "com.apple.product-type.application";
@@ -337,6 +359,9 @@
 				Base,
 			);
 			mainGroup = E4EAFC1D2B023AF10095D10B;
+			packageReferences = (
+				E40644842B0F7B3700028CBD /* XCRemoteSwiftPackageReference "SwiftyGif" */,
+			);
 			productRefGroup = E4EAFC272B023AF10095D10B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -354,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */,
+				E406448D2B0F868200028CBD /* remy-eating.gif in Resources */,
 				E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,8 +426,10 @@
 				E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */,
 				E406446E2B0E94F000028CBD /* AreaModel.swift in Sources */,
 				E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */,
+				E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */,
 				E4EAFC692B0259A50095D10B /* Meal+CoreDataClass.swift in Sources */,
 				E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */,
+				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -721,6 +749,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E40644842B0F7B3700028CBD /* XCRemoteSwiftPackageReference "SwiftyGif" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kirualex/SwiftyGif.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E40644852B0F7B3700028CBD /* SwiftyGif */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E40644842B0F7B3700028CBD /* XCRemoteSwiftPackageReference "SwiftyGif" */;
+			productName = SwiftyGif;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E4EAFC342B023AF80095D10B /* Ratatouille.xcdatamodeld */ = {

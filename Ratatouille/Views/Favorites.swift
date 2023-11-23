@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct Favorites: View {
+    @AppStorage("isDarkMode") var isDarkMode: Bool = true
+    
     var body: some View {
-        VStack {
-            Text("Mine favoritter").foregroundColor(.myContrastColor)
+        NavigationStack {
+            VStack {
+                Text("Mine favoritter").foregroundColor(.myContrastColor)
+            }
+            .navigationTitle("Favoritter")
+            .background(Color.myBackgroundColor)
         }
-        .navigationTitle("Favoritter")
         .background(Color.myBackgroundColor)
+        .environment(\.colorScheme, isDarkMode ? .dark : .light)
     }
 }
 
