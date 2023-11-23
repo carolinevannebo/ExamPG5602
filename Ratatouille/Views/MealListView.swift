@@ -37,7 +37,6 @@ class MealListViewModel: ObservableObject {
 
 struct MealListView: View {
     @StateObject var viewModel = MealListViewModel()
-    //@Environment(\.managedObjectContext) private var managedObjectContext // TODO: temporarily
     
     var body: some View {
         NavigationView {
@@ -69,6 +68,7 @@ struct MealListView: View {
                 } else { Spacer() }
             }
         } // navView, onAppear can apply here
+        .navigationTitle("Oppskrifter")
         .background(Color.myBackgroundColor)
         .padding(.horizontal)
         

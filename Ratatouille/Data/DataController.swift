@@ -10,8 +10,6 @@ import CoreData
 import SwiftUI
 
 class DataController: ObservableObject {
-//    private var _managedObjectContext: NSManagedObjectContext?
-    
     lazy var persistentContainer: NSPersistentContainer = {
         
         let container = NSPersistentContainer(name: "Ratatouille")
@@ -29,20 +27,6 @@ class DataController: ObservableObject {
         return container
     }()
     
-//    var managedObjectContext: NSManagedObjectContext {
-//        if let context = _managedObjectContext {
-//            return context
-//        }
-//
-//        // Attempt to retrieve the context from the environment
-//        if let context = Environment(\.managedObjectContext) as? NSManagedObjectContext {
-//            _managedObjectContext = context
-//            return context
-//        }
-//
-//        fatalError("Managed object context not set in the environment.")
-//    }
-    
     var managedObjectContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
@@ -59,12 +43,4 @@ class DataController: ObservableObject {
     
     static let shared = DataController()
     
-//    init() {
-//        container.loadPersistentStores { description, error in
-//            if let error = error {
-//                print(error)
-//            }
-//            print(description)
-//        }
-//    }
 }

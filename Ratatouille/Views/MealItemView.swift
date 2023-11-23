@@ -37,12 +37,15 @@ struct MealItemView: View {
                 
             Spacer()
                 
-            VStack {
+            VStack (alignment: .leading) {
                 Text(viewModel.meal.name ).foregroundColor(.myAccentColor).font(.callout)
                 Text(viewModel.meal.category?.name ?? "N/A").foregroundColor(.myContrastColor)
                 Text(viewModel.meal.area?.name ?? "N/A").foregroundColor(.myContrastColor)
             }
+            .frame(width: 150)
             .padding()
+            
+            Spacer()
         }
     }
 }

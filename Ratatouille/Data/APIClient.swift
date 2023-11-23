@@ -1,5 +1,5 @@
 //
-//  NewAPIClient.swift
+//  APIClient.swift
 //  Ratatouille
 //
 //  Created by Caroline Vannebo on 22/11/2023.

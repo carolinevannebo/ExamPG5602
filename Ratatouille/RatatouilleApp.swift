@@ -14,21 +14,35 @@ struct RatatouilleApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView {
-                MealListView().tabItem {
-                    Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
-                }
-            } // TabView
-            .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
-            .environment(\.colorScheme, .dark)
-            .onAppear {
+            MainView()
+                .modifier(DarkModeViewModifier())
+                .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
+                .onAppear {
                 Task {
-                    // Debugging
-                    //UserDefaults.standard.setValue(true, forKey: "com.apple.CoreData.SQLDebug")
                     await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
-        } // WindowGroup
+        }
     }
 }
 
+struct MainView: View {
+    @State private var selection = 2
+    
+    var body: some View {
+        TabView(selection: $selection) {
+            Favorites().tabItem {
+                Label("Favoritter", systemImage: "heart.circle.fill")
+            }.tag(1)
+            
+            
+            MealListView().tabItem {
+                Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill")
+            }.tag(2)
+            
+            SettingsView().tabItem {
+                Label("Innstillinger", systemImage: "gear.circle.fill")
+            }.tag(3)
+        }
+    }
+}
