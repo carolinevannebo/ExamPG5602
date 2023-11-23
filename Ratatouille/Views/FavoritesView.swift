@@ -10,23 +10,23 @@ import SwiftUI
 class FavoritesViewModel: ObservableObject {
     @Published var meals: [Meal] = []
     
-//    let favoritesLogic = LoadFavorites()
+    let loadFavorites = LoadFavorites()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
-//    func loadFavoriteMeals() async {
-//        do {
-//            if let meals = await favoritesLogic.execute(input: ()) {
-//                DispatchQueue.main.async {
-//                    self.meals = meals
-//                }
-//            } else {
-//                throw FavoritesViewModelError.noFavorites
-//            }
-//        } catch {
-//            print("Unexpected error: \(error)")
-//        }
-//    }
+    func loadFavoriteMeals() async {
+        do {
+            if let meals = await loadFavorites.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.meals = meals
+                }
+            } else {
+                throw FavoritesViewModelError.noFavorites
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
     
     enum FavoritesViewModelError: Error {
         case noFavorites
@@ -39,14 +39,15 @@ struct FavoritesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-//                ForEach(viewModel.meals) { meal in
-//                    NavigationLink {
-//                        Text(meal.name ) // TODO: DetailView
-//                    } label: {
-//                        MealItemView(meal: viewModel.meal)
-//                        .padding(.horizontal)
-//                    }
-//                }
+                ForEach(viewModel.meals) { meal in
+                    NavigationLink {
+                        Text(meal.name ?? "unknown").foregroundColor(.myContrastColor) // TODO: DetailView
+                    } label: {
+                        Text(meal.name ?? "unknown").foregroundColor(.myContrastColor)
+                        //MealItemView(meal: viewModel.meal)
+                        .padding(.horizontal)
+                    }
+                }
             }
             .navigationTitle("Favoritter")
             .background(Color.myBackgroundColor)
@@ -54,6 +55,11 @@ struct FavoritesView: View {
         }
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
+        .onAppear {
+            Task {
+                await viewModel.loadFavoriteMeals()
+            }
+        }
     }
 }
 

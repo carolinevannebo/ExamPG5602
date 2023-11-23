@@ -76,7 +76,7 @@ struct MealListView: View {
         } // navView, onAppear can apply here
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
-        .onAppear() {
+        .onAppear {
             Task {
                 await viewModel.searchMeals(isDemo: true)
             }

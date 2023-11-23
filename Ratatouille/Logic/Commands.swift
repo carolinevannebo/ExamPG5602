@@ -150,19 +150,25 @@ class SearchCategories: ICommand {
     }
 }
 
-//class LoadFavorites: ICommand {
-//    typealias Input = Void
-//    typealias Output = [MealModel]?
-//
-//    func execute(input: Void) async -> [MealModel]? {
-//        do {
-//
-//        } catch {
-//            print("Unexpected error: \(error)")
-//            return nil
-//        }
-//    }
-//}
+class LoadFavorites: ICommand {
+    typealias Input = Void
+    typealias Output = [Meal]?
+
+    func execute(input: Void) async -> [Meal]? {
+        do {
+            let favoriteFetchRequest: NSFetchRequest<Meal> = Meal.fetchRequest()
+            let managedObjectContext = DataController.shared.managedObjectContext
+            
+            // TODO: this seems too simple, what are you forgetting?
+            let fetchedFavorites: [Meal] = try managedObjectContext.fetch(favoriteFetchRequest)
+            return fetchedFavorites
+            
+        } catch {
+            print("Unexpected error: \(error)")
+            return nil
+        }
+    }
+}
 
 class SaveFavorite: ICommand {
     typealias Input = MealModel
