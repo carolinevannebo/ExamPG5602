@@ -21,6 +21,10 @@ struct RatatouilleApp: App {
                     await initCD.execute(input: DataController.shared.managedObjectContext)
                 }
             }
+                .onDisappear {
+                    DataController.shared.saveContext()
+                }
+
         }
     }
 }

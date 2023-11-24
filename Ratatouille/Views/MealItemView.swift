@@ -87,6 +87,7 @@ struct MealItemView: View {
     }
 
     var body: some View {
+        
         ZStack {
             HStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)

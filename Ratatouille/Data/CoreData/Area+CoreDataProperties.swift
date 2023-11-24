@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Area {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Area> {

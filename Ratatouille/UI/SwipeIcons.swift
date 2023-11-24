@@ -24,8 +24,7 @@ struct HeartIcon: View {
                     .onTapGesture {
                         Task {
                             viewModel.hasTappedHeart = true
-                            let result = await viewModel.saveFavorite.execute(input: viewModel.meal)
-                            print(result)
+                            await viewModel.handleTappedHeart()
                         }
                     }
             }
@@ -37,28 +36,28 @@ struct HeartIcon: View {
 }
 
 struct ArchiveIcon: View {
-    @StateObject var viewModel: FavoritesViewModel
+    @StateObject var viewModel: FavoriteItemViewModel
     
     var body: some View {
         HStack {
-            Spacer()
             if (viewModel.hasTappedArchive) {
-                Image(systemName: "archive.fill")
+                Image(systemName: "archivebox.fill")
                     .onTapGesture {
                         viewModel.hasTappedArchive = false
                     }
             } else {
-                Image(systemName: "archive")
+                Image(systemName: "archivebox")
                     .onTapGesture {
                         Task {
                             viewModel.hasTappedArchive = true
-                            // TODO: call on function to archive favorite
+                            await viewModel.handleTappedArchive()
                         }
                     }
             }
+            Spacer()
         }
         .foregroundColor(.mySwipeIconColor)
         .font(.system(size: 35))
-        .padding(.trailing, 30)
+        .padding(.leading, 30)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 
 struct MealModel: Codable, Identifiable {
@@ -15,7 +16,7 @@ struct MealModel: Codable, Identifiable {
     let instructions: String
     let area: AreaModel?
     let category: CategoryModel?
-    let ingredients: [IngredientModel]
+    let ingredients: [IngredientModel]?
     
     init(from decoder: Decoder) throws {
         do {
@@ -23,15 +24,26 @@ struct MealModel: Codable, Identifiable {
             let id = try container.decode(String.self, forKey: .idMeal)
             let name = try container.decode(String.self, forKey: .strMeal)
             let image = try container.decodeIfPresent(String.self, forKey: .strMealThumb)
-            let area = try container.decode(String.self, forKey: .strArea)
-            let category = try container.decode(String.self, forKey: .strCategory)
+            let area = try container.decodeIfPresent(String.self, forKey: .strArea)
+            let category = try container.decodeIfPresent(String.self, forKey: .strCategory)
             let instructions = try container.decode(String.self, forKey: .strInstructions)
             
             var areaModel = try AreaModel(from: decoder)
-            areaModel.self.name = area
+            areaModel.self.name = area!
             
             var categoryModel = try CategoryModel(from: decoder)
-            categoryModel.self.name = category
+            categoryModel.self.name = category!
+            
+            // Match the rest of categorymodel's attributes to attributes of category in CoreData
+            let managedObjectContext = DataController.shared.managedObjectContext
+            let categoryFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+            categoryFetchRequest.predicate = NSPredicate(format: "name == %@", categoryModel.self.name)
+            let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first
+            
+            // Assign values
+            categoryModel.self.id = fetchedCategory?.id
+            categoryModel.self.image = fetchedCategory?.image
+            categoryModel.self.information = fetchedCategory?.information
             
             let (dynamicIngredientKeys, dynamicMeasureKeys) = MealModel.makeDynamicKeys()
             let dynamicContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
@@ -47,7 +59,34 @@ struct MealModel: Codable, Identifiable {
             for ingredient in dynamicIngredients {
                 var ingredientModel = try IngredientModel(from: decoder)
                 if !ingredient.isEmpty {
+                    ingredientModel.self.id = UUID().uuidString
                     ingredientModel.self.name = ingredient
+                    
+//                    let commaIndex = (ingredientModel.self.name?.firstIndex(of: ",") ?? ingredientModel.self.name?.endIndex)!
+//                    let substringValue = ingredientModel.self.name?[..<commaIndex]
+//
+//                    let ingredientEntityName = String(substringValue!)
+                    
+                    // Match the rest of ingredientmodel's attributes to attributes of ingredient in CoreData
+//                    let ingredientFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+//                    ingredientFetchRequest.predicate = NSPredicate(format: "name == %@", ingredientEntityName)
+                    
+//                    try await managedObjectContext.perform {
+//                        if let ingredientinformation = try managedObjectContext.fetch(ingredientFetchRequest).first?.information {
+//                            ingredientModel.self.information = ingredientinformation
+//                        } else {
+//                            ingredientModel.self.information = nil
+//                        }
+//                    }
+                    
+//                    if let fetchedIngredient = try managedObjectContext.fetch(ingredientFetchRequest).first {
+//                        // Assign values
+//                        ingredientModel.self.information = fetchedIngredient.information
+//                    } else {
+//                        ingredientModel.self.information = nil
+//                    }
+                    
+                    // Append model
                     ingredientsArr.append(ingredientModel)
                 }
             }
@@ -101,7 +140,7 @@ struct MealModel: Codable, Identifiable {
                     if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
                        let measurement = try container.decodeIfPresent(String.self, forKey: measurementKey) {
                             if !ingredient.isEmpty, !measurement.isEmpty {
-                                let attribute = "\(ingredient), \(measurement)"
+                                let attribute = "\(ingredient.capitalized), \(measurement)"
                                 dynamicIngredients.append(attribute)
                             }
                     }

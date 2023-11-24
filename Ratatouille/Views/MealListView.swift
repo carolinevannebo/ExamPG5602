@@ -58,6 +58,8 @@ struct MealListView: View {
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 
+                // category widgets
+                
                 ScrollView {
                     ForEach(0..<viewModel.meals.count, id: \.self) { index in
                         NavigationLink {

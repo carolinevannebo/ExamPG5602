@@ -40,6 +40,12 @@ class SearchMeals: ICommand {
                 
             case .success(let meals):
                 print("Got \(meals.count) meals")
+                
+                // testing
+                for meal in meals {
+                    print("meal has category entity with name \(meal.category?.name ?? "unknown") and id \(meal.category?.id ?? "unknown")")
+                }
+                
                 return meals
                 
             case .failure(let error):
@@ -161,6 +167,8 @@ class LoadFavorites: ICommand {
             
             // TODO: this seems too simple, what are you forgetting?
             let fetchedFavorites: [Meal] = try managedObjectContext.fetch(favoriteFetchRequest)
+            
+            print("Loading \(fetchedFavorites.count) favorites")
             return fetchedFavorites
             
         } catch {
@@ -193,21 +201,33 @@ class SaveFavorite: ICommand {
             areaFetchRequest.predicate = NSPredicate(format: "name == %@", input.area!.name)
             
             let categoryFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
-            categoryFetchRequest.predicate = NSPredicate(format: "name == %@", input.category!.name)
+            categoryFetchRequest.predicate = NSPredicate(format: "id == %@", input.category!.id!)
             
-            var ingredientFetchRequests: [NSFetchRequest<Ingredient>] = []
+//            var ingredientFetchRequests: [NSFetchRequest<Ingredient>] = []
+            let managedObjectContext = DataController.shared.managedObjectContext
+            var ingredientEntities: [Ingredient] = []
             
-            for ingredient in input.ingredients {
-                let ingredientFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+            for ingredient in input.ingredients! {
+                // TODO: du kan bare lagre nye ingredienser? men det kan bli mange...
                 
-                let commaIndex = (ingredient.name?.firstIndex(of: ",") ?? ingredient.name?.endIndex)!
-                let substringValue = ingredient.name?[..<commaIndex]
+                let newIngredient = Ingredient(context: managedObjectContext)
+                newIngredient.id = ingredient.id
+                newIngredient.name = ingredient.name
+                newIngredient.information = ingredient.information
+                ingredientEntities.append(newIngredient)
                 
-                ingredientFetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", substringValue! as CVarArg)
-                ingredientFetchRequests.append(ingredientFetchRequest)
+//                let ingredientFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+////                ingredientFetchRequest.predicate = NSPredicate(format: "id == %@", ingredient.id!) // id er ikke lik lenger
+//
+//                let commaIndex = (ingredient.name?.firstIndex(of: ",") ?? ingredient.name?.endIndex)!
+//                let substringValue = ingredient.name?[..<commaIndex]
+//
+//                ingredientFetchRequest.predicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", substringValue! as CVarArg)
+                
+//                ingredientFetchRequests.append(ingredientFetchRequest)
             }
             
-            let managedObjectContext = DataController.shared.managedObjectContext
+            //let managedObjectContext = DataController.shared.managedObjectContext
             var result: Result<Meal, SaveFavoriteError>?
             
             try await managedObjectContext.perform {
@@ -217,13 +237,13 @@ class SaveFavorite: ICommand {
                 let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first
                 print("Got meal's category: \(fetchedCategory?.name ?? "unknown")")
                 
-                var fetchedIngredients: [Ingredient] = []
-                
-                for request in ingredientFetchRequests {
-                    let fetchedIngredient = try managedObjectContext.fetch(request)
-                    fetchedIngredients.append(contentsOf: fetchedIngredient)
-                }
-                print("Got \(fetchedIngredients.count) ingredients in meal")
+//                var fetchedIngredients: [Ingredient] = []
+//
+//                for request in ingredientFetchRequests {
+//                    let fetchedIngredient = try managedObjectContext.fetch(request)
+//                    fetchedIngredients.append(contentsOf: fetchedIngredient)
+//                }
+//                print("Got \(fetchedIngredients.count) ingredients in meal")
                 
                 if let fetchedFavorite = try managedObjectContext.fetch(favoriteFetchRequest).first {
                     fetchedFavorite.name = input.name
@@ -231,7 +251,7 @@ class SaveFavorite: ICommand {
                     fetchedFavorite.instructions = input.instructions
                     fetchedFavorite.area = fetchedArea
                     fetchedFavorite.category = fetchedCategory
-                    fetchedFavorite.ingredients = NSSet(array: fetchedIngredients)
+                    fetchedFavorite.ingredients = NSSet(array: ingredientEntities)
                     
                     print("Favorite meal is already saved, updating: \(fetchedFavorite.name!)")
                     result = .success(fetchedFavorite)
@@ -243,15 +263,26 @@ class SaveFavorite: ICommand {
                     newFavorite.instructions = input.instructions
                     newFavorite.area = fetchedArea
                     newFavorite.category = fetchedCategory
-                    newFavorite.ingredients = NSSet(array: fetchedIngredients)
+                    newFavorite.ingredients = NSSet(array: ingredientEntities)
                     
                     print("New favorite created: \(newFavorite.name ?? "unknown name for some reason")")
+                    
+                    print("This favorite has the following attributes: ")
+                    print("id: \(newFavorite.id ?? "unknown id")")
+                    print("image: \(newFavorite.image ?? "unknown image")")
+                    print("area: \(newFavorite.area?.name ?? "unknown area")")
+                    print("category name: \(newFavorite.category?.name ?? "unknown category name")")
+                    print("category id: \(newFavorite.category?.id ?? "unknown category id")")
+                    print("category image: \(newFavorite.category?.image ?? "unknown category image")")
+                    print("category information: \(newFavorite.category?.information ?? "unknown category information")")
+                    
                     result = .success(newFavorite)
                 }
             }
             
             print("Saving favorite...")
             DataController.shared.saveContext()
+            
             return result ?? .failure(.fetchingEntityError)
         } catch {
             print("Unexpected error: \(error)")

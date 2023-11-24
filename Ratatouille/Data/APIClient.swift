@@ -149,9 +149,9 @@ extension APIClient {
                 print("category: \(meal.category?.name ?? "N/A")")
                 print("ingredients: ")
     
-                meal.ingredients.forEach { ingredient in
-                    print("\((ingredient).name ?? "N/A")")
-                }
+//                meal.ingredients.forEach { ingredient in
+//                    print("\((ingredient).name ?? "N/A")")
+//                }
     
                 print("-------------------")
             }
@@ -208,21 +208,31 @@ extension APIClient {
             for areaData in areas {
                 // Fetch or create Area
                 let areaFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
-                areaFetchRequest.predicate = NSPredicate(format: "name == %@", areaData.name)
+                areaFetchRequest.predicate = NSPredicate(format: "name == %@", areaData.name.capitalized)
                 
                 if let fetchedArea = try managedObjectContext.fetch(areaFetchRequest).first {
                     // Area already exists, update it if needed
-                    fetchedArea.name = areaData.name
+                    fetchedArea.name = areaData.name // TODO: You should give area an id
                     print("Area already exists: \(fetchedArea.name ?? "")")
                 } else {
                     // Create a new Area
                     let newArea = Area(context: managedObjectContext)
                     newArea.name = areaData.name
+                    
                     print("New area created: \(newArea.name ?? "")")
                 }
             }
             
             DataController.shared.saveContext()
+            
+            // check how many areas are saved in coredata
+            let countFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
+            do {
+                let count = try managedObjectContext.count(for: countFetchRequest)
+                print("Number of areas saved: \(count)")
+            } catch {
+                print("Error counting areas: \(error)")
+            }
 
         } catch let error {
             print(error)
@@ -299,6 +309,7 @@ extension APIClient {
                 try await managedObjectContext.perform {
                     if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
                         // Category already exists, update it if needed
+//                        fetchedCategory.id = id // testing with id
                         fetchedCategory.name = categoryData.name
                         fetchedCategory.image = categoryData.image
                         fetchedCategory.information = categoryData.information
@@ -318,6 +329,19 @@ extension APIClient {
             }
                     
             DataController.shared.saveContext()
+            
+            // check how many categories are saved in coredata
+            let countFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+            do {
+                let count = try managedObjectContext.count(for: countFetchRequest)
+                print("Number of categories saved: \(count)")
+                let categoriesInCD = try managedObjectContext.fetch(countFetchRequest)
+                for categoryInCD in categoriesInCD {
+                    print("This CoreData category has id \(categoryInCD.id ?? "unknown")") // they all have an id
+                }
+            } catch {
+                print("Error counting categories: \(error)")
+            }
             
         } catch let error {
             print(error)
@@ -396,26 +420,36 @@ extension APIClient {
                 
                 try await managedObjectContext.perform {
                     if let fetchedIngredient = try managedObjectContext.fetch(ingredientFetchRequest).first {
-                        // Category already exists, update it if needed
-                        fetchedIngredient.name = ingredientData.name
+                        // Ingredient already exists, update it if needed
+                        //fetchedIngredient.id = id // testing with id
+                        fetchedIngredient.name = ingredientData.name?.capitalized
                         fetchedIngredient.information = ingredientData.information
                         print("Ingredient already exists: \(fetchedIngredient.name ?? "")")
                     } else {
                         // Create new ingredient
                         let newIngredient = Ingredient(context: managedObjectContext)
                         newIngredient.id = id
-                        newIngredient.name = ingredientData.name
+                        newIngredient.name = ingredientData.name?.capitalized
                         newIngredient.information = newIngredient.information
                         
-                        print("New ingredient created: \(newIngredient.name ?? "")")
+                        print("New ingredient created: \(newIngredient.name ?? "") with id: \(newIngredient.id ?? "unknown")")
                     }
                 }
             }
             
             DataController.shared.saveContext()
             
+            // check how many ingredients are saved in coredata
+            let countFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+            do {
+                let count = try managedObjectContext.count(for: countFetchRequest)
+                print("Number of ingredients saved: \(count)")
+            } catch {
+                print("Error counting ingredients: \(error)")
+            }
+            
         } catch let error {
-            print(error)
+            print("Could not save ingredients: \(error)")
         }
     }
     
