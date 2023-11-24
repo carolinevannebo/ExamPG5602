@@ -26,6 +26,9 @@
 		E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644892B0F82E700028CBD /* AnimatedGif.swift */; };
 		E406448D2B0F868200028CBD /* remy-eating.gif in Resources */ = {isa = PBXBuildFile; fileRef = E406448C2B0F868200028CBD /* remy-eating.gif */; };
 		E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E406448E2B0F86E200028CBD /* ViewCoordinator.swift */; };
+		E40644912B10349500028CBD /* SwipeIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644902B10349500028CBD /* SwipeIcons.swift */; };
+		E40644932B10350600028CBD /* ImageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644922B10350600028CBD /* ImageWidget.swift */; };
+		E40644952B1035A300028CBD /* MealCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644942B1035A300028CBD /* MealCards.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -78,6 +81,9 @@
 		E40644892B0F82E700028CBD /* AnimatedGif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedGif.swift; sourceTree = "<group>"; };
 		E406448C2B0F868200028CBD /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "remy-eating.gif"; path = "../../../../../../remy-eating.gif"; sourceTree = "<group>"; };
 		E406448E2B0F86E200028CBD /* ViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCoordinator.swift; sourceTree = "<group>"; };
+		E40644902B10349500028CBD /* SwipeIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeIcons.swift; sourceTree = "<group>"; };
+		E40644922B10350600028CBD /* ImageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWidget.swift; sourceTree = "<group>"; };
+		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -217,6 +223,8 @@
 				E406445E2B0D1AED00028CBD /* CircleImage.swift */,
 				E40644602B0D2FBC00028CBD /* MyColors.swift */,
 				E40644892B0F82E700028CBD /* AnimatedGif.swift */,
+				E40644902B10349500028CBD /* SwipeIcons.swift */,
+				E40644922B10350600028CBD /* ImageWidget.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -240,6 +248,7 @@
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
 				E406447E2B0EBDDF00028CBD /* FavoritesView.swift */,
 				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
+				E40644942B1035A300028CBD /* MealCards.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -415,10 +424,13 @@
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E40644612B0D2FBC00028CBD /* MyColors.swift in Sources */,
 				E406447F2B0EBDDF00028CBD /* FavoritesView.swift in Sources */,
+				E40644932B10350600028CBD /* ImageWidget.swift in Sources */,
 				E4EAFC712B025FF60095D10B /* DataController.swift in Sources */,
 				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,
+				E40644952B1035A300028CBD /* MealCards.swift in Sources */,
 				E406445D2B0D0F3500028CBD /* MealItemView.swift in Sources */,
+				E40644912B10349500028CBD /* SwipeIcons.swift in Sources */,
 				E4EAFC7E2B028EC40095D10B /* Ingredient+CoreDataClass.swift in Sources */,
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,
 				E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */,

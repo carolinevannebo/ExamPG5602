@@ -59,11 +59,11 @@ struct MealListView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 ScrollView {
-                    ForEach(viewModel.meals) { meal in
+                    ForEach(0..<viewModel.meals.count, id: \.self) { index in
                         NavigationLink {
-                            Text(meal.name ) // TODO: DetailView
+                            Text(viewModel.meals[index].name ) // TODO: DetailView
                         } label: {
-                                MealItemView(meal: meal)//.shadow(radius: 10)
+                            MealItemView(meal: viewModel.meals[index])//.shadow(radius: 10)
                             .padding(.horizontal)
                         }
                     }
