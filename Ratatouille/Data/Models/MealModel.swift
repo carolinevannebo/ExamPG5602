@@ -11,12 +11,13 @@ import CoreData
 
 struct MealModel: Codable, Identifiable {
     let id: String
-    let name: String
-    let image: String?
-    let instructions: String?
-    let area: AreaModel?
-    let category: CategoryModel?
-    let ingredients: [IngredientModel]?
+    var name: String
+    var image: String?
+    var instructions: String?
+    var area: AreaModel?
+    var category: CategoryModel?
+    var ingredients: [IngredientModel]?
+    var isFavorite: Bool
     
     init(from decoder: Decoder) throws {
         do {
@@ -83,6 +84,7 @@ struct MealModel: Codable, Identifiable {
             self.area = areaModel
             self.category = categoryModel
             self.ingredients = ingredientsArr.compactMap { $0 }
+            self.isFavorite = false
             
         } catch {
             let context = DecodingError.Context(

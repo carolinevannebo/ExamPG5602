@@ -14,9 +14,10 @@ class MealListViewModel: ObservableObject {
     @Published var categories: [CategoryModel] = []
     @Published var searchId: UUID = UUID()
     
-    let searchLogic = SearchMeals()
-    let loadCategories = LoadCategories()
-    let filterByCategories = FilterByCategories()
+    // TODO: you want to have one command, and set that command to different values based on events
+    let searchCommand = SearchMealsCommand()
+    let loadCategoriesCommand = LoadCategoriesCommand()
+    let filterCommand = FilterByCategoriesCommand() // TODO: add loading stages
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -30,7 +31,7 @@ class MealListViewModel: ObservableObject {
                 mutableInput = input
             }
             
-            if let meals = await searchLogic.execute(input: mutableInput) {
+            if let meals = await searchCommand.execute(input: mutableInput) {
                 DispatchQueue.main.async {
                     self.meals = meals
                     self.searchId = UUID()
@@ -46,7 +47,7 @@ class MealListViewModel: ObservableObject {
     
     func filterByCategories() async {
         do {
-            if let meals = await filterByCategories.execute(input: chosenCategory) {
+            if let meals = await filterCommand.execute(input: chosenCategory) {
                 DispatchQueue.main.async {
                     self.meals = meals
                     self.searchId = UUID()
@@ -61,7 +62,7 @@ class MealListViewModel: ObservableObject {
     
     func loadCategories() async {
         do {
-            if let categories = await loadCategories.execute(input: ()) {
+            if let categories = await loadCategoriesCommand.execute(input: ()) {
                 DispatchQueue.main.async {
                     self.categories = categories
                 }

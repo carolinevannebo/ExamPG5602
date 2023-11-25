@@ -13,7 +13,8 @@ class MealItemViewModel: ObservableObject {
     @Published var isDragging: Bool = false
     @Published var hasTappedHeart: Bool = false
     
-    let saveFavorite = SaveFavorite()
+    let saveCommand = SaveFavoriteCommand()
+    let archiveCommand = ArchiveMealCommand()
     
     init(meal: MealModel) {
         self.meal = meal
@@ -25,20 +26,28 @@ class MealItemViewModel: ObservableObject {
     }
     
     func handleTappedHeart() async {
-        if hasTappedHeart {
-            do {
-                let result = await saveFavorite.execute(input: self.meal)
+        do {
+            if hasTappedHeart {
+                let result = await saveCommand.execute(input: self.meal)
                 
                 switch result {
                 case .success(let favorite):
                     print("Saving \(String(describing: favorite.name)) succeeded")
+                    
+                    DispatchQueue.main.async {
+                        self.meal.isFavorite = true
+                    }
+                    // testvariant 2
+                    //MealListViewModel().searchId.self = UUID()
                 case .failure(let error):
                     throw error
                 }
-                
-            } catch {
-                print("Unexpected error: \(error)")
+            } else {
+                // TODO: set isArchived to true
+                print("Recipe with name \(meal.name) will be moved to archives")
             }
+        } catch {
+            print("Unexpected error: \(error)")
         }
     }
     
@@ -83,7 +92,10 @@ struct MealItemView: View {
     @StateObject var viewModel: MealItemViewModel
 
     init(meal: MealModel) {
-        _viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
+        let mealItemViewModel = MealItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: mealItemViewModel)
+        //_viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
+        // this instanciation of viewmodel can lead to unnecessary view model recreations
     }
 
     var body: some View {

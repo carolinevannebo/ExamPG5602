@@ -14,10 +14,13 @@ struct HeartIcon: View {
     var body: some View {
         HStack {
             Spacer()
-            if (viewModel.hasTappedHeart) {
+            if (viewModel.meal.isFavorite) {
                 Image(systemName: "heart.fill")
                     .onTapGesture {
-                        viewModel.hasTappedHeart = false
+                        Task {
+                            viewModel.hasTappedHeart = false
+                            await viewModel.handleTappedHeart()
+                        }
                     }
             } else {
                 Image(systemName: "heart")
@@ -43,7 +46,10 @@ struct ArchiveIcon: View {
             if (viewModel.hasTappedArchive) {
                 Image(systemName: "archivebox.fill")
                     .onTapGesture {
-                        viewModel.hasTappedArchive = false
+                        Task {
+                            viewModel.hasTappedArchive = false
+                            await viewModel.handleTappedArchive()
+                        }
                     }
             } else {
                 Image(systemName: "archivebox")

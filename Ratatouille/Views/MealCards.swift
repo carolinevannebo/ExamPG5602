@@ -13,7 +13,9 @@ struct MealCardForMeal: View {
     @StateObject var viewModel: FavoriteItemViewModel
     
     init(meal: Meal) {
-        _viewModel = StateObject(wrappedValue: FavoriteItemViewModel(meal: meal)!)
+        let favoriteItemViewModel = FavoriteItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: favoriteItemViewModel)
+        //_viewModel = StateObject(wrappedValue: FavoriteItemViewModel(meal: meal)!)
     }
     
     var body: some View {
@@ -63,7 +65,9 @@ struct MealCardForMealModel: View {
     @StateObject var viewModel: MealItemViewModel
         
     init(meal: MealModel) {
-        _viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
+        let mealItemViewModel = MealItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: mealItemViewModel)
+        //_viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
     }
     
     var body: some View {

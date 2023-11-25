@@ -15,7 +15,7 @@ public protocol ICommand {
     func execute(input: Input) async -> Output
 }
 
-class InitCD: ICommand {
+class InitCDCommand: ICommand {
     typealias Input = NSManagedObjectContext
     typealias Output = Void
     
@@ -28,7 +28,7 @@ class InitCD: ICommand {
     }
 }
 
-class SearchMeals: ICommand {
+class SearchMealsCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
     
@@ -38,12 +38,24 @@ class SearchMeals: ICommand {
             
             switch result {
                 
-            case .success(let meals):
-                print("Got \(meals.count) meals")
+            case .success(var meals):
+                print("Got \(meals.count) meals, loading isFavorite attribute...")
                 
-                // testing
-                for meal in meals {
-                    print("meal has category entity with name \(meal.category?.name ?? "unknown") and id \(meal.category?.id ?? "unknown")")
+                let managedObjectContext = DataController.shared.managedObjectContext
+                
+                meals = try meals.map { meal -> MealModel in
+                    let request: NSFetchRequest<Meal> = Meal.fetchRequest()
+                        request.predicate = NSPredicate(format: "id == %@", meal.id)
+                    
+                    if let match: Meal = try managedObjectContext.fetch(request).first {
+                        var updatedMeal = meal
+                            updatedMeal.isFavorite = true
+                        
+                        print("updated meal from search is favorite")
+                        return updatedMeal
+                    } else {
+                        return meal
+                    }
                 }
                 
                 return meals
@@ -68,7 +80,7 @@ class SearchMeals: ICommand {
     }
 }
 
-class SearchRandom: ICommand {
+class SearchRandomCommand: ICommand {
     typealias Input = Void
     typealias Output = MealModel?
 
@@ -90,51 +102,52 @@ class SearchRandom: ICommand {
     }
 }
 
-//class SearchIngredients: ICommand {
-//    typealias Input = String
-//    typealias Output = [IngredientModel]?
-//
-//    func execute(input: String) async -> Output {
-//        do {
-//            let result = await APIClient.getIngredients(input: input)
-//
-//            switch result {
-//                case .success(let ingredients):
-//                    print("Got \(ingredients.count) meals")
-//                    return ingredients
-//                case .failure(let error):
-//                    throw error
-//            }
-//        } catch {
-//            print("Unexpected error: \(error)")
-//            return nil
-//        }
-//    }
-//}
-//
-//class SearchAreas: ICommand {
-//    typealias Input = String
-//    typealias Output = [AreaModel]?
-//
-//    func execute(input: String) async -> Output {
-//        do {
-//            let result = await APIClient.getAreas(input: input)
-//
-//            switch result {
-//                case .success(let areas):
-//                    print("Got \(areas.count) meals")
-//                    return areas
-//                case .failure(let error):
-//                    throw error
-//            }
-//        } catch {
-//            print("Unexpected error: \(error)")
-//            return nil
-//        }
-//    }
-//}
+class ListIngredientsCommand: ICommand {
+    typealias Input = String
+    typealias Output = [IngredientModel]?
 
-class FilterByCategories: ICommand {
+    func execute(input: String) async -> Output {
+        do {
+            let result = await APIClient.getIngredients()
+
+            switch result {
+                case .success(let ingredients):
+                    print("Got \(ingredients.count) meals")
+                    return ingredients
+                case .failure(let error):
+                    throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            return nil
+        }
+    }
+}
+
+class ListAreasCommand: ICommand {
+    typealias Input = String
+    typealias Output = [AreaModel]?
+
+    func execute(input: String) async -> Output {
+        do {
+            let result = await APIClient.getAreas()
+
+            switch result {
+                case .success(let areas):
+                    print("Got \(areas.count) meals")
+                    return areas
+                case .failure(let error):
+                    throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            return nil
+        }
+    }
+}
+
+// TODO: this filter logic is slow, fix it
+class FilterByCategoriesCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
 
@@ -172,7 +185,7 @@ class FilterByCategories: ICommand {
     }
 }
 
-class LoadCategories: ICommand {
+class LoadCategoriesCommand: ICommand {
     typealias Input = Void
     typealias Output = [CategoryModel]?
     
@@ -194,13 +207,15 @@ class LoadCategories: ICommand {
     }
 }
 
-class LoadFavorites: ICommand {
+class LoadFavoritesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Meal]?
 
     func execute(input: Void) async -> [Meal]? {
         do {
             let request: NSFetchRequest<Meal> = Meal.fetchRequest()
+                request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(value: false))
+            
             let managedObjectContext = DataController.shared.managedObjectContext
             
             // TODO: this seems too simple, what are you forgetting?
@@ -216,21 +231,88 @@ class LoadFavorites: ICommand {
     }
 }
 
-class SaveFavorite: ICommand {
+class LoadArchivesCommand: ICommand {
+    typealias Input = Void
+    typealias Output = [Meal]?
+
+    func execute(input: Void) async -> [Meal]? {
+        do {
+            let request: NSFetchRequest<Meal> = Meal.fetchRequest()
+                request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(value: true))
+            
+            let managedObjectContext = DataController.shared.managedObjectContext
+            
+            // TODO: this seems too simple, what are you forgetting?
+            let archives: [Meal] = try managedObjectContext.fetch(request)
+            
+            print("Loading \(archives.count) meals from archive")
+            return archives
+            
+        } catch {
+            print("Unexpected error: \(error)")
+            return nil
+        }
+    }
+}
+
+class ArchiveMealCommand: ICommand {
+    typealias Input = Meal
+    typealias Output = Result<Meal, ArchiveMealError>
+    
+    enum ArchiveMealError: Error {
+        case missingIdError(String)
+        case archivingError
+    }
+    
+    func execute(input: Meal) async -> Result<Meal, ArchiveMealError> {
+        do {
+            if input.id.isEmpty {
+                throw ArchiveMealError.missingIdError("Meal ID is missing.")
+            }
+            
+            let request: NSFetchRequest<Meal> = Meal.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", input.id)
+            
+            let managedObjectContext = DataController.shared.managedObjectContext
+            var result: Result<Meal, ArchiveMealError>?
+            
+            try await managedObjectContext.perform {
+                if let fetchedMeal = try managedObjectContext.fetch(request).first {
+                    fetchedMeal.isArchived = true
+                    
+                    result = .success(fetchedMeal)
+                }
+            }
+            
+            print("Archiving meal...")
+            DataController.shared.saveContext()
+            
+            return result ?? .failure(.archivingError)
+        } catch {
+            print("Unexpected error: \(error)")
+            return .failure(.archivingError)
+        }
+    }
+}
+
+class SaveFavoriteCommand: ICommand {
     typealias Input = MealModel
     typealias Output = Result<Meal, SaveFavoriteError>
     
     enum SaveFavoriteError: Error {
-        case unMatchedId
+        case missingIdError(String)
         case noMatchingPredicateError
         case fetchingAttributeError
-        case fetchingEntityError
         case savingError
     }
     
     func execute(input: MealModel) async -> Result<Meal, SaveFavoriteError> {
         do {
             print("About to save favorite \(input.name) with ID: \(input.id)")
+            
+            if input.id.isEmpty {
+                throw SaveFavoriteError.missingIdError("Meal ID is missing.")
+            }
             
             let favoriteFetchRequest: NSFetchRequest<Meal> = Meal.fetchRequest()
             favoriteFetchRequest.predicate = NSPredicate(format: "id == %@", input.id)
@@ -265,33 +347,15 @@ class SaveFavorite: ICommand {
 //                ingredientFetchRequests.append(ingredientFetchRequest)
             }
             
-            //let managedObjectContext = DataController.shared.managedObjectContext
             var result: Result<Meal, SaveFavoriteError>?
             
             try await managedObjectContext.perform {
                 
                 let fetchedArea = try managedObjectContext.fetch(areaFetchRequest).first
-                print("Got meal's area: \(fetchedArea?.name ?? "unknown")")
                 let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first
-                print("Got meal's category: \(fetchedCategory?.name ?? "unknown")")
-                
-//                var fetchedIngredients: [Ingredient] = []
-//
-//                for request in ingredientFetchRequests {
-//                    let fetchedIngredient = try managedObjectContext.fetch(request)
-//                    fetchedIngredients.append(contentsOf: fetchedIngredient)
-//                }
-//                print("Got \(fetchedIngredients.count) ingredients in meal")
                 
                 if let fetchedFavorite = try managedObjectContext.fetch(favoriteFetchRequest).first {
-                    fetchedFavorite.name = input.name
-                    fetchedFavorite.image = input.image
-                    fetchedFavorite.instructions = input.instructions
-                    fetchedFavorite.area = fetchedArea
-                    fetchedFavorite.category = fetchedCategory
-                    fetchedFavorite.ingredients = NSSet(array: ingredientEntities)
-                    
-                    print("Favorite meal is already saved, updating: \(fetchedFavorite.name!)")
+                    print("Favorite meal is already saved: \(fetchedFavorite.name!)")
                     result = .success(fetchedFavorite)
                 } else {
                     let newFavorite = Meal(context: managedObjectContext)
@@ -302,26 +366,29 @@ class SaveFavorite: ICommand {
                     newFavorite.area = fetchedArea
                     newFavorite.category = fetchedCategory
                     newFavorite.ingredients = NSSet(array: ingredientEntities)
+                    newFavorite.isArchived = false
                     
                     print("New favorite created: \(newFavorite.name ?? "unknown name for some reason")")
                     
                     print("This favorite has the following attributes: ")
-                    print("id: \(newFavorite.id ?? "unknown id")")
+                    print("id: \(newFavorite.id)")
                     print("image: \(newFavorite.image ?? "unknown image")")
                     print("area: \(newFavorite.area?.name ?? "unknown area")")
                     print("category name: \(newFavorite.category?.name ?? "unknown category name")")
                     print("category id: \(newFavorite.category?.id ?? "unknown category id")")
                     print("category image: \(newFavorite.category?.image ?? "unknown category image")")
                     print("category information: \(newFavorite.category?.information ?? "unknown category information")")
+                    print("isArchived: \(newFavorite.isArchived)")
                     
                     result = .success(newFavorite)
+//                    input.isFavorite = true
                 }
             }
             
             print("Saving favorite...")
             DataController.shared.saveContext()
             
-            return result ?? .failure(.fetchingEntityError)
+            return result ?? .failure(.savingError)
         } catch {
             print("Unexpected error: \(error)")
             return .failure(.savingError)

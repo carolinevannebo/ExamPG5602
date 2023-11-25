@@ -10,18 +10,20 @@ import CoreData
 
 class FavoritesViewModel: ObservableObject {
     @Published var meals: [Meal] = []
-    @Published var hasTappedArchive: Bool = false
+    //@Published var hasTappedArchive: Bool = false
     @Published var hasFavorites: Bool = false
+    @Published var listId: UUID = UUID()
     
-    let loadFavorites = LoadFavorites()
+    let loadCommand = LoadFavoritesCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
     func loadFavoriteMeals() async {
         do {
-            if let meals = await loadFavorites.execute(input: ()) {
+            if let meals = await loadCommand.execute(input: ()) {
                 DispatchQueue.main.async {
                     self.meals = meals
+                    self.listId = UUID()
                     
                     if !self.meals.isEmpty {
                         self.hasFavorites = true
@@ -47,15 +49,32 @@ class FavoriteItemViewModel: ObservableObject {
     @Published var hasTappedArchive: Bool = false
     
     // TODO: declare archive logic
+    let archiveCommand = ArchiveMealCommand()
     
-    init?(meal: Meal) {
+    init(meal: Meal) { // tok bort ?
         self.meal = meal
     }
     
     func handleTappedArchive() async {
-        if hasTappedArchive {
-            // TODO: use archive logic
-            print("Archive icon was tapped")
+        do {
+            if hasTappedArchive {
+                let result = await archiveCommand.execute(input: self.meal)
+                
+                switch result {
+                case .success(let archived):
+                    print("Archiving \(String(describing: archived.name)) succeeded")
+                    
+                    // testvariant 1
+                    await FavoritesViewModel().loadFavoriteMeals()
+                case .failure(let error):
+                    throw error
+                }
+            } else {
+                // TODO: set isArchived to false
+                print("Recipe with name \(meal.name ?? "unknown") will be moved from archives")
+            }
+        } catch {
+            print("Unexpected error: \(error)")
         }
     }
     
@@ -105,7 +124,7 @@ struct FavoritesView: View {
                             } label: {
                                 FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
                             }
-                        }
+                        }//.id(viewModel.listId)
                     }
                 } else {
                     Spacer().frame(maxWidth: .infinity)
@@ -139,7 +158,9 @@ struct FavoriteItemView: View {
     @StateObject var viewModel: FavoriteItemViewModel
 
     init(meal: Meal) {
-        _viewModel = StateObject(wrappedValue: FavoriteItemViewModel(meal: meal)!)
+        let favoriteItemViewModel = FavoriteItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: favoriteItemViewModel)
+        //_viewModel = StateObject(wrappedValue: FavoriteItemViewModel(meal: meal)!)
     }
 
     var body: some View {

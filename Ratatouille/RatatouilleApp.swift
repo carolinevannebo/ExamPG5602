@@ -10,7 +10,7 @@ import CoreData
 
 @main
 struct RatatouilleApp: App {
-    let initCD = InitCD()
+    let command = InitCDCommand()
     
     var body: some Scene {
         WindowGroup {
@@ -18,7 +18,7 @@ struct RatatouilleApp: App {
                 .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
                 .onAppear {
                 Task {
-                    await initCD.execute(input: DataController.shared.managedObjectContext)
+                    await command.execute(input: DataController.shared.managedObjectContext)
                 }
             }
                 .onDisappear {
