@@ -8,10 +8,15 @@
 import SwiftUI
 
 class MealListViewModel: ObservableObject {
-    @Published var input = ""
+    @Published var input: String = ""
+    @Published var chosenCategory: String = ""
     @Published var meals: [MealModel] = []
-    @Published var hasSearched: Bool = false
+    @Published var categories: [CategoryModel] = []
+    @Published var searchId: UUID = UUID()
+    
     let searchLogic = SearchMeals()
+    let loadCategories = LoadCategories()
+    let filterByCategories = FilterByCategories()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -27,8 +32,9 @@ class MealListViewModel: ObservableObject {
             
             if let meals = await searchLogic.execute(input: mutableInput) {
                 DispatchQueue.main.async {
-                    self.hasSearched = true
-                    self.meals = meals // TODO: BUG - dersom man toggler tema, tilbakestilles søket
+                    self.meals = meals
+                    self.searchId = UUID()
+                    
                 }
             } else {
                 throw MealListViewModelError.mealsEmpty
@@ -38,9 +44,40 @@ class MealListViewModel: ObservableObject {
         }
     }
     
+    func filterByCategories() async {
+        do {
+            if let meals = await filterByCategories.execute(input: chosenCategory) {
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            } else {
+                throw MealListViewModelError.filterError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    func loadCategories() async {
+        do {
+            if let categories = await loadCategories.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.categories = categories
+                }
+            } else {
+                throw MealListViewModelError.categoriesEmpty
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
     enum MealListViewModelError: Error {
         case failed(underlying: Error)
         case mealsEmpty
+        case categoriesEmpty
+        case filterError
     }
 }
 
@@ -58,17 +95,36 @@ struct MealListView: View {
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 
-                // category widgets
-                
                 ScrollView {
-                    ForEach(0..<viewModel.meals.count, id: \.self) { index in
-                        NavigationLink {
-                            Text(viewModel.meals[index].name ) // TODO: DetailView
-                        } label: {
-                            MealItemView(meal: viewModel.meals[index])//.shadow(radius: 10)
-                            .padding(.horizontal)
+                    // category widgets
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(0..<viewModel.categories.count, id: \.self) { index in
+                                CategoryItemView(category: viewModel.categories[index])
+                                    .onTapGesture {
+                                        viewModel.chosenCategory = viewModel.categories[index].name
+                                        print("tapped: \(viewModel.chosenCategory)")
+                                        Task {
+                                            await viewModel.filterByCategories()
+                                        }
+                                    }
+                            }
                         }
                     }
+                    .frame(height: 140)
+                    .padding()
+                
+                    VStack {
+                        ForEach(0..<viewModel.meals.count, id: \.self) { index in
+                            NavigationLink {
+                                Text(viewModel.meals[index].name ) // TODO: DetailView
+                            } label: {
+                                MealItemView(meal: viewModel.meals[index])//.shadow(radius: 10)
+                                    .padding(.horizontal)
+                            }
+                        }.id(viewModel.searchId)
+                    }
+                    .padding(.vertical)
                 }
             }
             .navigationTitle("Oppskrifter")
@@ -80,6 +136,7 @@ struct MealListView: View {
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
         .onAppear {
             Task {
+                await viewModel.loadCategories()
                 await viewModel.searchMeals(isDemo: true)
             }
         }

@@ -82,6 +82,7 @@ struct MealCardForMealModel: View {
                     Text("\(viewModel.meal.area?.name ?? "N/A") \((viewModel.meal.category?.name ?? "N/A"))")
                         .font(.callout)
                         .foregroundColor(.myAccentColor)
+                        .multilineTextAlignment(.leading)
                     
                 }
                 .padding()

@@ -90,18 +90,78 @@ class SearchRandom: ICommand {
     }
 }
 
-class SearchIngredients: ICommand {
+//class SearchIngredients: ICommand {
+//    typealias Input = String
+//    typealias Output = [IngredientModel]?
+//
+//    func execute(input: String) async -> Output {
+//        do {
+//            let result = await APIClient.getIngredients(input: input)
+//
+//            switch result {
+//                case .success(let ingredients):
+//                    print("Got \(ingredients.count) meals")
+//                    return ingredients
+//                case .failure(let error):
+//                    throw error
+//            }
+//        } catch {
+//            print("Unexpected error: \(error)")
+//            return nil
+//        }
+//    }
+//}
+//
+//class SearchAreas: ICommand {
+//    typealias Input = String
+//    typealias Output = [AreaModel]?
+//
+//    func execute(input: String) async -> Output {
+//        do {
+//            let result = await APIClient.getAreas(input: input)
+//
+//            switch result {
+//                case .success(let areas):
+//                    print("Got \(areas.count) meals")
+//                    return areas
+//                case .failure(let error):
+//                    throw error
+//            }
+//        } catch {
+//            print("Unexpected error: \(error)")
+//            return nil
+//        }
+//    }
+//}
+
+class FilterByCategories: ICommand {
     typealias Input = String
-    typealias Output = [IngredientModel]?
-    
+    typealias Output = [MealModel]?
+
     func execute(input: String) async -> Output {
         do {
-            let result = await APIClient.getIngredients(input: input)
-            
+            let result = await APIClient.filterMealsByCategory(input: input)
+
             switch result {
-                case .success(let ingredients):
-                    print("Got \(ingredients.count) meals")
-                    return ingredients
+                case .success(let meals):
+                    print("Got \(meals.count) meals, loading missing information...")
+                
+                var completeMeals: [MealModel] = []
+                
+                for meal in meals {
+                    let newResult = await APIClient.getMeals(input: meal.id)
+                    
+                    switch newResult {
+                    case .success(let idMeals):
+                        for id in idMeals {
+                            completeMeals.append(id)
+                        }
+                    case .failure(let error):
+                        throw error
+                    }
+                }
+                return completeMeals
+//                    return meals
                 case .failure(let error):
                     throw error
             }
@@ -112,42 +172,20 @@ class SearchIngredients: ICommand {
     }
 }
 
-class SearchAreas: ICommand {
-    typealias Input = String
-    typealias Output = [AreaModel]?
-    
-    func execute(input: String) async -> Output {
-        do {
-            let result = await APIClient.getAreas(input: input)
-            
-            switch result {
-                case .success(let areas):
-                    print("Got \(areas.count) meals")
-                    return areas
-                case .failure(let error):
-                    throw error
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            return nil
-        }
-    }
-}
-
-class SearchCategories: ICommand {
-    typealias Input = String
+class LoadCategories: ICommand {
+    typealias Input = Void
     typealias Output = [CategoryModel]?
     
-    func execute(input: String) async -> Output {
+    func execute(input: Void) async -> Output {
         do {
-            let result = await APIClient.getCategories(input: input)
+            let result = await APIClient.getCategories()
             
             switch result {
-                case .success(let categories):
-                    print("Got \(categories.count) meals")
-                    return categories
-                case .failure(let error):
-                    throw error
+            case .success(let categories):
+                print("Got \(categories.count) categories")
+                return categories
+            case .failure(let error):
+                throw error
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -162,14 +200,14 @@ class LoadFavorites: ICommand {
 
     func execute(input: Void) async -> [Meal]? {
         do {
-            let favoriteFetchRequest: NSFetchRequest<Meal> = Meal.fetchRequest()
+            let request: NSFetchRequest<Meal> = Meal.fetchRequest()
             let managedObjectContext = DataController.shared.managedObjectContext
             
             // TODO: this seems too simple, what are you forgetting?
-            let fetchedFavorites: [Meal] = try managedObjectContext.fetch(favoriteFetchRequest)
+            let favorites: [Meal] = try managedObjectContext.fetch(request)
             
-            print("Loading \(fetchedFavorites.count) favorites")
-            return fetchedFavorites
+            print("Loading \(favorites.count) favorites")
+            return favorites
             
         } catch {
             print("Unexpected error: \(error)")

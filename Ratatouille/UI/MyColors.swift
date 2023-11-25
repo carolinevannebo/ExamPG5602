@@ -32,4 +32,8 @@ extension Color {
     public static var mySwipeIconColor: Color {
         return Color(UIColor(named: "mySwipeIconColor")!)
     }
+    
+    public static var myDiffusedColor: Color {
+        return Color(UIColor(named: "myDiffusedColor")!)
+    }
 }

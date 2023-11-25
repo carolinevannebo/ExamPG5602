@@ -62,7 +62,7 @@ extension APIClient {
     private static func parseJsonToMeals(_ json: Data) -> [MealModel] {
         do {
             let mealWrapper = try JSONDecoder().decode(MealWrapper.self, from: json)
-            
+            print("parsing \(mealWrapper.meals.count) meals")
             if !mealWrapper.meals.isEmpty {
                 return mealWrapper.meals
             } else {
@@ -95,6 +95,26 @@ extension APIClient {
         let numericRegex = "^[0-9]+$"
         let predicate = NSPredicate(format: "SELF MATCHES %@", numericRegex)
         return predicate.evaluate(with: input)
+    }
+    
+    static func filterMealsByCategory(input: String) async -> Result<[MealModel], APIClientError> {
+        do {
+            let searchString = "\(searchByCategoryEndpoint)\(input)"
+            
+            let json = try await getJson(endpoint: searchString)
+            let meals = parseJsonToMeals(json)
+            
+            if meals.isEmpty {
+                return .failure(APIClientError.parseError)
+            }
+            
+            return .success(meals)
+            
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
     }
     
     static func getMeals(input: String) async -> Result<[MealModel], APIClientError> {
@@ -182,12 +202,11 @@ extension APIClient {
         return []
     }
     
-    static func getAreas(input: String) async -> Result<[AreaModel], APIClientError> {
+    static func getAreas() async -> Result<[AreaModel], APIClientError> {
         do {
-            let searchString = "\(searchByAreaEndpoint)\(input)"
-            let json = try await getJson(endpoint: searchString)
+            let json = try await getJson(endpoint: listAreasEndpoint)
             let areas = parseJsonToAreas(json)
-            
+
             if !areas.isEmpty {
                 return .success(areas)
             } else {
@@ -212,7 +231,7 @@ extension APIClient {
                 
                 if let fetchedArea = try managedObjectContext.fetch(areaFetchRequest).first {
                     // Area already exists, update it if needed
-                    fetchedArea.name = areaData.name // TODO: You should give area an id
+//                    fetchedArea.name = areaData.name // TODO: You should give area an id
                     print("Area already exists: \(fetchedArea.name ?? "")")
                 } else {
                     // Create a new Area
@@ -220,10 +239,11 @@ extension APIClient {
                     newArea.name = areaData.name
                     
                     print("New area created: \(newArea.name ?? "")")
+                    DataController.shared.saveContext()
                 }
             }
             
-            DataController.shared.saveContext()
+//            DataController.shared.saveContext()
             
             // check how many areas are saved in coredata
             let countFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
@@ -273,12 +293,11 @@ extension APIClient {
         return []
     }
     
-    static func getCategories(input: String) async -> Result<[CategoryModel], APIClientError> {
+    static func getCategories() async -> Result<[CategoryModel], APIClientError> {
         do {
-            let searchString = "\(searchByCategoryEndpoint)\(input)"
-            let json = try await getJson(endpoint: searchString)
+            let json = try await getJson(endpoint: listCategoriesEndpoint)
             let categories = parseJsonToCategories(json)
-            
+
             if !categories.isEmpty {
                 return .success(categories)
             } else {
@@ -310,9 +329,9 @@ extension APIClient {
                     if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
                         // Category already exists, update it if needed
 //                        fetchedCategory.id = id // testing with id
-                        fetchedCategory.name = categoryData.name
-                        fetchedCategory.image = categoryData.image
-                        fetchedCategory.information = categoryData.information
+//                        fetchedCategory.name = categoryData.name
+//                        fetchedCategory.image = categoryData.image
+//                        fetchedCategory.information = categoryData.information
                         
                         print("Category already exists: \(fetchedCategory.name ?? "")")
                     } else {
@@ -324,11 +343,12 @@ extension APIClient {
                         newCategory.information = categoryData.information
                         
                         print("New category created: \(newCategory.name ?? "")")
+                        DataController.shared.saveContext()
                     }
                 }
             }
                     
-            DataController.shared.saveContext()
+            //DataController.shared.saveContext()
             
             // check how many categories are saved in coredata
             let countFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
@@ -386,12 +406,11 @@ extension APIClient {
         return []
     }
     
-    static func getIngredients(input: String) async -> Result<[IngredientModel], APIClientError> {
+    static func getIngredients() async -> Result<[IngredientModel], APIClientError> {
         do {
-            let searchString = "\(searchByIngredientEndpoint)\(input)"
-            let json = try await getJson(endpoint: searchString)
+            let json = try await getJson(endpoint: listIngredientsEndpoint)
             let ingredients = parseJsonToIngredients(json)
-            
+
             if !ingredients.isEmpty {
                 return .success(ingredients)
             } else {
@@ -422,8 +441,8 @@ extension APIClient {
                     if let fetchedIngredient = try managedObjectContext.fetch(ingredientFetchRequest).first {
                         // Ingredient already exists, update it if needed
                         //fetchedIngredient.id = id // testing with id
-                        fetchedIngredient.name = ingredientData.name?.capitalized
-                        fetchedIngredient.information = ingredientData.information
+//                        fetchedIngredient.name = ingredientData.name?.capitalized
+//                        fetchedIngredient.information = ingredientData.information
                         print("Ingredient already exists: \(fetchedIngredient.name ?? "")")
                     } else {
                         // Create new ingredient
@@ -433,11 +452,12 @@ extension APIClient {
                         newIngredient.information = newIngredient.information
                         
                         print("New ingredient created: \(newIngredient.name ?? "") with id: \(newIngredient.id ?? "unknown")")
+                        DataController.shared.saveContext()
                     }
                 }
             }
             
-            DataController.shared.saveContext()
+//            DataController.shared.saveContext()
             
             // check how many ingredients are saved in coredata
             let countFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
