@@ -100,7 +100,11 @@ struct ArchiveView: View {
                             NavigationLink {
                                 Text(viewModel.meals[index].name!)
                             } label: {
-                                Text(viewModel.meals[index].name!)
+                                HStack {
+                                    Text(viewModel.meals[index].name!)
+                                    Image(systemName: "trash")
+                                    Image(systemName: "arrow.up.bin")
+                                }
                             }
                         }
                     }

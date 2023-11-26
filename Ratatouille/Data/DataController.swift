@@ -16,8 +16,6 @@ class DataController: ObservableObject {
         
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         container.persistentStoreDescriptions.first!.url = documentsURL.appendingPathComponent("Ratatouille.sqlite")
-        // Do not persist to disk (this is not production)
-        //container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         
         container.loadPersistentStores(completionHandler: { (description, error) in
             if let error = error as NSError? {

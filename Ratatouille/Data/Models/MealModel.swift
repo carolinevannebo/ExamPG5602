@@ -19,6 +19,17 @@ struct MealModel: Codable, Identifiable {
     var ingredients: [IngredientModel]?
     var isFavorite: Bool
     
+    init(id: String, name: String, image: String, instructions: String, area: AreaModel, category: CategoryModel, ingredients: [IngredientModel], isFavorite: Bool) {
+        self.id = id
+        self.name = name
+        self.image = image
+        self.instructions = instructions
+        self.area = area
+        self.category = category
+        self.ingredients = ingredients
+        self.isFavorite = isFavorite
+    }
+    
     init(from decoder: Decoder) throws {
         do {
             let container = try decoder.container(keyedBy: MealCodingKeys.self)

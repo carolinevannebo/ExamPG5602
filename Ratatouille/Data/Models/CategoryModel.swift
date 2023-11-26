@@ -13,6 +13,13 @@ struct CategoryModel: Codable, Identifiable {
     var image: String?
     var information: String?
     
+    init(id: String?, name: String, image: String, information: String) {
+        self.id = id
+        self.name = name
+        self.image = image
+        self.information = information
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CategoryCodingKeys.self)
         let id = try container.decodeIfPresent(String.self, forKey: .idCategory)
