@@ -26,7 +26,7 @@ class LoadFavoritesCommand: ICommand {
             return favorites
             
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in LoadFavoritesCommand: \(error)")
             return nil
         }
     }
@@ -124,7 +124,7 @@ class SaveFavoriteCommand: ICommand {
             
             return result ?? .failure(.savingError)
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in SaveFavoriteCommand: \(error)")
             return .failure(.savingError)
         }
     }

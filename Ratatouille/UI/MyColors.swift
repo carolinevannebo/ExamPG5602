@@ -13,6 +13,10 @@ extension Color {
         return Color(UIColor(named: "myBackgroundColor")!)
     }
     
+    public static var myOpacityBackgroundColor: Color {
+        return Color(UIColor(named: "myOpacityBackgroundColor")!)
+    }
+    
     public static var myPrimaryColor: Color {
         return Color(UIColor(named: "myPrimaryColor")!)
     }
@@ -35,5 +39,9 @@ extension Color {
     
     public static var myDiffusedColor: Color {
         return Color(UIColor(named: "myDiffusedColor")!)
+    }
+    
+    public static var mySubTitleColor: Color {
+        return Color(UIColor(named: "mySubTitleColor")!)
     }
 }

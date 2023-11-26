@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class LoadCategoriesCommand: ICommand {
     typealias Input = Void
@@ -23,7 +24,7 @@ class LoadCategoriesCommand: ICommand {
                 throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in LoadCategoriesCommand: \(error)")
             return nil
         }
     }
@@ -45,7 +46,7 @@ class ListIngredientsCommand: ICommand {
                     throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in ListIngredientsCommand: \(error)")
             return nil
         }
     }
@@ -67,7 +68,26 @@ class ListAreasCommand: ICommand {
                     throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in ListAreasCommand: \(error)")
+            return nil
+        }
+    }
+}
+
+class FetchFlagCommand: ICommand {
+    typealias Input = AreaModel
+    typealias Output = UIImage?
+    
+    func execute(input: AreaModel) async -> Output {
+        do {
+            let countryCode = FlagAPIClient.CountryCode(rawValue: input.name.lowercased())!
+            let flagStyle = FlagAPIClient.FlagStyle.flat
+            let flagSize = FlagAPIClient.FlagSize.small
+            
+            let flag = try await FlagAPIClient.getFlag(countryCode: countryCode, flagStyle: flagStyle, flagSize: flagSize)
+            return flag
+        } catch {
+            print("Unexpected error in FetchFlagCommand: \(error)")
             return nil
         }
     }

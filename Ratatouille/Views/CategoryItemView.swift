@@ -28,7 +28,7 @@ struct CategoryItemView: View {
                 .foregroundColor(.myDiffusedColor)
             
             VStack (alignment: .center) {
-                CircleImage(url: viewModel.category.image!, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0)
+                CircleImage(url: viewModel.category.image!, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0).padding()
                 Text(viewModel.category.name)
                     .foregroundColor(.myContrastColor)
                     .multilineTextAlignment(.leading)

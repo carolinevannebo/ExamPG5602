@@ -29,6 +29,8 @@
 		E40644912B10349500028CBD /* SwipeIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644902B10349500028CBD /* SwipeIcons.swift */; };
 		E40644932B10350600028CBD /* ImageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644922B10350600028CBD /* ImageWidget.swift */; };
 		E40644952B1035A300028CBD /* MealCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644942B1035A300028CBD /* MealCards.swift */; };
+		E46962892B139D7400D100E6 /* ClearBackgroundViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */; };
+		E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469628A2B13B19400D100E6 /* FlagAPIClient.swift */; };
 		E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */; };
 		E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */; };
 		E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */; };
@@ -93,6 +95,8 @@
 		E40644902B10349500028CBD /* SwipeIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeIcons.swift; sourceTree = "<group>"; };
 		E40644922B10350600028CBD /* ImageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWidget.swift; sourceTree = "<group>"; };
 		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
+		E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackgroundViewModifier.swift; sourceTree = "<group>"; };
+		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
 		E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemView.swift; sourceTree = "<group>"; };
 		E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -233,7 +237,6 @@
 				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
 				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
 				E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */,
-				E4E3B9762B12CD30008591D3 /* MealDetailView.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 				E4EAFC6F2B0259B70095D10B /* CoreData */,
 				E4EAFC702B025FF60095D10B /* DataController.swift */,
 				E406446B2B0E86F900028CBD /* APIClient.swift */,
+				E469628A2B13B19400D100E6 /* FlagAPIClient.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -267,6 +271,7 @@
 		E4EAFC5B2B0240620095D10B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E4E3B9762B12CD30008591D3 /* MealDetailView.swift */,
 				E406445A2B0CF28600028CBD /* MealListView.swift */,
 				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
@@ -282,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */,
+				E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -450,8 +456,10 @@
 				E40644702B0E951600028CBD /* CategoryModel.swift in Sources */,
 				E406445F2B0D1AED00028CBD /* CircleImage.swift in Sources */,
 				E40644722B0E953D00028CBD /* IngredientModel.swift in Sources */,
+				E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */,
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E4E3B9772B12CD30008591D3 /* MealDetailView.swift in Sources */,
+				E46962892B139D7400D100E6 /* ClearBackgroundViewModifier.swift in Sources */,
 				E4E3B9792B12D3DF008591D3 /* DemoMeal.swift in Sources */,
 				E40644612B0D2FBC00028CBD /* MyColors.swift in Sources */,
 				E406447F2B0EBDDF00028CBD /* FavoritesView.swift in Sources */,

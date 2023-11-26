@@ -58,7 +58,7 @@ class ConnectAttributesCommand: ICommand {
                 }
             }
         } catch {
-            print("Unexpected error when fetching isFavorite attribute: \(error)")
+            print("Unexpected error when fetching isFavorite attribute in ConnectAttributesCommand: \(error)")
             return []
         }
     }

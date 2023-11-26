@@ -19,7 +19,7 @@ class MealListViewModel: ObservableObject {
     let loadCategoriesCommand = LoadCategoriesCommand()
     let filterCommand = FilterByCategoriesCommand() // TODO: add loading stages
     
-    @AppStorage("isDarkMode") var isDarkMode: Bool = true
+    @AppStorage("isDarkMode") var isDarkMode: Bool = true // TODO: this shouldnt be here, right?
     
     func searchMeals(isDemo: Bool) async {
         do {
@@ -35,7 +35,6 @@ class MealListViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.meals = meals
                     self.searchId = UUID()
-                    
                 }
             } else {
                 throw MealListViewModelError.mealsEmpty
@@ -117,9 +116,10 @@ struct MealListView: View {
                     VStack {
                         ForEach(0..<viewModel.meals.count, id: \.self) { index in
                             NavigationLink {
-                                Text(viewModel.meals[index].name ) // TODO: DetailView
+                                MealDetailView(meal: viewModel.meals[index])
+                                //Text(viewModel.meals[index].name ) // TODO: DetailView
                             } label: {
-                                MealItemView(meal: viewModel.meals[index])//.shadow(radius: 10)
+                                MealItemView(meal: viewModel.meals[index])
                                     .padding(.horizontal)
                             }
                         }.id(viewModel.searchId)
@@ -131,7 +131,7 @@ struct MealListView: View {
             .background(Color.myBackgroundColor)
             .toolbarBackground(.visible, for: .tabBar)
             
-        } // navView, onAppear can apply here
+        } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
         .onAppear {

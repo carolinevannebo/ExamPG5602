@@ -163,7 +163,7 @@ extension APIClient {
             meals.forEach { meal in
                 print("id: \(meal.id )")
                 print("name: \(meal.name )")
-                print("instructions: \(meal.instructions )")
+                print("instructions: \(meal.instructions ?? "N/A" )")
                 print("image link: \(meal.image ?? "N/A")")
                 print("area: \(meal.area?.name ?? "N/A")")
                 print("category: \(meal.category?.name ?? "N/A")")

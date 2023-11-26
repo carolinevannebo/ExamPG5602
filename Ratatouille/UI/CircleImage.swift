@@ -26,7 +26,7 @@ struct CircleImage: View {
                 .clipShape(Circle())
                 .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
                 .shadow(radius: 5)
-                .padding()
+                //.padding()
         } else {
             // You might want to replace this with a placeholder or loading spinner
             Text("Loading...").onAppear { loadImage() }

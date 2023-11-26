@@ -23,7 +23,7 @@ class SearchRandomCommand: ICommand {
                     throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in SearchRandomCommand: \(error)")
             return nil
         }
     }
@@ -35,6 +35,7 @@ class SearchMealsCommand: ICommand {
     
     func execute(input: String) async -> Output {
         do {
+            print("Searching for meals with input: \(input)")
             let result = await APIClient.getMeals(input: input)
             
             switch result {
@@ -60,7 +61,7 @@ class SearchMealsCommand: ICommand {
                 }
             }
         } catch {
-            print("Error: \(error)") // TODO: feilhåndtering med meldinger til UI
+            print("Error in SearchMealsCommand: \(error)") // TODO: feilhåndtering med meldinger til UI
             return nil
         }
     }
@@ -104,7 +105,7 @@ class FilterByCategoriesCommand: ICommand {
                     throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in FilterByCategoriesCommand: \(error)")
             return nil
         }
     }
@@ -120,7 +121,7 @@ class FilterByCategoriesCommand: ICommand {
                 throw error
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in fetchAdditionalInformation for FilterByCategoriesCommand: \(error)")
             return nil
         }
     }

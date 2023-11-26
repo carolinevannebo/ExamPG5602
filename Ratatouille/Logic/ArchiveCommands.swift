@@ -26,7 +26,7 @@ class LoadArchivesCommand: ICommand {
             return archives
             
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in LoadArchivesCommand: \(error)")
             return nil
         }
     }
@@ -75,7 +75,7 @@ class DeleteMealCommand: ICommand {
                     
             return .success(())
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in DeleteMealCommand: \(error)")
             return .failure(.deleteError)
         }
     }
@@ -132,7 +132,7 @@ class ArchiveMealCommand: ICommand {
             
             return result ?? .failure(.archivingError)
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error in ArchiveMealCommand: \(error)")
             return .failure(.archivingError)
         }
     }

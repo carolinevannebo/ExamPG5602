@@ -20,7 +20,7 @@ struct ImageWidget: View {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .foregroundColor(.mySecondaryColor)
                 
-            CircleImage(url: url, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0)
+            CircleImage(url: url, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0).padding()
         }.frame(width: 90)
     }
 }
