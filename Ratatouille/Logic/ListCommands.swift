@@ -80,15 +80,22 @@ class FetchFlagCommand: ICommand {
     
     func execute(input: AreaModel) async -> Output {
         do {
-            let countryCode = FlagAPIClient.CountryCode(rawValue: input.name.lowercased())!
-            let flagStyle = FlagAPIClient.FlagStyle.flat
-            let flagSize = FlagAPIClient.FlagSize.small
-            
-            let flag = try await FlagAPIClient.getFlag(countryCode: countryCode, flagStyle: flagStyle, flagSize: flagSize)
-            return flag
+            if let countryCode = FlagAPIClient.CountryCode.nameToCode[input.name.lowercased()] {
+                let flagStyle = FlagAPIClient.FlagStyle.flat
+                let flagSize = FlagAPIClient.FlagSize.small
+                
+                do {
+                    let flag = try await FlagAPIClient.getFlag(countryCode: countryCode, flagStyle: flagStyle, flagSize: flagSize)
+                    return flag
+                } catch {
+                    print("Error while fetching flag: \(error)")
+                    throw error
+                }
+            }
         } catch {
             print("Unexpected error in FetchFlagCommand: \(error)")
             return nil
         }
+        return nil
     }
 }

@@ -29,8 +29,9 @@
 		E40644912B10349500028CBD /* SwipeIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644902B10349500028CBD /* SwipeIcons.swift */; };
 		E40644932B10350600028CBD /* ImageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644922B10350600028CBD /* ImageWidget.swift */; };
 		E40644952B1035A300028CBD /* MealCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644942B1035A300028CBD /* MealCards.swift */; };
-		E46962892B139D7400D100E6 /* ClearBackgroundViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */; };
 		E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469628A2B13B19400D100E6 /* FlagAPIClient.swift */; };
+		E469628E2B13E6C300D100E6 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E469628D2B13E6C300D100E6 /* Nuke */; };
+		E46962902B13E6C300D100E6 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E469628F2B13E6C300D100E6 /* NukeUI */; };
 		E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */; };
 		E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */; };
 		E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */; };
@@ -95,7 +96,6 @@
 		E40644902B10349500028CBD /* SwipeIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeIcons.swift; sourceTree = "<group>"; };
 		E40644922B10350600028CBD /* ImageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWidget.swift; sourceTree = "<group>"; };
 		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
-		E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackgroundViewModifier.swift; sourceTree = "<group>"; };
 		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
 		E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemView.swift; sourceTree = "<group>"; };
 		E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -130,7 +130,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E46962902B13E6C300D100E6 /* NukeUI in Frameworks */,
 				E40644862B0F7B3700028CBD /* SwiftyGif in Frameworks */,
+				E469628E2B13E6C300D100E6 /* Nuke in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +289,6 @@
 			isa = PBXGroup;
 			children = (
 				E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */,
-				E46962882B139D7400D100E6 /* ClearBackgroundViewModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -328,6 +329,8 @@
 			name = Ratatouille;
 			packageProductDependencies = (
 				E40644852B0F7B3700028CBD /* SwiftyGif */,
+				E469628D2B13E6C300D100E6 /* Nuke */,
+				E469628F2B13E6C300D100E6 /* NukeUI */,
 			);
 			productName = Ratatouille;
 			productReference = E4EAFC262B023AF10095D10B /* Ratatouille.app */;
@@ -403,6 +406,7 @@
 			mainGroup = E4EAFC1D2B023AF10095D10B;
 			packageReferences = (
 				E40644842B0F7B3700028CBD /* XCRemoteSwiftPackageReference "SwiftyGif" */,
+				E469628C2B13E6C300D100E6 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = E4EAFC272B023AF10095D10B /* Products */;
 			projectDirPath = "";
@@ -459,7 +463,6 @@
 				E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */,
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E4E3B9772B12CD30008591D3 /* MealDetailView.swift in Sources */,
-				E46962892B139D7400D100E6 /* ClearBackgroundViewModifier.swift in Sources */,
 				E4E3B9792B12D3DF008591D3 /* DemoMeal.swift in Sources */,
 				E40644612B0D2FBC00028CBD /* MyColors.swift in Sources */,
 				E406447F2B0EBDDF00028CBD /* FavoritesView.swift in Sources */,
@@ -815,6 +818,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		E469628C2B13E6C300D100E6 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -822,6 +833,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E40644842B0F7B3700028CBD /* XCRemoteSwiftPackageReference "SwiftyGif" */;
 			productName = SwiftyGif;
+		};
+		E469628D2B13E6C300D100E6 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E469628C2B13E6C300D100E6 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		E469628F2B13E6C300D100E6 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E469628C2B13E6C300D100E6 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 

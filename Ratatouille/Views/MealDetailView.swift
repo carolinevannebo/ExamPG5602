@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct MealDetailView: View {
     @State var meal: MealModel
@@ -172,15 +173,18 @@ struct AreaTextBox: View {
                 .opacity(0.9)
                 .shadow(radius: 2)
             HStack {
-                Image(uiImage: flag!) // TODO: set default image if nil
+                Text(area.name)
+                    .foregroundColor(.mySubTitleColor)
+                    .font(.system(size: 14))
                     .padding(.leading)
                 
                 Spacer()
                 
-                Text(area.name)
-                    .foregroundColor(.mySubTitleColor)
-                    .font(.system(size: 14))
-                    .padding(.trailing)
+                if flag != nil {
+                    Image(uiImage: flag!).padding(.trailing)
+//                    Image(uiImage: flag!) // TODO: set default image if nil
+//                        .padding(.trailing)
+                }
             }
         }
         .onAppear {

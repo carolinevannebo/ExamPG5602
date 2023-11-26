@@ -15,7 +15,7 @@ struct AreaModel: Codable {
 //        self.name = name
 //    }
     
-    init(from decoder: Decoder) async throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: AreaCodingKeys.self)
         let name = try container.decode(String.self, forKey: .strArea)
         self.name = name

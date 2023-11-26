@@ -7,23 +7,28 @@
 
 import Foundation
 import UIKit
+import Nuke
 
 struct FlagAPIClient {
     
     static func getFlag(countryCode: CountryCode, flagStyle: FlagStyle, flagSize: FlagSize) async throws -> UIImage? {
         do {
-            let fullEndpoint = "https://flagsapi.com/\(countryCode)/\(flagStyle)/\(flagSize).png"
+            print("country code: \(countryCode)")
+            print("flag style: \(flagStyle)")
+            print("flag size: \(flagSize)")
             
-            let data = try await APIClient.getJson(endpoint: fullEndpoint)
+            let endpoint: String = "https://flagsapi.com/\(countryCode.rawValue)/\(flagStyle)/\(flagSize.rawValue).png"
+            print("flag url: \(endpoint)")
             
-            guard let uiImage = UIImage(data: data) else {
-                throw FlagAPIClientError.invalidImageData
-            }
+            let url: URL = URL(string: endpoint)!
             
-            return uiImage
+            let response = try await ImagePipeline.shared.image(for: url)
+            
+            return response
+            
         } catch {
             print("Unexpected error when fetching flag: \(error)")
-            return nil
+            throw FlagAPIClientError.invalidImageData
         }
     }
     
@@ -43,8 +48,8 @@ struct FlagAPIClient {
         case large = "48"
         case xlarge = "64"
     }
-    
-    enum CountryCode: String {
+
+    enum CountryCode: String, CodingKey {
         case american = "US"
         case british = "GB"
         case canadian = "CA"
@@ -72,7 +77,37 @@ struct FlagAPIClient {
         case tunisian = "TN"
         case turkish = "TR"
         case vietnamese = "VN"
-        case unknown
+        
+        static let nameToCode: [String: CountryCode] = [
+            "american": .american,
+            "british": .british,
+            "canadian": .canadian,
+            "chinese": .chinese,
+            "croatian": .croatian,
+            "dutch": .dutch,
+            "egyptian": .egyptian,
+            "filipino": .filipino,
+            "french": .french,
+            "greek": .greek,
+            "indian": .indian,
+            "irish": .irish,
+            "italian": .italian,
+            "jamaican": .jamaican,
+            "japanese": .japanese,
+            "kenyan": .kenyan,
+            "malaysian": .malaysian,
+            "mexican": .mexican,
+            "moroccan": .moroccan,
+            "polish": .polish,
+            "portuguese": .portuguese,
+            "russian": .russian,
+            "spanish": .spanish,
+            "thai": .thai,
+            "tunisian": .tunisian,
+            "turkish": .turkish,
+            "vietnamese": .vietnamese
+        ]
+
     }
 
 }

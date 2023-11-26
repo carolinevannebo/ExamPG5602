@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke",
+      "state" : {
+        "revision" : "1694798e876113d44f6ec6ead965d7286695981d",
+        "version" : "12.2.0"
+      }
+    },
+    {
       "identity" : "swiftygif",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kirualex/SwiftyGif.git",
