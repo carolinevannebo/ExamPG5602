@@ -104,7 +104,6 @@ struct MealListView: View {
                                 CategoryItemView(category: viewModel.categories[index])
                                     .onTapGesture {
                                         viewModel.chosenCategory = viewModel.categories[index].name
-                                        print("tapped: \(viewModel.chosenCategory)")
                                         Task {
                                             await viewModel.filterByCategories()
                                         }

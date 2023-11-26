@@ -44,16 +44,17 @@ struct MealModel: Codable, Identifiable {
                 
                 // Match the rest of categorymodel's attributes to attributes of category in CoreData
                 let managedObjectContext = DataController.shared.managedObjectContext
-                let categoryFetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
-                categoryFetchRequest.predicate = NSPredicate(format: "name == %@", categoryModel.self!.name)
+                let request: NSFetchRequest<Category> = Category.fetchRequest()
+                    request.predicate = NSPredicate(format: "name == %@", category!)
                 
-                if let fetchedCategory = try managedObjectContext.fetch(categoryFetchRequest).first {
-            
+                if let fetchedCategory = try managedObjectContext.fetch(request).first {
                     // Assign values
                     categoryModel.self?.id = fetchedCategory.id
                     categoryModel.self?.image = fetchedCategory.image
                     categoryModel.self?.information = fetchedCategory.information
                 }
+            } else {
+                categoryModel = nil
             }
             
             let (dynamicIngredientKeys, dynamicMeasureKeys) = MealModel.makeDynamicKeys()

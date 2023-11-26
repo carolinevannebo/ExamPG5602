@@ -45,6 +45,11 @@ class MealItemViewModel: ObservableObject {
             } else {
                 // TODO: set isArchived to true
                 print("Recipe with name \(meal.name) will be moved to archives")
+                
+                DispatchQueue.main.async { // TODO: redundant?
+                    self.meal.isFavorite = false
+                    
+                }
             }
         } catch {
             print("Unexpected error: \(error)")

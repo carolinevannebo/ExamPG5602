@@ -10,7 +10,6 @@ import CoreData
 
 class FavoritesViewModel: ObservableObject {
     @Published var meals: [Meal] = []
-    //@Published var hasTappedArchive: Bool = false
     @Published var hasFavorites: Bool = false
     @Published var listId: UUID = UUID()
     
@@ -27,13 +26,15 @@ class FavoritesViewModel: ObservableObject {
                     
                     if !self.meals.isEmpty {
                         self.hasFavorites = true
+                    } else {
+                        self.hasFavorites = false
                     }
                 }
             } else {
                 throw FavoritesViewModelError.noFavorites
             }
         } catch {
-            print("Unexpected error: \(error)")
+            print("Unexpected error when loading favorites to View: \(error)")
         }
     }
     
@@ -61,9 +62,12 @@ class FavoriteItemViewModel: ObservableObject {
                 let result = await archiveCommand.execute(input: self.meal)
                 
                 switch result {
-                case .success(let archived):
-                    print("Archiving \(String(describing: archived.name)) succeeded")
+                case .success(let archive):
+                    print("Archived \(self.meal.name ?? "unknown name"), archive has \(archive.meals?.count ?? 0) records")
                     
+                    DispatchQueue.main.async {
+                        self.meal.isArchived = true
+                    }
                     // testvariant 1
                     await FavoritesViewModel().loadFavoriteMeals()
                 case .failure(let error):
@@ -72,6 +76,10 @@ class FavoriteItemViewModel: ObservableObject {
             } else {
                 // TODO: set isArchived to false
                 print("Recipe with name \(meal.name ?? "unknown") will be moved from archives")
+                
+                DispatchQueue.main.async {
+                    self.meal.isArchived = false
+                }
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -124,7 +132,7 @@ struct FavoritesView: View {
                             } label: {
                                 FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
                             }
-                        }//.id(viewModel.listId)
+                        }.id(viewModel.listId)
                     }
                 } else {
                     Spacer().frame(maxWidth: .infinity)
@@ -138,7 +146,6 @@ struct FavoritesView: View {
                     
                     Spacer().frame(maxWidth: .infinity)
                 }
-                
             }
             .navigationTitle("Favoritter")
             .background(Color.myBackgroundColor)

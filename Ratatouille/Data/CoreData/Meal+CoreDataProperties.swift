@@ -24,6 +24,7 @@ extension Meal {
     @NSManaged public var category: Category?
     @NSManaged public var ingredients: NSSet?
     @NSManaged public var isArchived: Bool
+    @NSManaged public var archive: Archive?
 }
 
 // MARK: Generated accessors for ingredients

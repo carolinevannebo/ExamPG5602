@@ -43,12 +43,13 @@ struct ArchiveIcon: View {
     
     var body: some View {
         HStack {
-            if (viewModel.hasTappedArchive) {
+            if (viewModel.meal.isArchived) {
                 Image(systemName: "archivebox.fill")
                     .onTapGesture {
                         Task {
-                            viewModel.hasTappedArchive = false
-                            await viewModel.handleTappedArchive()
+                            // TODO: can only delete from archives
+//                            viewModel.hasTappedArchive = false
+//                            await viewModel.handleTappedArchive()
                         }
                     }
             } else {
