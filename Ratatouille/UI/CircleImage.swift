@@ -2,7 +2,7 @@
 //  CircleImage.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 21/11/2023.
+//  Created by Candidate no.2017 on 21/11/2023.
 //
 
 import SwiftUI

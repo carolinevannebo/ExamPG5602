@@ -2,11 +2,13 @@
 //  MealCards.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 24/11/2023.
+//  Created by Candidate no.2017 on 24/11/2023.
 //
 
 import Foundation
 import SwiftUI
+
+// TODO: refactor redundance
 
 // This meal card takes in a meal from CoreData
 struct MealCardForMeal: View {

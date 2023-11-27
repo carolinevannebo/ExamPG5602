@@ -2,7 +2,7 @@
 //  AreaModel.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 22/11/2023.
+//  Created by Candidate no.2017 on 22/11/2023.
 //
 
 import Foundation

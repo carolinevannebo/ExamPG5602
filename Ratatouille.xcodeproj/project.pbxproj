@@ -32,10 +32,10 @@
 		E469628E2B13E6C300D100E6 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E469628D2B13E6C300D100E6 /* Nuke */; };
 		E46962902B13E6C300D100E6 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E469628F2B13E6C300D100E6 /* NukeUI */; };
 		E46962922B14E59800D100E6 /* ImageLoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */; };
-		E46962942B1509E800D100E6 /* SearchFieldModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962932B1509E800D100E6 /* SearchFieldModifier.swift */; };
 		E46962962B15334900D100E6 /* remy-eating.gif in Resources */ = {isa = PBXBuildFile; fileRef = E46962952B15334900D100E6 /* remy-eating.gif */; };
 		E46962982B15421B00D100E6 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962972B15421B00D100E6 /* CategoryListView.swift */; };
 		E469629A2B15448E00D100E6 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962992B15448E00D100E6 /* MealListView.swift */; };
+		E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469629F2B15465900D100E6 /* ArchiveView.swift */; };
 		E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */; };
 		E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */; };
 		E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */; };
@@ -101,10 +101,10 @@
 		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
 		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
 		E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingAnimation.swift; sourceTree = "<group>"; };
-		E46962932B1509E800D100E6 /* SearchFieldModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFieldModifier.swift; sourceTree = "<group>"; };
 		E46962952B15334900D100E6 /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "remy-eating.gif"; sourceTree = "<group>"; };
 		E46962972B15421B00D100E6 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		E46962992B15448E00D100E6 /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
+		E469629F2B15465900D100E6 /* ArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
 		E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemView.swift; sourceTree = "<group>"; };
 		E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -180,6 +180,45 @@
 			path = GIF;
 			sourceTree = "<group>";
 		};
+		E469629B2B1545C900D100E6 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E40644942B1035A300028CBD /* MealCards.swift */,
+				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E469629C2B1545E700D100E6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E406447C2B0EB94700028CBD /* SettingsView.swift */,
+				E469629F2B15465900D100E6 /* ArchiveView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E469629D2B1545FB00D100E6 /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				E406447E2B0EBDDF00028CBD /* FavoritesView.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
+		E469629E2B15461F00D100E6 /* RecipeBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */,
+				E46962972B15421B00D100E6 /* CategoryListView.swift */,
+				E4E3B9762B12CD30008591D3 /* MealDetailView.swift */,
+				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
+				E46962992B15448E00D100E6 /* MealListView.swift */,
+				E406445A2B0CF28600028CBD /* RecipeBrowserView.swift */,
+			);
+			path = RecipeBrowser;
+			sourceTree = "<group>";
+		};
 		E4EAFC1D2B023AF10095D10B = {
 			isa = PBXGroup;
 			children = (
@@ -203,12 +242,12 @@
 		E4EAFC282B023AF10095D10B /* Ratatouille */ = {
 			isa = PBXGroup;
 			children = (
+				E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */,
 				E4EAFC5A2B0240450095D10B /* Data */,
 				E4EAFC582B02402F0095D10B /* Logic */,
 				E4EAFC5C2B02406E0095D10B /* ViewModifiers */,
 				E4EAFC5B2B0240620095D10B /* Views */,
 				E4EAFC592B02403D0095D10B /* UI */,
-				E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */,
 				E4EAFC2F2B023AF80095D10B /* Preview Content */,
 			);
 			path = Ratatouille;
@@ -282,16 +321,10 @@
 		E4EAFC5B2B0240620095D10B /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E4E3B9762B12CD30008591D3 /* MealDetailView.swift */,
-				E406445A2B0CF28600028CBD /* RecipeBrowserView.swift */,
-				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
-				E406447C2B0EB94700028CBD /* SettingsView.swift */,
-				E406447E2B0EBDDF00028CBD /* FavoritesView.swift */,
-				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
-				E40644942B1035A300028CBD /* MealCards.swift */,
-				E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */,
-				E46962972B15421B00D100E6 /* CategoryListView.swift */,
-				E46962992B15448E00D100E6 /* MealListView.swift */,
+				E469629D2B1545FB00D100E6 /* Favorites */,
+				E469629E2B15461F00D100E6 /* RecipeBrowser */,
+				E469629C2B1545E700D100E6 /* Settings */,
+				E469629B2B1545C900D100E6 /* Shared */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -300,7 +333,6 @@
 			isa = PBXGroup;
 			children = (
 				E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */,
-				E46962932B1509E800D100E6 /* SearchFieldModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -495,7 +527,6 @@
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,
 				E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */,
 				E406446C2B0E86F900028CBD /* APIClient.swift in Sources */,
-				E46962942B1509E800D100E6 /* SearchFieldModifier.swift in Sources */,
 				E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */,
 				E46962922B14E59800D100E6 /* ImageLoadingAnimation.swift in Sources */,
 				E406446E2B0E94F000028CBD /* AreaModel.swift in Sources */,
@@ -504,6 +535,7 @@
 				E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */,
 				E4EAFC692B0259A50095D10B /* Meal+CoreDataClass.swift in Sources */,
 				E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */,
+				E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */,
 				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
 			);

@@ -2,7 +2,7 @@
 //  ImageLoadingAnimation.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 27/11/2023.
+//  Created by Candidate no.2017 on 27/11/2023.
 // source: https://www.youtube.com/watch?v=oihbs1tYqkE&ab_channel=ShubhamSingh
 
 import SwiftUI

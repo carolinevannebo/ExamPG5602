@@ -2,7 +2,7 @@
 //  Animation.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 23/11/2023.
+//  Created by Candidate no.2017 on 23/11/2023.
 //
 
 import Foundation
@@ -22,4 +22,3 @@ struct AnimatedGif: UIViewRepresentable {
         uiView.setGifFromURL(self.url)
     }
 }
-//AnimatedGifView(url: Binding(get: { myModel.gif.url }, set: { _ in }))

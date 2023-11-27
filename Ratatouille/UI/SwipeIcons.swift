@@ -2,7 +2,7 @@
 //  SwipeIcons.swift
 //  Ratatouille
 //
-//  Created by Caroline Vannebo on 24/11/2023.
+//  Created by Candidate no.2017 on 24/11/2023.
 //
 
 import Foundation
