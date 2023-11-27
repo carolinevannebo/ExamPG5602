@@ -27,9 +27,28 @@ struct MealDetailView: View {
                         .foregroundColor(.mySecondaryColor)
                         .shadow(radius: 5)
                         .opacity(0.5)
-                    Text(meal.instructions!)
-                        .foregroundColor(.myContrastColor)
-                        .padding()
+                        .padding(.top)
+                    
+                    LazyVStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                                .foregroundColor(.myAccentColor)
+                                .shadow(radius: 5)
+                                .frame(width: 230, height: 40)
+                            
+                            Text("Instruksjoner")
+                                .font(.system(size: 20))
+                                .foregroundColor(.mySubTitleColor)
+                        }
+                        
+                        Spacer()
+                   
+                        Text(meal.instructions!)
+                            .foregroundColor(.myContrastColor)
+                            .padding()
+                        
+                        // YouTube video?
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -133,7 +152,7 @@ struct CategoryDetailView: View {
                     if category.image != nil {
                         CircleImage(url: category.image!, width: 100, height: 100, strokeColor: .clear, lineWidth: 0).padding(.trailing, 40)
                     } else {
-                        Image(uiImage: UIImage(named: "demoCategory")!) // TODO: meal.category.image
+                        Image(uiImage: UIImage(named: "demoCategory")!)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
@@ -198,9 +217,7 @@ struct AreaTextBox: View {
                 Spacer()
                 
                 if flag != nil {
-                    Image(uiImage: flag!).padding(.trailing)
-//                    Image(uiImage: flag!) // TODO: set default image if nil
-//                        .padding(.trailing)
+                    Image(uiImage: flag!).padding(.trailing)// TODO: set default image if nil
                 }
             }
         }
@@ -266,6 +283,7 @@ struct SectionHeader: View {
 }
 
 
+// TODO: FÅR IKKE LISTA TIL Å COMPRIMERES, DEN TAR OPP ALL PLASS NÅR DEN SKAL VÆRE LUKKET
 struct IngredientList: View {
     @State var ingredients: [IngredientModel]
     @State var isShowingSection = false
@@ -277,19 +295,17 @@ struct IngredientList: View {
                         header: SectionHeader(isOn: $isShowingSection, title: "Ingredienser", onLabel: "Vis", offLabel: "Skjul")
                     ) {
                         
-                        if isShowingSection {
+//                        if isShowingSection {
                             IngredientListContent(ingredients: ingredients)
-                        }
+//                        }
                     }
                 }
                 .padding(.horizontal)
                 .listStyle(.plain)
                 .background(Color.myBackgroundColor)
-//                .scaledToFit()
         }
         .padding(.bottom)
-        .frame(minHeight: 70, maxHeight: 300)
-        //.background(Color.myBackgroundColor)
+//        .frame(minHeight: 70, maxHeight: 300)
     }
 }
 
