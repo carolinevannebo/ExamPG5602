@@ -59,6 +59,7 @@ struct MealDetailView: View {
                 // Category information sheet
                 CategoryDetailView(category: meal.category!)
                     .modifier(DarkModeViewModifier())
+                    .presentationDetents([.medium, .large])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
         }
@@ -130,7 +131,7 @@ struct CategoryDetailView: View {
     @State var category: CategoryModel
     
     var body: some View {
-        ScrollView {
+        VStack {
             ZStack {
                 // Header
                 ZStack {
@@ -292,7 +293,8 @@ struct IngredientList: View {
         NavigationView {
                 List {
                     Section(
-                        header: SectionHeader(isOn: $isShowingSection, title: "Ingredienser", onLabel: "Vis", offLabel: "Skjul")
+                        "Ingredienser"
+//                        header: SectionHeader(isOn: $isShowingSection, title: "Ingredienser", onLabel: "Vis", offLabel: "Skjul")
                     ) {
                         
 //                        if isShowingSection {

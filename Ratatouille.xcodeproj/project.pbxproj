@@ -32,6 +32,7 @@
 		E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469628A2B13B19400D100E6 /* FlagAPIClient.swift */; };
 		E469628E2B13E6C300D100E6 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E469628D2B13E6C300D100E6 /* Nuke */; };
 		E46962902B13E6C300D100E6 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E469628F2B13E6C300D100E6 /* NukeUI */; };
+		E46962922B14E59800D100E6 /* ImageLoadingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */; };
 		E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */; };
 		E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */; };
 		E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */; };
@@ -97,6 +98,7 @@
 		E40644922B10350600028CBD /* ImageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWidget.swift; sourceTree = "<group>"; };
 		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
 		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
+		E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingAnimation.swift; sourceTree = "<group>"; };
 		E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemView.swift; sourceTree = "<group>"; };
 		E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E4E3B96B2B12A005008591D3 /* Archive+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				E40644902B10349500028CBD /* SwipeIcons.swift */,
 				E40644922B10350600028CBD /* ImageWidget.swift */,
 				E4E3B9782B12D3DF008591D3 /* DemoMeal.swift */,
+				E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */,
 				E406446C2B0E86F900028CBD /* APIClient.swift in Sources */,
 				E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */,
+				E46962922B14E59800D100E6 /* ImageLoadingAnimation.swift in Sources */,
 				E406446E2B0E94F000028CBD /* AreaModel.swift in Sources */,
 				E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */,
 				E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */,

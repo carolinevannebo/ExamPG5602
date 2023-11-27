@@ -44,4 +44,22 @@ extension Color {
     public static var mySubTitleColor: Color {
         return Color(UIColor(named: "mySubTitleColor")!)
     }
+    
+    // Loading animation
+    
+    public static var circleTrackStart: Color {
+        return Color(UIColor(named: "circleTrackStart")!)
+    }
+    
+    public static var circleTrackEnd: Color {
+        return Color(UIColor(named: "circleTrackEnd")!)
+    }
+    
+    public static var circleRoundStart: Color {
+        return Color(UIColor(named: "circleRoundStart")!)
+    }
+    
+    public static var circleRoundEnd: Color {
+        return Color(UIColor(named: "circleRoundEnd")!)
+    }
 }

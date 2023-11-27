@@ -23,7 +23,7 @@ class DataController: ObservableObject {
             }
             print(description)
         })
-        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.automaticallyMergesChangesFromParent = true // TODO: check
         return container
     }()
     

@@ -15,16 +15,11 @@ struct RatatouilleApp: App {
     var body: some Scene {
         WindowGroup {
             ViewCoordinator()
-                .environment(\.managedObjectContext, DataController.shared.managedObjectContext)
                 .onAppear {
                 Task {
                     await command.execute(input: DataController.shared.managedObjectContext)
                 }
             }
-                .onDisappear {
-                    DataController.shared.saveContext()
-                }
-
         }
     }
 }
