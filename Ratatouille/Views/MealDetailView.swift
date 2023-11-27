@@ -22,35 +22,7 @@ struct MealDetailView: View {
                 IngredientList(ingredients: $meal.wrappedValue.ingredients!)
                 
                 // Instructions
-                ZStack {
-                    RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .foregroundColor(.mySecondaryColor)
-                        .shadow(radius: 5)
-                        .opacity(0.5)
-                        .padding(.top)
-                    
-                    LazyVStack {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                                .foregroundColor(.myAccentColor)
-                                .shadow(radius: 5)
-                                .frame(width: 230, height: 40)
-                            
-                            Text("Instruksjoner")
-                                .font(.system(size: 20))
-                                .foregroundColor(.mySubTitleColor)
-                        }
-                        
-                        Spacer()
-                   
-                        Text(meal.instructions!)
-                            .foregroundColor(.myContrastColor)
-                            .padding()
-                        
-                        // YouTube video?
-                    }
-                }
-                .padding(.horizontal)
+                InstructionsSection(meal: $meal.wrappedValue)
             }
             .navigationTitle(meal.name)
             .background(Color.myBackgroundColor)
@@ -127,6 +99,7 @@ struct MealHeader: View {
     }
 }
 
+// Sheet
 struct CategoryDetailView: View {
     @State var category: CategoryModel
     
@@ -284,7 +257,7 @@ struct SectionHeader: View {
 }
 
 
-// TODO: FÅR IKKE LISTA TIL Å COMPRIMERES, DEN TAR OPP ALL PLASS NÅR DEN SKAL VÆRE LUKKET
+// TODO: FÅR IKKE LISTA TIL Å COMPRIMERES, DEN TAR OPP ALL WHITESPACE NÅR DEN SKAL VÆRE LUKKET
 struct IngredientList: View {
     @State var ingredients: [IngredientModel]
     @State var isShowingSection = false
@@ -321,6 +294,42 @@ struct IngredientListContent: View {
                 .listRowSeparatorTint(Color.myAccentColor)
                 .listRowBackground(Color.clear.opacity(0))
         }
+    }
+}
+
+struct InstructionsSection: View {
+    var meal: MealModel
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .foregroundColor(.mySecondaryColor)
+                .shadow(radius: 5)
+                .opacity(0.5)
+                .padding(.top)
+            
+            LazyVStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .foregroundColor(.myAccentColor)
+                        .shadow(radius: 5)
+                        .frame(width: 230, height: 40)
+                    
+                    Text("Instruksjoner")
+                        .font(.system(size: 20))
+                        .foregroundColor(.mySubTitleColor)
+                }
+                
+                Spacer()
+           
+                Text(meal.instructions!)
+                    .foregroundColor(.myContrastColor)
+                    .padding()
+                
+                // YouTube video?
+            }
+        }
+        .padding(.horizontal)
     }
 }
 

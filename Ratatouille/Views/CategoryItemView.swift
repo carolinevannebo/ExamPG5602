@@ -7,35 +7,25 @@
 
 import SwiftUI
 
-class CategoryItemViewModel: ObservableObject {
-    @Published var category: CategoryModel
-    
-    init(category: CategoryModel) {
-        self.category = category
-    }
-}
-
 struct CategoryItemView: View {
-    @StateObject var viewModel: CategoryItemViewModel
-
-    init(category: CategoryModel) {
-        _viewModel = StateObject(wrappedValue: CategoryItemViewModel(category: category))
-    }
+    @State var category: CategoryModel
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .foregroundColor(.myDiffusedColor)
+                .shadow(radius: 1)
             
             VStack (alignment: .center) {
-                CircleImage(url: viewModel.category.image!, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0).padding()
-                Text(viewModel.category.name)
+                CircleImage(url: category.image!, width: 65, height: 65, strokeColor: Color.white, lineWidth: 0)
+                Text(category.name)
                     .foregroundColor(.myContrastColor)
                     .multilineTextAlignment(.leading)
                     .font(.system(size: 15))
-                    .padding()
+                    .fontWeight(.semibold)
             }
-            //.frame(width: 110)
+            .frame(height: 110)
+            .padding()
         }
         .frame(width: 110)
     }

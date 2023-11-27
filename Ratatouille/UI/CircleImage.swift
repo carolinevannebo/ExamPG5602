@@ -64,6 +64,6 @@ struct CircleImage: View {
 struct CircleImage_Previews: PreviewProvider {
     static var previews: some View {
         let url: String = "https://www.themealdb.com/images/media/meals/qqwypw1504642429.jpg"
-        CircleImage(url: "url", width: 50, height: 50, strokeColor: Color.white, lineWidth: 0)
+        CircleImage(url: url, width: 50, height: 50, strokeColor: Color.white, lineWidth: 0)
     }
 }

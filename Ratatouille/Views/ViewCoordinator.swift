@@ -43,7 +43,7 @@ struct MainView: View {
                     Label("Favoritter", systemImage: "heart.circle.fill").padding()
                 }.tag(1)
                 
-                MealListView().tabItem {
+                RecipeBrowserView().tabItem {
                     Label("Oppskrifter", systemImage: "magnifyingglass.circle.fill").padding()
                 }.tag(2)
                 

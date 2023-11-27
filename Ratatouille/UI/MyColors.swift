@@ -62,4 +62,22 @@ extension Color {
     public static var circleRoundEnd: Color {
         return Color(UIColor(named: "circleRoundEnd")!)
     }
+    
+    // TextField
+    
+    public static var myInputBgColor: Color {
+        return Color(UIColor(named: "myInputBgColor")!)
+    }
+    
+    public static var myInputTextColor: Color {
+        return Color(UIColor(named: "myInputTextColor")!)
+    }
+    
+    public static var myPlaceholderColor: Color {
+        return Color(UIColor(named: "myPlaceholderColor")!)
+    }
+    
+    public static var mySearchIconColor: Color {
+        return Color(UIColor(named: "mySearchIconColor")!)
+    }
 }

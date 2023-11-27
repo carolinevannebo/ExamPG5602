@@ -84,7 +84,7 @@ class FilterByCategoriesCommand: ICommand {
                     for meal in meals {
                         group.addTask {
                             do {
-                                return try await self.fetchAdditionalInformation(for: meal)!
+                                return try await self.fetchAdditionalInformation(for: meal)! // TODO: crasher her av og til
                             } catch {
                                 print("Error fetching additional information: \(error)")
                                 return meal

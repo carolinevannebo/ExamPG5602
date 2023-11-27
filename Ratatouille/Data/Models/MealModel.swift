@@ -58,7 +58,7 @@ struct MealModel: Codable, Identifiable {
                 let request: NSFetchRequest<Category> = Category.fetchRequest()
                     request.predicate = NSPredicate(format: "name == %@", category!)
                 
-                if let fetchedCategory = try managedObjectContext.fetch(request).first {
+                if let fetchedCategory = try managedObjectContext.fetch(request).first { // TODO: crasher her
                     // Assign values
                     categoryModel.self?.id = fetchedCategory.id
                     categoryModel.self?.image = fetchedCategory.image
