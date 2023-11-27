@@ -11,9 +11,9 @@ import UIKit
 struct AreaModel: Codable {
     var name: String
     
-//    init?(name: String) {
-//        self.name = name
-//    }
+    init?(name: String) {
+        self.name = name
+    }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: AreaCodingKeys.self)

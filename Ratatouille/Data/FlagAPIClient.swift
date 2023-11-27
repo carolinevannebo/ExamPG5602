@@ -13,12 +13,7 @@ struct FlagAPIClient {
     
     static func getFlag(countryCode: CountryCode, flagStyle: FlagStyle, flagSize: FlagSize) async throws -> UIImage? {
         do {
-            print("country code: \(countryCode)")
-            print("flag style: \(flagStyle)")
-            print("flag size: \(flagSize)")
-            
             let endpoint: String = "https://flagsapi.com/\(countryCode.rawValue)/\(flagStyle)/\(flagSize.rawValue).png"
-            print("flag url: \(endpoint)")
             
             let url: URL = URL(string: endpoint)!
             

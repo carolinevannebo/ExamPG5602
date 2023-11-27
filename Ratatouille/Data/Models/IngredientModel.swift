@@ -12,11 +12,11 @@ struct IngredientModel: Codable, Identifiable {
     var name: String?
     var information: String?
     
-//    init?(id: String, name: String, information: String?) {
-//        self.id = id
-//        self.name = name
-//        self.information = information
-//    }
+    init?(id: String, name: String, information: String?) {
+        self.id = id
+        self.name = name
+        self.information = information
+    }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: IngredientCodingKeys.self)

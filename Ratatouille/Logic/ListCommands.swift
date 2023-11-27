@@ -90,7 +90,7 @@ class FetchFlagCommand: ICommand {
                 } catch {
                     print("Error while fetching flag: \(error)")
                     throw error
-                }
+                } 
             }
         } catch {
             print("Unexpected error in FetchFlagCommand: \(error)")

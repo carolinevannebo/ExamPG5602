@@ -15,14 +15,21 @@ struct MealDetailView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                // Header
                 MealHeader(meal: $meal, categoryIsPresented: $categoryIsPresented)
                 
+                // Ingredients
+                IngredientList(ingredients: $meal.wrappedValue.ingredients!)
+                
+                // Instructions
                 ZStack {
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .foregroundColor(.myDiffusedColor)
+                        .foregroundColor(.mySecondaryColor)
                         .shadow(radius: 5)
                         .opacity(0.5)
-                    Text(meal.instructions!).padding()
+                    Text(meal.instructions!)
+                        .foregroundColor(.myContrastColor)
+                        .padding()
                 }
                 .padding(.horizontal)
             }
@@ -30,14 +37,13 @@ struct MealDetailView: View {
             .background(Color.myBackgroundColor)
             .toolbarBackground(.visible, for: .tabBar)
             .sheet(isPresented: $categoryIsPresented) {
+                // Category information sheet
                 CategoryDetailView(category: meal.category!)
-                    .modifier(DarkModeViewModifier()) // TODO: check darkmode
-                    //.preferredColorScheme(.dark) // TODO: midlertidig
+                    .modifier(DarkModeViewModifier())
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
         }
-        .modifier(DarkModeViewModifier()) // TODO: check darkmode
-        //.environment(\.colorScheme, .dark) // TODO: midlertidig, du må endre fargene dine
+        .modifier(DarkModeViewModifier())
     }
 }
 
@@ -52,28 +58,38 @@ struct MealHeader: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .foregroundColor(.mySecondaryColor)
-                .shadow(radius: 5)
-                .opacity(0.5)
-            HStack {
-                VStack (alignment: .leading) {
-                    VStack {
-                        CategoryButton(category: meal.wrappedValue.category!)
-                            .onTapGesture {
-                                categoryIsPresented.wrappedValue = true
-                            }
-                        AreaTextBox(area: meal.wrappedValue.area!)
+            ZStack {
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .foregroundColor(.mySecondaryColor)
+                    .shadow(radius: 5)
+                    .opacity(0.5)
+                
+                // Text boxes
+                HStack {
+                    VStack (alignment: .leading) {
+                            CategoryButton(category: meal.wrappedValue.category!)
+                                .onTapGesture {
+                                    categoryIsPresented.wrappedValue = true
+                                }
+                            AreaTextBox(area: meal.wrappedValue.area!)
+                        Spacer()
+                        
                     }
-                    .frame(height: 90)
-                    // some ingredients
-                    Spacer()
+                    .frame(width: 175, height: 90)
+                    .padding()
                     
+                    Spacer()
                 }
-                .padding()
+            }
+            .frame(height: 110)
+            .padding(.vertical)
+            
+            // Meal image
+            HStack {
+                Spacer()
                 
                 if meal.wrappedValue.image != nil {
-                    CircleImage(url: meal.wrappedValue.image!, width: 140, height: 140, strokeColor: .clear, lineWidth: 0)
+                    CircleImage(url: meal.wrappedValue.image!, width: 140, height: 140, strokeColor: .clear, lineWidth: 0).padding(.trailing)
                 } else {
                     Image(uiImage: UIImage(named: "demoMeal")!)
                         .resizable()
@@ -82,11 +98,11 @@ struct MealHeader: View {
                         .clipShape(Circle())
                         .overlay(Circle().stroke(.clear, lineWidth: 0))
                         .shadow(radius: 5)
-                        .padding()
+                        .padding(.trailing)
                 }
             }
+            .padding(.vertical)
         }
-        .frame(height: 200)
         .padding(.horizontal)
     }
 }
@@ -127,6 +143,7 @@ struct CategoryDetailView: View {
                             .padding(.trailing, 40)
                     }
                 }
+                .padding()
             }
             
             // Content
@@ -219,8 +236,78 @@ struct CategoryButton: View {
     }
 }
 
-//struct MealDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MealDetailView(meal: DemoMeal().meal)
-//    }
-//}
+struct SectionHeader: View {
+    // source: https://github.com/ondrej-kvasnovsky/collapsable-expandable-list
+    @Binding var isOn: Bool
+    @State var title: String
+    @State var onLabel: String
+    @State var offLabel: String
+    
+    var body: some View {
+        Button(action: {
+            withAnimation {
+                isOn.toggle()
+            }
+        }, label: {
+            if isOn {
+                Text(offLabel)
+            } else {
+                Text(onLabel)
+            }
+        })
+        .font(.caption)
+        .foregroundColor(.myAccentColor)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .overlay(
+            Text(title),
+            alignment: .leading
+        )
+    }
+}
+
+
+struct IngredientList: View {
+    @State var ingredients: [IngredientModel]
+    @State var isShowingSection = false
+    
+    var body: some View {
+        NavigationView {
+                List {
+                    Section(
+                        header: SectionHeader(isOn: $isShowingSection, title: "Ingredienser", onLabel: "Vis", offLabel: "Skjul")
+                    ) {
+                        
+                        if isShowingSection {
+                            IngredientListContent(ingredients: ingredients)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .listStyle(.plain)
+                .background(Color.myBackgroundColor)
+//                .scaledToFit()
+        }
+        .padding(.bottom)
+        .frame(minHeight: 70, maxHeight: 300)
+        //.background(Color.myBackgroundColor)
+    }
+}
+
+struct IngredientListContent: View {
+    var ingredients: [IngredientModel]
+    
+    var body: some View {
+        ForEach(0..<ingredients.count, id: \.self) { index in
+            Text(ingredients[index].name!)
+                .foregroundColor(.myContrastColor)
+                .listRowSeparatorTint(Color.myAccentColor)
+                .listRowBackground(Color.clear.opacity(0))
+        }
+    }
+}
+
+struct MealDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        MealDetailView(meal: DemoMeal().meal)
+    }
+}

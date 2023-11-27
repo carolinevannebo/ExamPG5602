@@ -18,31 +18,35 @@ struct SettingsView: View {
         NavigationStack {
                 
             List {
-                NavigationLink {
-                    Text("Rediger landområder")
-                } label : {
-                    Text("Rediger landområder")
-                }
-                
-                NavigationLink {
-                    Text("Rediger kategorier")
-                } label : {
-                    Text("Rediger kategorier")
-                }
+                Section {
+                    NavigationLink {
+                        Text("Rediger landområder")
+                    } label : {
+                        Text("Rediger landområder")
+                    }
                     
-                NavigationLink {
-                    Text("Rediger ingredienser")
-                } label : {
-                    Text("Rediger ingredienser")
+                    NavigationLink {
+                        Text("Rediger kategorier")
+                    } label : {
+                        Text("Rediger kategorier")
+                    }
+                    
+                    NavigationLink {
+                        Text("Rediger ingredienser")
+                    } label : {
+                        Text("Rediger ingredienser")
+                    }
                 }
                 
                 Toggle("Aktiver mørk modus", isOn: $isDarkMode)
                     .toggleStyle(SwitchToggleStyle(tint: Color.myAccentColor))
 
-                NavigationLink {
-                    ArchiveView()
-                } label : {
-                    Text("Administrer arkiv")
+                Section {
+                    NavigationLink {
+                        ArchiveView()
+                    } label : {
+                        Text("Administrer arkiv")
+                    }
                 }
             }
             .padding()
