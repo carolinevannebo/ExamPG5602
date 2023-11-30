@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: rename to recipebrowser, create seperate view for the list itself
 class RecipeBrowserViewModel: ObservableObject {
     // Inputs to search with
     @Published var input: String = ""
@@ -15,8 +14,8 @@ class RecipeBrowserViewModel: ObservableObject {
     
     // Stored data to present
     @Published var meals: [MealModel] = []
-    @Published var categories: [CategoryModel] = []
-    @Published var areas: [AreaModel] = []
+    @Published var categories: [Category] = []
+    @Published var areas: [Area] = []
     
     // Reloads results
     @Published var searchId: UUID = UUID()
@@ -27,11 +26,11 @@ class RecipeBrowserViewModel: ObservableObject {
     
     // Logic
     let searchCommand = SearchMealsCommand()
-    let loadCategoriesCommand = LoadCategoriesCommand()
+    let loadCategoriesCommand = LoadCategoriesFromCDCommand()
     let filterCommand = FilterByCategoriesCommand() // TODO: add loading stages
-    let loadAreasCommand = LoadAreasCommand()
+    let loadAreasCommand = LoadAreasFromCDCommand()
     
-    @AppStorage("isDarkMode") var isDarkMode: Bool = true // TODO: this shouldnt be here, right?
+    @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
     func searchMeals(isDemo: Bool) async {
         do {
@@ -172,32 +171,70 @@ struct AreaList: View {
     @StateObject var viewModel: RecipeBrowserViewModel
     @State private var searchArea: String = ""
     
-    var filteredAreas: [AreaModel] {
-        if searchArea.isEmpty {
-            return viewModel.areas
-        } else {
-            return viewModel.areas.filter { $0.name.contains(searchArea) }
+    @State var filteredAreas: [Area] = []
+//    @State var filteredAreas: [Area] {
+//        if searchArea.isEmpty {
+//            return viewModel.areas
+//        } else {
+//            return viewModel.areas.filter { $0.name.localizedCaseInsensitiveContains(searchArea) }
+//        }
+//    }
+    
+    func performSearch() {
+        Task {
+            if searchArea.isEmpty {
+                filteredAreas = viewModel.areas
+            } else {
+                filteredAreas = viewModel.areas.compactMap { mapArea($0)}
+//                filteredAreas = viewModel.areas.filter {
+//                    $0.name.localizedCaseInsensitiveContains(searchArea)
+//                }
+            }
         }
     }
     
+    func mapArea(_ area: Area) -> Area? {
+        guard area.name.localizedCaseInsensitiveContains(searchArea) else {
+            return nil
+        }
+        return area
+    }
+    
     var body: some View {
-        ScrollView {
-            TextField("Søk etter landområder...", text: $searchArea)
-            
-            ForEach(0..<filteredAreas.count, id: \.self) { index in
-                if filteredAreas[index].name != "Unknown" {
-                    AreaTextBox(area: filteredAreas[index])
-                        .padding(.horizontal)
+        NavigationView {
+            List {
+                ForEach(0..<filteredAreas.count, id: \.self) { index in
+                    
+                    if filteredAreas[index].name != "Unknown" {
+                            
+                        Group {
+                            if let mappedArea = mapArea(filteredAreas[index]) {
+                                AreaTextBox(area: mappedArea)
+                            } else {
+                                AreaTextBox(area: filteredAreas[index])
+                            }
+                        }
+                        .listRowBackground(Color.clear)
                         .onTapGesture {
                             searchArea = ""
                             // filter meals by areas
                         }
-                }
-            }.searchable(text: $searchArea, prompt: "Search area")
+                    }
+                } // Bug: background is not transparent when search input is wrong
+            }
+            .listStyle(.plain)
+            .navigationBarTitle("Landområder", displayMode: .inline)
+            .searchable(text: $searchArea, prompt: "Søk etter landområder...")
+            .onChange(of: searchArea) { newSearchArea in
+                performSearch()
+            }
         }
         .padding()
         .onAppear {
-            Task { await viewModel.loadAreas() }
+            Task {
+                await viewModel.loadAreas()
+                performSearch()
+            }
         }
     }
 }

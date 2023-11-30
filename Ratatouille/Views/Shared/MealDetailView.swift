@@ -41,7 +41,6 @@ struct MealDetailView<MealType: MealRepresentable>: View {
 }
 
 struct MealHeader<MealType: MealRepresentable>: View {
-//    var meal: Binding<MealModel>
     var meal: Binding<MealType>
     var categoryIsPresented: Binding<Bool>
     
@@ -103,7 +102,6 @@ struct MealHeader<MealType: MealRepresentable>: View {
 
 // Sheet
 struct CategoryDetailView<CategoryType: CategoryRepresentable>: View {
-    //@State var category: CategoryModel
     @State var category: CategoryType
     
     var body: some View {
@@ -156,7 +154,6 @@ struct CategoryDetailView<CategoryType: CategoryRepresentable>: View {
 }
 
 struct AreaTextBox<AreaType: AreaRepresentable>: View {
-//    @State var area: AreaModel
     @State var area: AreaType
     @State var flag: UIImage?
     
@@ -206,7 +203,6 @@ struct AreaTextBox<AreaType: AreaRepresentable>: View {
 }
 
 struct CategoryButton<CategoryType: CategoryRepresentable>: View {
-    //@State var category: CategoryModel
     @State var category: CategoryType
     
     var body: some View {

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct CategoryItemView: View {
-    @State var category: CategoryModel
+//    @State var category: CategoryModel
+    @State var category: CategoryRepresentable
     
     var body: some View {
         ZStack {
