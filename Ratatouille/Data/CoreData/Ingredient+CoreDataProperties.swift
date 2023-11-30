@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-extension Ingredient {
+extension Ingredient: IngredientRepresentable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Ingredient> {
         return NSFetchRequest<Ingredient>(entityName: "Ingredient")
@@ -18,7 +18,7 @@ extension Ingredient {
 
     @NSManaged public var id: String?
     @NSManaged public var information: String?
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var meals: NSSet?
 }
 

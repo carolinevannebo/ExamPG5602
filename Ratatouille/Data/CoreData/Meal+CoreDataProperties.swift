@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-extension Meal {
+extension Meal: MealRepresentable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Meal> {
         return NSFetchRequest<Meal>(entityName: "Meal")
@@ -19,7 +19,7 @@ extension Meal {
     @NSManaged public var id: String
     @NSManaged public var image: String?
     @NSManaged public var instructions: String?
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var area: Area?
     @NSManaged public var category: Category?
     @NSManaged public var ingredients: NSSet?
@@ -59,6 +59,12 @@ extension Meal : Identifiable {
     enum MealErrors: Error { // TODO: error handling
         case decodingError
         case ingredientMismatchError
-        
     }
+}
+
+extension Meal {
+    typealias AreaType = Area
+    typealias CategoryType = Category
+    typealias IngredientType = Ingredient
+    typealias IngredientsCollection = NSSet //Set<IngredientType>
 }

@@ -27,7 +27,7 @@ struct MealCardForMeal: View {
                 Spacer().frame(width: 20)
                 
                 VStack (alignment: .leading) {
-                    Text(viewModel.meal.name! )
+                    Text(viewModel.meal.name )
                         .font(.system(size: 15, weight: .semibold))
                         .multilineTextAlignment(.leading)
                         .foregroundColor(.myContrastColor)

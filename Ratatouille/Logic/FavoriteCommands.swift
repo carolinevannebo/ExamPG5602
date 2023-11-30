@@ -88,7 +88,7 @@ class SaveFavoriteCommand: ICommand {
                         print("Meal is in archives.")
                         result = .failure(.locatedInArchive("Cannot perform action"))
                     } else {
-                        print("Favorite meal is already saved: \(fetchedFavorite.name!)")
+                        print("Favorite meal is already saved: \(fetchedFavorite.name)")
                         result = .success(fetchedFavorite)
                     }
                 } else {
@@ -102,7 +102,7 @@ class SaveFavoriteCommand: ICommand {
                     newFavorite.ingredients = NSSet(array: ingredientEntities)
                     newFavorite.isArchived = false
                     
-                    print("New favorite created: \(newFavorite.name ?? "unknown name for some reason")")
+                    print("New favorite created: \(newFavorite.name)")
                     
                     print("This favorite has the following attributes: ")
                     print("id: \(newFavorite.id)")

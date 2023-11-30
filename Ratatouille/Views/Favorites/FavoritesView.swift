@@ -154,9 +154,10 @@ struct FavoritesView: View {
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
         .onAppear {
-            Task {
-                await viewModel.loadFavoriteMeals()
-            }
+            Task { await viewModel.loadFavoriteMeals() }
+        }
+        .refreshable {
+            Task { await viewModel.loadFavoriteMeals() }
         }
     }
 }
@@ -167,7 +168,6 @@ struct FavoriteItemView: View {
     init(meal: Meal) {
         let favoriteItemViewModel = FavoriteItemViewModel(meal: meal)
         _viewModel = StateObject(wrappedValue: favoriteItemViewModel)
-        //_viewModel = StateObject(wrappedValue: FavoriteItemViewModel(meal: meal)!)
     }
 
     var body: some View {

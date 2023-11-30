@@ -9,13 +9,13 @@
 import Foundation
 import CoreData
 
-extension Area {
+extension Area: AreaRepresentable {    
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Area> {
         return NSFetchRequest<Area>(entityName: "Area")
     }
 
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var meals: NSSet?
 
 }
@@ -42,3 +42,4 @@ extension Area : Identifiable {
         case name
     }
 }
+

@@ -9,8 +9,9 @@ import Foundation
 import CoreData
 
 
-struct MealModel: Codable, Identifiable {
-    let id: String
+struct MealModel: Codable, Identifiable, MealRepresentable {
+ 
+    var id: String
     var name: String
     var image: String?
     var instructions: String?
@@ -189,4 +190,11 @@ struct DynamicCodingKeys: CodingKey {
 
 struct MealWrapper: Decodable {
     let meals: [MealModel]
+}
+
+extension MealModel {
+    typealias AreaType = AreaModel
+    typealias CategoryType = CategoryModel
+    typealias IngredientType = IngredientModel
+    typealias IngredientsCollection = [IngredientType]
 }

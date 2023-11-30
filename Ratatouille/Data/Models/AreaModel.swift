@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct AreaModel: Codable {
+struct AreaModel: Codable, AreaRepresentable {
     var name: String
     
     init?(name: String) {
@@ -29,3 +29,4 @@ enum AreaCodingKeys: CodingKey {
 struct AreaWrapper: Decodable {
     let meals: [AreaModel] // Has to be meals, to recognize the field in the API
 }
+

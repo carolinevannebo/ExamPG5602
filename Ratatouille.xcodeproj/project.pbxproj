@@ -28,6 +28,9 @@
 		E40644912B10349500028CBD /* SwipeIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644902B10349500028CBD /* SwipeIcons.swift */; };
 		E40644932B10350600028CBD /* ImageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644922B10350600028CBD /* ImageWidget.swift */; };
 		E40644952B1035A300028CBD /* MealCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40644942B1035A300028CBD /* MealCards.swift */; };
+		E42525262B18B8EB00A099C1 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42525252B18B8EB00A099C1 /* ViewExtensions.swift */; };
+		E42525282B18B99400A099C1 /* InputFieldViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */; };
+		E425252A2B18C9CE00A099C1 /* Representables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42525292B18C9CE00A099C1 /* Representables.swift */; };
 		E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469628A2B13B19400D100E6 /* FlagAPIClient.swift */; };
 		E469628E2B13E6C300D100E6 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E469628D2B13E6C300D100E6 /* Nuke */; };
 		E46962902B13E6C300D100E6 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E469628F2B13E6C300D100E6 /* NukeUI */; };
@@ -99,6 +102,9 @@
 		E40644902B10349500028CBD /* SwipeIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeIcons.swift; sourceTree = "<group>"; };
 		E40644922B10350600028CBD /* ImageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageWidget.swift; sourceTree = "<group>"; };
 		E40644942B1035A300028CBD /* MealCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCards.swift; sourceTree = "<group>"; };
+		E42525252B18B8EB00A099C1 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldViewModifier.swift; sourceTree = "<group>"; };
+		E42525292B18C9CE00A099C1 /* Representables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Representables.swift; sourceTree = "<group>"; };
 		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
 		E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingAnimation.swift; sourceTree = "<group>"; };
 		E46962952B15334900D100E6 /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "remy-eating.gif"; sourceTree = "<group>"; };
@@ -286,6 +292,7 @@
 				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
 				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
 				E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */,
+				E42525292B18C9CE00A099C1 /* Representables.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -293,15 +300,16 @@
 		E4EAFC592B02403D0095D10B /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				E406448B2B0F862B00028CBD /* GIF */,
+				E40644892B0F82E700028CBD /* AnimatedGif.swift */,
 				E4EAFC2D2B023AF80095D10B /* Assets.xcassets */,
 				E406445E2B0D1AED00028CBD /* CircleImage.swift */,
-				E40644602B0D2FBC00028CBD /* MyColors.swift */,
-				E40644892B0F82E700028CBD /* AnimatedGif.swift */,
-				E40644902B10349500028CBD /* SwipeIcons.swift */,
-				E40644922B10350600028CBD /* ImageWidget.swift */,
 				E4E3B9782B12D3DF008591D3 /* DemoMeal.swift */,
+				E406448B2B0F862B00028CBD /* GIF */,
 				E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */,
+				E40644922B10350600028CBD /* ImageWidget.swift */,
+				E40644602B0D2FBC00028CBD /* MyColors.swift */,
+				E40644902B10349500028CBD /* SwipeIcons.swift */,
+				E42525252B18B8EB00A099C1 /* ViewExtensions.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -333,6 +341,7 @@
 			isa = PBXGroup;
 			children = (
 				E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */,
+				E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -502,6 +511,7 @@
 				E4E3B9752B12A0DB008591D3 /* ArchiveCommands.swift in Sources */,
 				E4EAFC762B02718C0095D10B /* Category+CoreDataClass.swift in Sources */,
 				E40644702B0E951600028CBD /* CategoryModel.swift in Sources */,
+				E425252A2B18C9CE00A099C1 /* Representables.swift in Sources */,
 				E406445F2B0D1AED00028CBD /* CircleImage.swift in Sources */,
 				E40644722B0E953D00028CBD /* IngredientModel.swift in Sources */,
 				E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */,
@@ -517,10 +527,12 @@
 				E4EAFC712B025FF60095D10B /* DataController.swift in Sources */,
 				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,
+				E42525262B18B8EB00A099C1 /* ViewExtensions.swift in Sources */,
 				E40644952B1035A300028CBD /* MealCards.swift in Sources */,
 				E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */,
 				E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */,
 				E4E3B9732B12A0CA008591D3 /* FavoriteCommands.swift in Sources */,
+				E42525282B18B99400A099C1 /* InputFieldViewModifier.swift in Sources */,
 				E406445D2B0D0F3500028CBD /* MealItemView.swift in Sources */,
 				E40644912B10349500028CBD /* SwipeIcons.swift in Sources */,
 				E4EAFC7E2B028EC40095D10B /* Ingredient+CoreDataClass.swift in Sources */,
@@ -696,6 +708,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Ratatouille/Preview Content\"";
+				DEVELOPMENT_TEAM = MJBZJ6F9V3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -724,6 +737,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Ratatouille/Preview Content\"";
+				DEVELOPMENT_TEAM = MJBZJ6F9V3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

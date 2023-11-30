@@ -37,8 +37,7 @@ class MealItemViewModel: ObservableObject {
                     DispatchQueue.main.async {
                         self.meal.isFavorite = true
                     }
-                    // testvariant 2
-                    //MealListViewModel().searchId.self = UUID()
+                    
                 case .failure(let error):
                     throw error
                 }
@@ -99,8 +98,6 @@ struct MealItemView: View {
     init(meal: MealModel) {
         let mealItemViewModel = MealItemViewModel(meal: meal)
         _viewModel = StateObject(wrappedValue: mealItemViewModel)
-        //_viewModel = StateObject(wrappedValue: MealItemViewModel(meal: meal))
-        // this instanciation of viewmodel can lead to unnecessary view model recreations
     }
 
     var body: some View {

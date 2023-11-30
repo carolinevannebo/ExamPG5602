@@ -9,7 +9,8 @@ import SwiftUI
 import NukeUI
 
 struct MealDetailView: View {
-    @State var meal: MealModel
+//    @State var meal: MealModel // it should be able to take in both MealModel or Meal
+    @State var meal: any MealRepresentable
     @State var categoryIsPresented: Bool = false
     
     var body: some View {
@@ -40,10 +41,11 @@ struct MealDetailView: View {
 }
 
 struct MealHeader: View {
-    var meal: Binding<MealModel>
+//    var meal: Binding<MealModel>
+    var meal: Binding<any MealRepresentable>
     var categoryIsPresented: Binding<Bool>
     
-    init(meal: Binding<MealModel>, categoryIsPresented: Binding<Bool>) {
+    init(meal: Binding<any MealRepresentable>, categoryIsPresented: Binding<Bool>) {
         self.meal = meal
         self.categoryIsPresented = categoryIsPresented
     }
@@ -101,7 +103,8 @@ struct MealHeader: View {
 
 // Sheet
 struct CategoryDetailView: View {
-    @State var category: CategoryModel
+    //@State var category: CategoryModel
+    @State var category: CategoryRepresentable
     
     var body: some View {
         VStack {
@@ -153,7 +156,8 @@ struct CategoryDetailView: View {
 }
 
 struct AreaTextBox: View {
-    @State var area: AreaModel
+//    @State var area: AreaModel
+    @State var area: AreaRepresentable
     @State var flag: UIImage?
     
     let fetchFlagCommand = FetchFlagCommand()
@@ -191,20 +195,19 @@ struct AreaTextBox: View {
                 Spacer()
                 
                 if flag != nil {
-                    Image(uiImage: flag!).padding(.trailing)// TODO: set default image if nil
+                    Image(uiImage: flag!).padding(.trailing)
                 }
             }
         }
         .onAppear {
-            Task {
-                await setFlag()
-            }
+            Task { await setFlag() }
         }
     }
 }
 
 struct CategoryButton: View {
-    @State var category: CategoryModel
+    //@State var category: CategoryModel
+    @State var category: CategoryRepresentable
     
     var body: some View {
         ZStack {
@@ -259,37 +262,31 @@ struct SectionHeader: View {
 
 // TODO: FÅR IKKE LISTA TIL Å COMPRIMERES, DEN TAR OPP ALL WHITESPACE NÅR DEN SKAL VÆRE LUKKET
 struct IngredientList: View {
-    @State var ingredients: [IngredientModel]
+//    @State var ingredients: [IngredientModel]
+    @State var ingredients: [IngredientRepresentable]
     @State var isShowingSection = false
     
     var body: some View {
         NavigationView {
-                List {
-                    Section(
-                        "Ingredienser"
-//                        header: SectionHeader(isOn: $isShowingSection, title: "Ingredienser", onLabel: "Vis", offLabel: "Skjul")
-                    ) {
-                        
-//                        if isShowingSection {
-                            IngredientListContent(ingredients: ingredients)
-//                        }
-                    }
+            List {
+                Section("Ingredienser") {
+                    IngredientListContent(ingredients: ingredients)
                 }
-                .padding(.horizontal)
-                .listStyle(.plain)
-                .background(Color.myBackgroundColor)
+            }
+            .listStyle(.plain)
+            .padding(.horizontal)
+            .background(Color.myBackgroundColor)
         }
-        .padding(.bottom)
-//        .frame(minHeight: 70, maxHeight: 300)
     }
 }
 
 struct IngredientListContent: View {
-    var ingredients: [IngredientModel]
+//    var ingredients: [IngredientModel]
+    var ingredients: [IngredientRepresentable]
     
     var body: some View {
         ForEach(0..<ingredients.count, id: \.self) { index in
-            Text(ingredients[index].name!)
+            Text(ingredients[index].name)
                 .foregroundColor(.myContrastColor)
                 .listRowSeparatorTint(Color.myAccentColor)
                 .listRowBackground(Color.clear.opacity(0))
@@ -298,7 +295,8 @@ struct IngredientListContent: View {
 }
 
 struct InstructionsSection: View {
-    var meal: MealModel
+    //var meal: MealModel
+    var meal: any MealRepresentable
     
     var body: some View {
         ZStack {
@@ -320,8 +318,6 @@ struct InstructionsSection: View {
                         .foregroundColor(.mySubTitleColor)
                 }
                 
-                Spacer()
-           
                 Text(meal.instructions!)
                     .foregroundColor(.myContrastColor)
                     .padding()

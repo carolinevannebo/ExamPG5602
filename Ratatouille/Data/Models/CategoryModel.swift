@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CategoryModel: Codable, Identifiable {
+struct CategoryModel: Codable, Identifiable, CategoryRepresentable {
     var id: String?
     var name: String
     var image: String?

@@ -30,17 +30,17 @@ class LoadCategoriesCommand: ICommand {
     }
 }
 
-class ListIngredientsCommand: ICommand {
-    typealias Input = String
+class LoadIngredientsCommand: ICommand {
+    typealias Input = Void
     typealias Output = [IngredientModel]?
 
-    func execute(input: String) async -> Output {
+    func execute(input: Void) async -> Output {
         do {
             let result = await APIClient.getIngredients()
 
             switch result {
                 case .success(let ingredients):
-                    print("Got \(ingredients.count) meals")
+                    print("Got \(ingredients.count) ingredients")
                     return ingredients
                 case .failure(let error):
                     throw error
@@ -52,17 +52,17 @@ class ListIngredientsCommand: ICommand {
     }
 }
 
-class ListAreasCommand: ICommand {
-    typealias Input = String
+class LoadAreasCommand: ICommand {
+    typealias Input = Void
     typealias Output = [AreaModel]?
 
-    func execute(input: String) async -> Output {
+    func execute(input: Void) async -> Output {
         do {
             let result = await APIClient.getAreas()
 
             switch result {
                 case .success(let areas):
-                    print("Got \(areas.count) meals")
+                    print("Got \(areas.count) areas")
                     return areas
                 case .failure(let error):
                     throw error

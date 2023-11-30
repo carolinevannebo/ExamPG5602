@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct IngredientModel: Codable, Identifiable {
+struct IngredientModel: Codable, Identifiable, IngredientRepresentable {
     var id: String?
-    var name: String?
+    var name: String
     var information: String?
     
     init?(id: String, name: String, information: String?) {
@@ -21,7 +21,7 @@ struct IngredientModel: Codable, Identifiable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: IngredientCodingKeys.self)
         self.id = try container.decodeIfPresent(String.self, forKey: .idIngredient)
-        self.name = try container.decodeIfPresent(String.self, forKey: .strIngredient)
+        self.name = try container.decode(String.self, forKey: .strIngredient)
         self.information = try container.decodeIfPresent(String.self, forKey: .strDescription)
     }
 }
@@ -35,3 +35,4 @@ enum IngredientCodingKeys: CodingKey {
 struct IngredientWrapper: Decodable {
     let meals: [IngredientModel] // Has to be meals, to recognize the field in the API
 }
+

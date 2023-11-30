@@ -16,6 +16,7 @@ class RecipeBrowserViewModel: ObservableObject {
     // Stored data to present
     @Published var meals: [MealModel] = []
     @Published var categories: [CategoryModel] = []
+    @Published var areas: [AreaModel] = []
     
     // Reloads results
     @Published var searchId: UUID = UUID()
@@ -28,6 +29,7 @@ class RecipeBrowserViewModel: ObservableObject {
     let searchCommand = SearchMealsCommand()
     let loadCategoriesCommand = LoadCategoriesCommand()
     let filterCommand = FilterByCategoriesCommand() // TODO: add loading stages
+    let loadAreasCommand = LoadAreasCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true // TODO: this shouldnt be here, right?
     
@@ -47,7 +49,7 @@ class RecipeBrowserViewModel: ObservableObject {
                     self.searchId = UUID()
                 }
             } else {
-                throw MealListViewModelError.mealsEmpty
+                throw RecipeBrowserViewModelError.mealsEmpty
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -62,7 +64,7 @@ class RecipeBrowserViewModel: ObservableObject {
                     self.searchId = UUID()
                 }
             } else {
-                throw MealListViewModelError.filterError
+                throw RecipeBrowserViewModelError.filterError
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -76,17 +78,32 @@ class RecipeBrowserViewModel: ObservableObject {
                     self.categories = categories
                 }
             } else {
-                throw MealListViewModelError.categoriesEmpty
+                throw RecipeBrowserViewModelError.categoriesEmpty
             }
         } catch {
             print("Unexpected error: \(error)")
         }
     }
     
-    enum MealListViewModelError: Error {
+    func loadAreas() async {
+        do {
+            if let areas = await loadAreasCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.areas = areas
+                }
+            } else {
+                throw RecipeBrowserViewModelError.areasEmpty
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    enum RecipeBrowserViewModelError: Error {
         case failed(underlying: Error)
         case mealsEmpty
         case categoriesEmpty
+        case areasEmpty
         case filterError
     }
 }
@@ -131,9 +148,9 @@ struct RecipeBrowserView: View {
             // --------------   REFACTOR REDUNDANCE ----------------------
             .sheet(isPresented: $viewModel.searchAreaSheetPresented) {
                 // search area
-                Text("her skal man søke i landområder")
+                AreaList(viewModel: viewModel)
                     .modifier(DarkModeViewModifier())
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.medium])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             .sheet(isPresented: $viewModel.searchIngredientSheetPresented) {
@@ -148,13 +165,40 @@ struct RecipeBrowserView: View {
         } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
-        .onAppear {
-            Task {
-                await viewModel.loadCategories()
-                await viewModel.searchMeals(isDemo: true)
-            }
+    }
+}
+
+struct AreaList: View {
+    @StateObject var viewModel: RecipeBrowserViewModel
+    @State private var searchArea: String = ""
+    
+    var filteredAreas: [AreaModel] {
+        if searchArea.isEmpty {
+            return viewModel.areas
+        } else {
+            return viewModel.areas.filter { $0.name.contains(searchArea) }
         }
-        
+    }
+    
+    var body: some View {
+        ScrollView {
+            TextField("Søk etter landområder...", text: $searchArea)
+            
+            ForEach(0..<filteredAreas.count, id: \.self) { index in
+                if filteredAreas[index].name != "Unknown" {
+                    AreaTextBox(area: filteredAreas[index])
+                        .padding(.horizontal)
+                        .onTapGesture {
+                            searchArea = ""
+                            // filter meals by areas
+                        }
+                }
+            }.searchable(text: $searchArea, prompt: "Search area")
+        }
+        .padding()
+        .onAppear {
+            Task { await viewModel.loadAreas() }
+        }
     }
 }
 
@@ -162,32 +206,10 @@ struct InputField: View {
     @StateObject var viewModel: RecipeBrowserViewModel
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .shadow(radius: 1)
-                .foregroundColor(Color.myInputBgColor)
-            
-            HStack {
-                TextField("",
-                          text: $viewModel.input,
-                          prompt: Text("Søk etter navn, bokstav, id...").foregroundColor(Color.myPlaceholderColor)
-                ).onSubmit {
-                    Task {
-                        await viewModel.searchMeals(isDemo: false)
-                    }
-                }
-                
-                Image(systemName: "magnifyingglass")
-                    .resizable()
-                    .fontWeight(.semibold)
-                    .frame(width: 17, height: 17)
-            }
-            .padding(20)
-            .frame(minWidth: 100, minHeight: 40)
-            .foregroundColor(Color.myInputTextColor)
-        }
-        .frame(height: 40)
-        .padding()
+        TextField("", text: $viewModel.input)
+            .modifier(InputFieldViewModifier(viewModel: viewModel, inputType: .inputMeal))
+            .frame(height: 40)
+            .padding()
     }
 }
 

@@ -448,7 +448,7 @@ extension APIClient {
                         // Create new ingredient
                         let newIngredient = Ingredient(context: managedObjectContext)
                         newIngredient.id = id
-                        newIngredient.name = ingredientData.name?.capitalized
+                        newIngredient.name = ingredientData.name.capitalized
                         newIngredient.information = newIngredient.information
                         
                         print("New ingredient created: \(newIngredient.name ?? "") with id: \(newIngredient.id ?? "unknown")")

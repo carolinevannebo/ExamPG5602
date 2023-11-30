@@ -21,6 +21,9 @@ struct MealListView: View {
             }.id(viewModel.searchId)
         }
         .padding(.vertical)
+        .onAppear {
+            Task { await viewModel.searchMeals(isDemo: true) }
+        }
     }
 }
 
