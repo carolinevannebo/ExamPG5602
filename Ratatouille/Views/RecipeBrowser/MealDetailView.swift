@@ -20,7 +20,7 @@ struct MealDetailView<MealType: MealRepresentable>: View {
                 MealHeader(meal: $meal, categoryIsPresented: $categoryIsPresented)
                 
                 // Ingredients
-                IngredientList(ingredients: $meal.wrappedValue.ingredients! as! [any IngredientRepresentable])
+                IngredientList<MealType>(ingredients: $meal.wrappedValue.ingredients!)
                 
                 // Instructions
                 InstructionsSection(meal: $meal.wrappedValue)
@@ -230,48 +230,19 @@ struct CategoryButton<CategoryType: CategoryRepresentable>: View {
     }
 }
 
-struct SectionHeader: View {
-    // source: https://github.com/ondrej-kvasnovsky/collapsable-expandable-list
-    @Binding var isOn: Bool
-    @State var title: String
-    @State var onLabel: String
-    @State var offLabel: String
-    
-    var body: some View {
-        Button(action: {
-            withAnimation {
-                isOn.toggle()
-            }
-        }, label: {
-            if isOn {
-                Text(offLabel)
-            } else {
-                Text(onLabel)
-            }
-        })
-        .font(.caption)
-        .foregroundColor(.myAccentColor)
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .overlay(
-            Text(title),
-            alignment: .leading
-        )
-    }
-}
-
-
-// TODO: FÅR IKKE LISTA TIL Å COMPRIMERES, DEN TAR OPP ALL WHITESPACE NÅR DEN SKAL VÆRE LUKKET
-struct IngredientList: View {
-//    @State var ingredients: [IngredientModel]
+struct IngredientList<MealType: MealRepresentable>: View where MealType.IngredientType: IngredientRepresentable {
     @State var isShowingSection = false
-    
-    @State var ingredients: [IngredientRepresentable]
+    @State var ingredients: MealType.IngredientsCollection
     
     var body: some View {
         NavigationView {
             List {
                 Section("Ingredienser") {
-                    IngredientArrayContent(ingredients: ingredients)
+                    if let arrayIngredients = ingredients as? [IngredientRepresentable] {
+                        IngredientArrayContent(ingredients: arrayIngredients)
+                    } else if let nsSetIngredients = ingredients as? NSSet {
+                        IngredientNSSetContent(ingredients: nsSetIngredients)
+                    }
                 }
             }
             .listStyle(.plain)
@@ -280,18 +251,30 @@ struct IngredientList: View {
         }
     }
 }
-// TODO: lag liste for NSSet
+
 struct IngredientArrayContent: View {
-//    var ingredients: [IngredientModel]
     var ingredients: [IngredientRepresentable]
     
     var body: some View {
-            ForEach(0..<ingredients.count, id: \.self) { index in
-                Text(ingredients[index].name!)
-                    .foregroundColor(.myContrastColor)
-                    .listRowSeparatorTint(Color.myAccentColor)
-                    .listRowBackground(Color.clear.opacity(0))
-            }
+        ForEach(0..<ingredients.count, id: \.self) { index in
+            Text(ingredients[index].name!)
+                .foregroundColor(.myContrastColor)
+                .listRowSeparatorTint(Color.myAccentColor)
+                .listRowBackground(Color.clear.opacity(0))
+        }
+    }
+}
+
+struct IngredientNSSetContent: View {
+    var ingredients: NSSet
+    
+    var body: some View {
+        ForEach(Array(ingredients) as! [IngredientRepresentable], id: \.id) { ingredient in
+            Text(ingredient.name!)
+                .foregroundColor(.myContrastColor)
+                .listRowSeparatorTint(Color.myAccentColor)
+                .listRowBackground(Color.clear.opacity(0))
+        }
     }
 }
 

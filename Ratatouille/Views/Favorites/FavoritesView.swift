@@ -128,7 +128,8 @@ struct FavoritesView: View {
                     ScrollView {
                         ForEach(0..<viewModel.meals.count, id: \.self) { index in
                             NavigationLink {
-                                Text(viewModel.meals[index].name ).foregroundColor(.myContrastColor) // TODO: DetailView
+                                //Text(viewModel.meals[index].name ).foregroundColor(.myContrastColor) // TODO: DetailView
+                                MealDetailView(meal: viewModel.meals[index])
                             } label: {
                                 FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
                             }
@@ -178,8 +179,47 @@ struct FavoriteItemView: View {
 
                 ArchiveIcon(viewModel: viewModel)
             }
-            MealCardForMeal(meal: viewModel.meal)
+            MealCardForFavorites(meal: viewModel.meal)
         }
         .padding(.horizontal)
+    }
+}
+
+struct MealCardForFavorites: View {
+    @StateObject var viewModel: FavoriteItemViewModel
+    
+    init(meal: Meal) {
+        let favoriteItemViewModel = FavoriteItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: favoriteItemViewModel)
+    }
+    
+    var body: some View {
+        HStack {
+            ImageWidget(url: viewModel.meal.image!)
+            
+            Spacer().frame(width: 20)
+            
+            MealCardContent(meal: viewModel.meal)
+            
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .foregroundColor(.myPrimaryColor)
+            )
+            // TODO: fix animations for this type of swipe
+            .offset(x: viewModel.offset.width, y: 0)
+            .gesture(
+                DragGesture()
+                    .onChanged { value in
+                        viewModel.handleDragGesture(value: value)
+                    }
+                    .onEnded { value in
+                        viewModel.handleDragEnd(value: value)
+                    }
+            )
+            .onChange(of: viewModel.offset.width) { value in
+                viewModel.isDragging = value != .zero
+            }
     }
 }

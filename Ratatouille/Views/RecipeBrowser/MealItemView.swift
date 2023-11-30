@@ -114,8 +114,43 @@ struct MealItemView: View {
                     HeartIcon(viewModel: viewModel)
                 }
             }
-            MealCardForMealModel(meal: viewModel.meal)
+            MealCardForRecipeBrowser(meal: viewModel.meal)
         }
         .padding(.horizontal)
+    }
+}
+
+struct MealCardForRecipeBrowser: View {
+    @StateObject var viewModel: MealItemViewModel
+        
+    init(meal: MealModel) {
+        let mealItemViewModel = MealItemViewModel(meal: meal)
+        _viewModel = StateObject(wrappedValue: mealItemViewModel)
+    }
+    
+    var body: some View {
+        HStack {
+            ImageWidget(url: viewModel.meal.image!)
+               
+            MealCardContent(meal: viewModel.meal)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .foregroundColor(.myPrimaryColor)
+            )
+            .offset(x: viewModel.offset.width, y: 0)
+            .gesture(
+                DragGesture()
+                    .onChanged { value in
+                        viewModel.handleDragGesture(value: value)
+                    }
+                    .onEnded { value in
+                        viewModel.handleDragEnd(value: value)
+                    }
+                )
+            .onChange(of: viewModel.offset.width) { value in
+                viewModel.isDragging = value != .zero
+            }
+        }
     }
 }
