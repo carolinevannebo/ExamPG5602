@@ -10,6 +10,7 @@ import Foundation
 class SearchRandomCommand: ICommand {
     typealias Input = Void
     typealias Output = MealModel?
+//    typealias Output = (any MealRepresentable)?
 
     func execute(input: Void) async -> Output {
         do {
@@ -32,6 +33,7 @@ class SearchRandomCommand: ICommand {
 class SearchMealsCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
+//    typealias Output = [(any MealRepresentable)]?
     
     func execute(input: String) async -> Output {
         do {
@@ -71,6 +73,7 @@ class SearchMealsCommand: ICommand {
 class FilterByCategoriesCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
+//    typealias Output = [(any MealRepresentable)]?
 
     func execute(input: String) async -> Output {
         do {

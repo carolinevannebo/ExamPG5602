@@ -49,10 +49,10 @@ struct ArchiveView: View {
                     ScrollView {
                         ForEach(0..<viewModel.meals.count, id: \.self) { index in
                             NavigationLink {
-                                Text(viewModel.meals[index].name!)
+                                Text(viewModel.meals[index].name)
                             } label: {
                                 HStack {
-                                    Text(viewModel.meals[index].name!)
+                                    Text(viewModel.meals[index].name)
                                     Image(systemName: "trash")
                                     Image(systemName: "arrow.up.bin")
                                 }

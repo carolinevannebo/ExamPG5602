@@ -15,11 +15,12 @@ struct MealModel: Codable, Identifiable, MealRepresentable {
     var name: String
     var image: String?
     var instructions: String?
-    var area: AreaModel?
-    var category: CategoryModel?
-    var ingredients: [IngredientModel]?
+    var area: AreaType?
+    var category: CategoryType?
+    var ingredients: IngredientsCollection?
     var isFavorite: Bool
     
+    // for demo only
     init?(id: String, name: String, image: String, instructions: String, area: AreaModel, category: CategoryModel, ingredients: [IngredientModel], isFavorite: Bool) {
         self.id = id
         self.name = name
@@ -42,7 +43,7 @@ struct MealModel: Codable, Identifiable, MealRepresentable {
             let category = try container.decodeIfPresent(String.self, forKey: .strCategory)
             
             var areaModel: AreaModel?
-            if area != nil {
+            if area != nil { //TODO: burde du ikke bare fetche det som allerede er lagra?
                 areaModel = try AreaModel(from: decoder)
                 areaModel.self?.name = area!
             } else {
@@ -78,15 +79,18 @@ struct MealModel: Codable, Identifiable, MealRepresentable {
                 measurementKeys: dynamicMeasureKeys
             )
             
-            var ingredientsArr: [IngredientModel] = []
+//            var ingredientsArr: [IngredientModel] = []
+            var ingredientsArr: IngredientsCollection = []
             
             for ingredient in dynamicIngredients {
-                var ingredientModel = try IngredientModel(from: decoder)
                 if !ingredient.isEmpty {
-                    ingredientModel.self.id = UUID().uuidString
-                    ingredientModel.self.name = ingredient
+                    //var ingredientModel = try IngredientModel(from: decoder)
+                    let ingredientModel = IngredientModel(id: UUID().uuidString, name: ingredient, information: nil)
                     
-                    ingredientsArr.append(ingredientModel)
+//                    ingredientModel.self.id = UUID().uuidString
+//                    ingredientModel.self.name = ingredient
+                    
+                    ingredientsArr.append(ingredientModel!)
                 }
             }
             

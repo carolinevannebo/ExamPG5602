@@ -75,12 +75,12 @@ class LoadAreasCommand: ICommand {
 }
 
 class FetchFlagCommand: ICommand {
-    typealias Input = AreaModel
+    typealias Input = String
     typealias Output = UIImage?
     
-    func execute(input: AreaModel) async -> Output {
+    func execute(input: String) async -> Output {
         do {
-            if let countryCode = FlagAPIClient.CountryCode.nameToCode[input.name.lowercased()] {
+            if let countryCode = FlagAPIClient.CountryCode.nameToCode[input.lowercased()] {
                 let flagStyle = FlagAPIClient.FlagStyle.flat
                 let flagSize = FlagAPIClient.FlagSize.small
                 

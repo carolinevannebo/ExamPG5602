@@ -9,7 +9,7 @@ import Foundation
 
 struct IngredientModel: Codable, Identifiable, IngredientRepresentable {
     var id: String?
-    var name: String
+    var name: String?
     var information: String?
     
     init?(id: String, name: String, information: String?) {
@@ -26,10 +26,10 @@ struct IngredientModel: Codable, Identifiable, IngredientRepresentable {
     }
 }
 
-enum IngredientCodingKeys: CodingKey {
-    case idIngredient
-    case strIngredient
-    case strDescription
+enum IngredientCodingKeys: CodingKey { // TODO: mulig du vil legge til string for model
+    case idIngredient //= "id"
+    case strIngredient //= "name"
+    case strDescription //= "information"
 }
 
 struct IngredientWrapper: Decodable {

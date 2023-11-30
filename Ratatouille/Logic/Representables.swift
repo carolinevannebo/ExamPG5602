@@ -35,6 +35,6 @@ protocol CategoryRepresentable {
 
 protocol IngredientRepresentable {
     var id: String? { get set }
-    var name: String { get set }
+    var name: String? { get set }
     var information: String? { get set }
 }

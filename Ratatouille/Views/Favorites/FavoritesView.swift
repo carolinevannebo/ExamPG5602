@@ -63,7 +63,7 @@ class FavoriteItemViewModel: ObservableObject {
                 
                 switch result {
                 case .success(let archive):
-                    print("Archived \(self.meal.name ?? "unknown name"), archive has \(archive.meals?.count ?? 0) records")
+                    print("Archived \(self.meal.name ), archive has \(archive.meals?.count ?? 0) records")
                     
                     DispatchQueue.main.async {
                         self.meal.isArchived = true
@@ -75,7 +75,7 @@ class FavoriteItemViewModel: ObservableObject {
                 }
             } else {
                 // TODO: set isArchived to false
-                print("Recipe with name \(meal.name ?? "unknown") will be moved from archives")
+                print("Recipe with name \(meal.name ) will be moved from archives")
                 
                 DispatchQueue.main.async {
                     self.meal.isArchived = false
@@ -128,7 +128,7 @@ struct FavoritesView: View {
                     ScrollView {
                         ForEach(0..<viewModel.meals.count, id: \.self) { index in
                             NavigationLink {
-                                Text(viewModel.meals[index].name ?? "unknown").foregroundColor(.myContrastColor) // TODO: DetailView
+                                Text(viewModel.meals[index].name ).foregroundColor(.myContrastColor) // TODO: DetailView
                             } label: {
                                 FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
                             }
