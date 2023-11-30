@@ -10,7 +10,6 @@ import Foundation
 class SearchRandomCommand: ICommand {
     typealias Input = Void
     typealias Output = MealModel?
-//    typealias Output = (any MealRepresentable)?
 
     func execute(input: Void) async -> Output {
         do {
@@ -33,7 +32,6 @@ class SearchRandomCommand: ICommand {
 class SearchMealsCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
-//    typealias Output = [(any MealRepresentable)]?
     
     func execute(input: String) async -> Output {
         do {
@@ -70,12 +68,11 @@ class SearchMealsCommand: ICommand {
 }
 
 // TODO: this filter logic is slow, fix it -> a little better, but can still be better
-class FilterByCategoriesCommand: ICommand {
+class FilterByCategoryCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
-//    typealias Output = [(any MealRepresentable)]?
 
-    func execute(input: String) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let result = await APIClient.filterMealsByCategory(input: input)
 
@@ -87,7 +84,7 @@ class FilterByCategoriesCommand: ICommand {
                     for meal in meals {
                         group.addTask {
                             do {
-                                return try await self.fetchAdditionalInformation(for: meal)! // TODO: crasher her av og til
+                                return try await APIClient.fetchAdditionalInformation(for: meal)!
                             } catch {
                                 print("Error fetching additional information: \(error)")
                                 return meal
@@ -108,23 +105,46 @@ class FilterByCategoriesCommand: ICommand {
                     throw error
             }
         } catch {
-            print("Unexpected error in FilterByCategoriesCommand: \(error)")
+            print("Unexpected error in FilterByCategoryCommand: \(error)")
             return nil
         }
     }
+}
+
+class FilterByAreaCommand: ICommand {
+    typealias Input = String
+    typealias Output = [MealModel]?
     
-    private func fetchAdditionalInformation(for meal: MealModel) async throws -> MealModel? {
+    func execute(input: Input) async -> Output {
         do {
-            let result = await APIClient.getMeals(input: meal.id)
+            let result = await APIClient.filterMealsByArea(input: input)
             
             switch result {
-            case .success(let idMeals):
-                return idMeals.first
+            case .success(let meals):
+                var completeMeals = try await withThrowingTaskGroup(of: MealModel.self) { group in
+                    for meal in meals {
+                        group.addTask {
+                            do {
+                                return try await APIClient.fetchAdditionalInformation(for: meal)!
+                            } catch {
+                                print("Error fetching additional information: \(error)")
+                                return meal
+                            }
+                        }
+                    }
+                    
+                    return try await group.reduce(into: []) { result, element in
+                        result.append(element)
+                    }
+                }
+                
+                completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
+                return completeMeals
             case .failure(let error):
                 throw error
             }
         } catch {
-            print("Unexpected error in fetchAdditionalInformation for FilterByCategoriesCommand: \(error)")
+            print("Unexpected error in FilterByAreaCommand: \(error)")
             return nil
         }
     }

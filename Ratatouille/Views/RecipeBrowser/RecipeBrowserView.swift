@@ -11,6 +11,7 @@ class RecipeBrowserViewModel: ObservableObject {
     // Inputs to search with
     @Published var input: String = ""
     @Published var chosenCategory: String = ""
+    @Published var chosenArea: String = ""
     
     // Stored data to present
     @Published var meals: [MealModel] = []
@@ -27,8 +28,9 @@ class RecipeBrowserViewModel: ObservableObject {
     // Logic
     let searchCommand = SearchMealsCommand()
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
-    let filterCommand = FilterByCategoriesCommand() // TODO: add loading stages
+    let filterByCategoryCommand = FilterByCategoryCommand() // TODO: add loading stages
     let loadAreasCommand = LoadAreasFromCDCommand()
+    let filterByAreaCommand = FilterByAreaCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -55,9 +57,9 @@ class RecipeBrowserViewModel: ObservableObject {
         }
     }
     
-    func filterByCategories() async {
+    func filterByCategory() async {
         do {
-            if let meals = await filterCommand.execute(input: chosenCategory) {
+            if let meals = await filterByCategoryCommand.execute(input: chosenCategory) {
                 DispatchQueue.main.async {
                     self.meals = meals
                     self.searchId = UUID()
@@ -78,6 +80,21 @@ class RecipeBrowserViewModel: ObservableObject {
                 }
             } else {
                 throw RecipeBrowserViewModelError.categoriesEmpty
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    func filterByArea() async {
+        do {
+            if let meals = await filterByAreaCommand.execute(input: chosenArea) {
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            } else {
+                throw RecipeBrowserViewModelError.filterError
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -172,13 +189,6 @@ struct AreaList: View {
     @State private var searchArea: String = ""
     
     @State var filteredAreas: [Area] = []
-//    @State var filteredAreas: [Area] {
-//        if searchArea.isEmpty {
-//            return viewModel.areas
-//        } else {
-//            return viewModel.areas.filter { $0.name.localizedCaseInsensitiveContains(searchArea) }
-//        }
-//    }
     
     func performSearch() {
         Task {
@@ -186,9 +196,6 @@ struct AreaList: View {
                 filteredAreas = viewModel.areas
             } else {
                 filteredAreas = viewModel.areas.compactMap { mapArea($0)}
-//                filteredAreas = viewModel.areas.filter {
-//                    $0.name.localizedCaseInsensitiveContains(searchArea)
-//                }
             }
         }
     }
@@ -204,23 +211,21 @@ struct AreaList: View {
         NavigationView {
             List {
                 ForEach(0..<filteredAreas.count, id: \.self) { index in
-                    
-                    if filteredAreas[index].name != "Unknown" {
-                            
-                        Group {
-                            if let mappedArea = mapArea(filteredAreas[index]) {
-                                AreaTextBox(area: mappedArea)
-                            } else {
-                                AreaTextBox(area: filteredAreas[index])
-                            }
-                        }
-                        .listRowBackground(Color.clear)
-                        .onTapGesture {
-                            searchArea = ""
-                            // filter meals by areas
+                    Group {
+                        if let mappedArea = mapArea(filteredAreas[index]) {
+                            AreaTextBox(area: mappedArea)
+                        } else {
+                            AreaTextBox(area: filteredAreas[index])
                         }
                     }
-                } // Bug: background is not transparent when search input is wrong
+                    .listRowBackground(Color.clear)
+                    .onTapGesture {
+                        searchArea = ""
+                        viewModel.chosenArea = filteredAreas[index].name
+                        viewModel.searchAreaSheetPresented = false
+                        Task { await viewModel.filterByArea() }
+                    }
+                } // Bug: background is not transparent when search input has no results
             }
             .listStyle(.plain)
             .navigationBarTitle("Landområder", displayMode: .inline)

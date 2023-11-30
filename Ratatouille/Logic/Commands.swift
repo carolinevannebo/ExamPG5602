@@ -28,6 +28,27 @@ class InitCDCommand: ICommand {
     }
 }
 
+//class CompleteMealAttributes: ICommand {
+//    typealias Input = MealModel
+//    typealias Output = MealModel?
+//    
+//    func execute(input: Input) async -> Output {
+//        do {
+//            let result = await APIClient.getMeals(input: input.id)
+//                
+//            switch result {
+//                case .success(let idMeals):
+//                    return idMeals.first
+//                case .failure(let error):
+//                    throw error
+//            }
+//        } catch {
+//            print("Unexpected error in fetchAdditionalInformation for FilterByCategoriesCommand: \(error)")
+//            return nil
+//        }
+//    }
+//}
+
 // Assigning isFavorite attribute based on match/no match in CoreData
 class ConnectAttributesCommand: ICommand {
     typealias Input = [MealModel]

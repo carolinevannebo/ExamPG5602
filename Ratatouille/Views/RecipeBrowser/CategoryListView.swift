@@ -17,7 +17,7 @@ struct CategoryListView: View {
                     CategoryItemView(category: viewModel.categories[index])
                         .onTapGesture {
                             viewModel.chosenCategory = viewModel.categories[index].name
-                            Task { await viewModel.filterByCategories() }
+                            Task { await viewModel.filterByCategory() }
                         }
                 }
             }

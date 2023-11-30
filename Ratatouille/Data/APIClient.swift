@@ -117,6 +117,26 @@ extension APIClient {
         }
     }
     
+    static func filterMealsByArea(input: String) async -> Result<[MealModel], APIClientError> {
+        do {
+            let searchString = "\(searchByAreaEndpoint)\(input)"
+            
+            let json = try await getJson(endpoint: searchString)
+            let meals = parseJsonToMeals(json)
+            
+            if meals.isEmpty {
+                return .failure(APIClientError.parseError)
+            }
+            
+            return .success(meals)
+            
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
     static func getMeals(input: String) async -> Result<[MealModel], APIClientError> {
         do {
             var searchString = ""
@@ -152,6 +172,22 @@ extension APIClient {
             return .failure(error)
         } catch {
             return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
+    static func fetchAdditionalInformation(for meal: MealModel) async throws -> MealModel? {
+        do {
+            let result = await APIClient.getMeals(input: meal.id)
+            
+            switch result {
+            case .success(let idMeals):
+                return idMeals.first
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error in fetchAdditionalInformation: \(error)")
+            return nil
         }
     }
     
