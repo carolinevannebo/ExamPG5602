@@ -58,13 +58,46 @@ class ManageCategoriesViewModel: ObservableObject {
     }
 }
 
+struct CategoryCard: View {
+    @State var category: Category
+    
+    var body: some View {
+        ZStack (alignment: .leading) {
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .foregroundColor(.myDiffusedColor)
+                .shadow(radius: 2)
+                .frame(height: 50)
+                .opacity(0.9)
+            HStack {
+                Spacer().frame(width: 30)
+                CircleImage(url: category.image!, width: 65, height: 65, strokeColor: .clear, lineWidth: 0)
+                
+                Text(category.name)
+                    .padding(.leading)
+                    .font(.system(size: 17))
+                    .foregroundColor(.myContrastColor)
+            }
+        }
+    }
+}
+
 struct ManageCategoriesView: View {
     @StateObject var viewModel = ManageCategoriesViewModel()
     
     var body: some View {
         NavigationStack {
             List {
-                
+                ForEach(0..<viewModel.categories.count, id: \.self) { index in
+                    ZStack {
+                        CategoryCard(category: viewModel.categories[index])
+                        NavigationLink(destination: Text(viewModel.categories[index].name)) {
+                            EmptyView()
+                        }
+                        .opacity(0)
+                    }
+                } // foreach
+                .listRowBackground(Color.clear)
+                .listRowSeparatorTint(Color.clear)
             } // list
             .padding(.top)
             .padding(.horizontal)

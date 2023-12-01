@@ -11,7 +11,7 @@ class SearchRandomCommand: ICommand {
     typealias Input = Void
     typealias Output = MealModel?
 
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let result = await APIClient.getRandomMeal()
 
@@ -33,7 +33,7 @@ class SearchMealsCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
     
-    func execute(input: String) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             print("Searching for meals with input: \(input)")
             let result = await APIClient.getMeals(input: input)

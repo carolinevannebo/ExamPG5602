@@ -72,7 +72,7 @@ struct ManageAreasView: View {
                         }
                         .opacity(0)
                     }
-                }
+                } // foreach
                 .listRowBackground(Color.clear)
                 .listRowSeparatorTint(Color.clear)
             } // list

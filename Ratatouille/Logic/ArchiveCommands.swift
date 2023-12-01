@@ -12,7 +12,7 @@ class LoadArchivesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Meal]?
 
-    func execute(input: Void) async -> [Meal]? {
+    func execute(input: Void) async -> Output {
         do {
             let request: NSFetchRequest<Meal> = Meal.fetchRequest()
                 request.predicate = NSPredicate(format: "isArchived == true")
@@ -32,6 +32,65 @@ class LoadArchivesCommand: ICommand {
     }
 }
 
+class RestoreMealCommand: ICommand {
+    typealias Input = Meal
+    typealias Output = Result<Meal, RestoreMealError>
+    
+    enum RestoreMealError: Error {
+        case missingIdError(String)
+        case restoreError
+        case fetchingMealError
+        case mealNotArchivedError
+    }
+    
+    func execute(input: Input) async -> Output {
+        do {
+            // Check for id
+            if input.id.isEmpty {
+                throw RestoreMealError.missingIdError("Meal ID is missing.")
+            }
+            
+            // Fetch meal
+            let mealRequest: NSFetchRequest<Meal> = Meal.fetchRequest()
+                mealRequest.predicate = NSPredicate(format: "id == %@", input.id)
+                    
+            // Variables for restoration
+            let managedObjectContext = DataController.shared.managedObjectContext
+            var result: Result<Meal, RestoreMealError>?
+            
+            // Perform restoration
+            try await managedObjectContext.perform {
+                if let fetchedMeal = try managedObjectContext.fetch(mealRequest).first {
+                    // Check that meal is in archives
+                    let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
+                        archiveRequest.predicate = NSPredicate(format: "meals CONTAINS %@", fetchedMeal)
+                    
+                    if let archive = try managedObjectContext.fetch(archiveRequest).first {
+                        archive.removeFromMeals(fetchedMeal) // Remove meal from archive
+                        
+                        // Meal is still saved, but now marked as not archived. Meaning it will reappear in favorites
+                        fetchedMeal.isArchived = false
+                        result = .success(fetchedMeal)
+                    } else {
+                        result = .failure(.mealNotArchivedError)
+                    }
+                } else {
+                    result = .failure(.fetchingMealError)
+                }
+            }
+            
+            // Save the context after restoration
+            print("Restoring meal...")
+            DataController.shared.saveContext()
+                    
+            return result ?? .failure(.restoreError)
+        } catch {
+            print("Unexpected error in RestoreMealCommand: \(error)")
+            return .failure(.restoreError)
+        }
+    }
+}
+
 class DeleteMealCommand: ICommand {
     typealias Input = Meal
     typealias Output = Result<Void, DeleteMealError>
@@ -41,7 +100,7 @@ class DeleteMealCommand: ICommand {
         case deleteError
     }
     
-    func execute(input: Meal) async -> Result<Void, DeleteMealError> {
+    func execute(input: Input) async -> Output {
         do {
             // Check for id
             if input.id.isEmpty {
@@ -88,9 +147,10 @@ class ArchiveMealCommand: ICommand {
     enum ArchiveMealError: Error {
         case missingIdError(String)
         case archivingError
+        case fetchingMealError
     }
     
-    func execute(input: Meal) async -> Result<Archive, ArchiveMealError> {
+    func execute(input: Input) async -> Output {
         do {
             // Check for id
             if input.id.isEmpty {
@@ -124,6 +184,8 @@ class ArchiveMealCommand: ICommand {
                         
                         result = .success(newArchive)
                     }
+                } else {
+                    result = .failure(.fetchingMealError)
                 }
             }
             

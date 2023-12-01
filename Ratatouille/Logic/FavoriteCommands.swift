@@ -12,7 +12,7 @@ class LoadFavoritesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Meal]?
 
-    func execute(input: Void) async -> [Meal]? {
+    func execute(input: Input) async -> Output {
         do {
             let request: NSFetchRequest<Meal> = Meal.fetchRequest()
                 request.predicate = NSPredicate(format: "isArchived == false")
@@ -44,7 +44,7 @@ class SaveFavoriteCommand: ICommand {
         case locatedInArchive(String)
     }
     
-    func execute(input: MealModel) async -> Result<Meal, SaveFavoriteError> {
+    func execute(input: Input) async -> Output {
         do {
             print("About to save favorite \(input.name) with ID: \(input.id)")
             

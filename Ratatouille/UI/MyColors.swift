@@ -80,4 +80,12 @@ extension Color {
     public static var mySearchIconColor: Color {
         return Color(UIColor(named: "mySearchIconColor")!)
     }
+    
+    public static var myAlternativeBgColor: Color {
+        return Color(UIColor(named: "myAlternativeBgColor")!)
+    }
+    
+    public static var myAlternativeTextColor: Color {
+        return Color(UIColor(named: "myAlternativeTextColor")!)
+    }
 }

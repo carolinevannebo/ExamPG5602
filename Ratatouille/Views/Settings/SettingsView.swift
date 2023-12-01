@@ -22,7 +22,7 @@ struct SettingsView: View {
                     }
                     
                     NavigationLink {
-                        Text("Rediger kategorier")
+                        ManageCategoriesView()
                     } label : {
                         Text("Rediger kategorier")
                     }

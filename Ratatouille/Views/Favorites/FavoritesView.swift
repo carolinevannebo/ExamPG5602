@@ -61,16 +61,7 @@ struct FavoritesView: View {
                         }.id(viewModel.listId)
                     }
                 } else {
-                    Spacer().frame(maxWidth: .infinity)
-                    
-                    Image(systemName: "square.stack.3d.up.slash")
-                        .foregroundColor(.myPrimaryColor)
-                        .font(.system(size: 40))
-                    
-                    Text("Ingen matoppskrifter")
-                        .foregroundColor(.mySecondaryColor)
-                    
-                    Spacer().frame(maxWidth: .infinity)
+                    EmptyFavoritesView()
                 }
             }
             .navigationTitle("Favoritter")
@@ -84,6 +75,23 @@ struct FavoritesView: View {
         }
         .refreshable {
             Task { await viewModel.loadFavoriteMeals() }
+        }
+    }
+}
+
+struct EmptyFavoritesView: View {
+    var body: some View {
+        VStack {
+            Spacer().frame(maxWidth: .infinity)
+            
+            Image(systemName: "square.stack.3d.up.slash")
+                .foregroundColor(.myPrimaryColor)
+                .font(.system(size: 40))
+            
+            Text("Ingen matoppskrifter")
+                .foregroundColor(.mySecondaryColor)
+            
+            Spacer().frame(maxWidth: .infinity)
         }
     }
 }

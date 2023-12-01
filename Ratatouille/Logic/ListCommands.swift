@@ -103,7 +103,7 @@ class LoadAreasFromAPICommand: ICommand {
     typealias Input = Void
     typealias Output = [AreaModel]?
 
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let result = await APIClient.getAreas()
 
@@ -125,7 +125,7 @@ class LoadCategoriesFromAPICommand: ICommand {
     typealias Input = Void
     typealias Output = [CategoryModel]?
     
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let result = await APIClient.getCategories()
             
@@ -147,7 +147,7 @@ class LoadIngredientsFromAPICommand: ICommand {
     typealias Input = Void
     typealias Output = [IngredientModel]?
 
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let result = await APIClient.getIngredients()
 
