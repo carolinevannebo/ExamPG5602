@@ -19,9 +19,9 @@ struct AreaSheetView: View {
                 ForEach(0..<filteredAreas.count, id: \.self) { index in
                     Group {
                         if let mappedArea = mapArea(filteredAreas[index]) {
-                            AreaTextBox(area: mappedArea)
+                            AreaTextBox(area: mappedArea, backgroundColor: .myAccentColor, textColor: .mySubTitleColor)
                         } else {
-                            AreaTextBox(area: filteredAreas[index])
+                            AreaTextBox(area: filteredAreas[index], backgroundColor: .myAccentColor, textColor: .mySubTitleColor)
                         }
                     }
                     .listRowBackground(Color.clear)

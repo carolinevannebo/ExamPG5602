@@ -24,9 +24,7 @@ struct CategoryListView: View {
         }
         .padding(.horizontal)
         .onAppear {
-            Task {
-                await viewModel.loadCategories()
-            }
+            Task { await viewModel.loadCategories() }
         }
     }
 }

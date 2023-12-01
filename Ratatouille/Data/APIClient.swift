@@ -137,9 +137,15 @@ extension APIClient {
         }
     }
     
+    static func replaceSpaces(withUnderscores input: String) -> String {
+        return input.replacingOccurrences(of: " ", with: "_")
+    }
+    
     static func filterMealsByIngredient(input: String) async -> Result<[MealModel], APIClientError> {
         do {
-            let searchString = "\(searchByIngredientEndpoint)\(input)"
+            let safeInput = replaceSpaces(withUnderscores: input)
+            
+            let searchString = "\(searchByIngredientEndpoint)\(safeInput)"
             
             let json = try await getJson(endpoint: searchString)
             let meals = parseJsonToMeals(json)
@@ -160,6 +166,10 @@ extension APIClient {
     static func getMeals(input: String) async -> Result<[MealModel], APIClientError> {
         do {
             var searchString = ""
+            
+            if input == " " {
+                return .failure(APIClientError.badInput)
+            }
             
             if isNumeric(input) { // searching by id
                 searchString = "\(searchByIdEndpoint)\(input)"

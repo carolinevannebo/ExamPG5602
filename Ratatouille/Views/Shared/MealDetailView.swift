@@ -64,7 +64,7 @@ struct MealHeader<MealType: MealRepresentable>: View {
                                 .onTapGesture {
                                     categoryIsPresented.wrappedValue = true
                                 }
-                            AreaTextBox(area: meal.wrappedValue.area!)
+                        AreaTextBox(area: meal.wrappedValue.area!, backgroundColor: .myAccentColor, textColor: .mySubTitleColor)
                         Spacer()
                         
                     }
@@ -157,6 +157,9 @@ struct AreaTextBox<AreaType: AreaRepresentable>: View {
     @State var area: AreaType
     @State var flag: UIImage?
     
+    @State var backgroundColor: Color
+    @State var textColor: Color
+    
     let fetchFlagCommand = FetchFlagCommand()
     
     func setFlag() async {
@@ -180,12 +183,12 @@ struct AreaTextBox<AreaType: AreaRepresentable>: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .foregroundColor(.myAccentColor)
+                .foregroundColor(backgroundColor)
                 .opacity(0.9)
                 .shadow(radius: 2)
             HStack {
                 Text(area.name)
-                    .foregroundColor(.mySubTitleColor)
+                    .foregroundColor(textColor)
                     .font(.system(size: 14))
                     .padding(.leading)
                 

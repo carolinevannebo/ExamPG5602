@@ -29,7 +29,7 @@ class RecipeBrowserViewModel: ObservableObject {
     
     // Error alert
     @Published var shouldAlertError: Bool = false
-    @Published var currentError: RecipeBrowserViewModelError? = nil
+    @Published var currentError: Error? = nil
     
     // Logic
     let searchCommand = SearchMealsCommand()
@@ -66,6 +66,7 @@ class RecipeBrowserViewModel: ObservableObject {
             print("Unexpected error: \(error)")
             currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
             shouldAlertError = true
+            
         }
     }
     
@@ -176,20 +177,27 @@ class RecipeBrowserViewModel: ObservableObject {
         case ingredientsEmptyError
         case filterError
         
-        var errorDescription: String {
+        var errorDescription: String? { // TODO: error messages should be in norwegian
             switch self {
             case .failed(underlying: let underlying):
-                return "Unable to establish error: \(underlying)."
+                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
             case .mealsEmptyError:
-                return "No meals matching search. Please provide a valid input."
+                return NSLocalizedString("No meals matching search.", comment: "")
             case .areasEmptyError:
-                return "Ratatouille was unable to load areas."
+                return NSLocalizedString("Ratatouille was unable to load areas.", comment: "")
             case .categoriesEmptyError:
-                return "Ratatouille was unable to load categories."
+                return NSLocalizedString("Ratatouille was unable to load categories.", comment: "")
             case .ingredientsEmptyError:
-                return "Ratatouille was unable to load ingredients."
+                return NSLocalizedString("Ratatouille was unable to load ingredients.", comment: "")
             case .filterError:
-                return "Ratatouille was unable to filter."
+                return NSLocalizedString("Ratatouille was unable to filter.", comment: "")
+            }
+        }
+        
+        var recoverySuggestion: String? {
+            switch self {
+            case .mealsEmptyError: return "Please provide a valid input."
+            default: return "Try again."
             }
         }
     }
@@ -248,11 +256,13 @@ struct RecipeBrowserView: View {
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             // --------------   REFACTOR REDUNDANCE ----------------------
-            .alert(isPresented: $viewModel.shouldAlertError, error: viewModel.currentError) { _ in
-                Button("OK") {}
-            } message: { error in
-                Text(error.errorDescription)
-            }
+            .errorAlert(error: $viewModel.currentError)
+//            .alert(isPresented: $viewModel.shouldAlertError) {
+//                Alert(
+//                    title: Text("Oops!"),
+//                    message: Text(viewModel.currentError?.errorDescription ?? "Ukjent feil")
+//                )
+//            }
             
         } // navStack
         .background(Color.myBackgroundColor)

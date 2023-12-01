@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-class SettingsViewModel: ObservableObject {
-    
-}
-
 struct SettingsView: View {
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -20,7 +16,7 @@ struct SettingsView: View {
             List {
                 Section {
                     NavigationLink {
-                        Text("Rediger landområder")
+                        ManageAreasView()
                     } label : {
                         Text("Rediger landområder")
                     }
