@@ -13,7 +13,7 @@ class FetchFlagCommand: ICommand {
     typealias Input = String
     typealias Output = UIImage?
     
-    func execute(input: String) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             if let countryCode = FlagAPIClient.CountryCode.nameToCode[input.lowercased()] {
                 let flagStyle = FlagAPIClient.FlagStyle.flat
@@ -39,7 +39,7 @@ class LoadAreasFromCDCommand: ICommand {
     typealias Input = Void
     typealias Output = [Area]?
 
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let request: NSFetchRequest<Area> = Area.fetchRequest()
             
@@ -59,7 +59,7 @@ class LoadCategoriesFromCDCommand: ICommand {
     typealias Input = Void
     typealias Output = [Category]?
     
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let request: NSFetchRequest<Category> = Category.fetchRequest()
             
@@ -80,7 +80,7 @@ class LoadIngredientsFromCDCommand: ICommand {
     typealias Input = Void
     typealias Output = [Ingredient]?
     
-    func execute(input: Void) async -> Output {
+    func execute(input: Input) async -> Output {
         do {
             let request: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
             

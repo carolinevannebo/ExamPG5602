@@ -10,13 +10,15 @@ import SwiftUI
 class RecipeBrowserViewModel: ObservableObject {
     // Inputs to search with
     @Published var input: String = ""
-    @Published var chosenCategory: String = ""
     @Published var chosenArea: String = ""
+    @Published var chosenCategory: String = ""
+    @Published var chosenIngredient: String = ""
     
     // Stored data to present
     @Published var meals: [MealModel] = []
-    @Published var categories: [Category] = []
     @Published var areas: [Area] = []
+    @Published var categories: [Category] = []
+    @Published var ingredients: [Ingredient] = []
     
     // Reloads results
     @Published var searchId: UUID = UUID()
@@ -27,10 +29,14 @@ class RecipeBrowserViewModel: ObservableObject {
     
     // Logic
     let searchCommand = SearchMealsCommand()
-    let loadCategoriesCommand = LoadCategoriesFromCDCommand()
-    let filterByCategoryCommand = FilterByCategoryCommand() // TODO: add loading stages
+    
     let loadAreasCommand = LoadAreasFromCDCommand()
+    let loadCategoriesCommand = LoadCategoriesFromCDCommand()
+    let loadIngredientsCommand = LoadIngredientsFromCDCommand()
+    
     let filterByAreaCommand = FilterByAreaCommand()
+    let filterByCategoryCommand = FilterByCategoryCommand() // TODO: add loading stages
+    let filterByIngredientCommand = FilterByIngredientCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -50,22 +56,21 @@ class RecipeBrowserViewModel: ObservableObject {
                     self.searchId = UUID()
                 }
             } else {
-                throw RecipeBrowserViewModelError.mealsEmpty
+                throw RecipeBrowserViewModelError.mealsEmptyError
             }
         } catch {
             print("Unexpected error: \(error)")
         }
     }
     
-    func filterByCategory() async {
+    func loadAreas() async {
         do {
-            if let meals = await filterByCategoryCommand.execute(input: chosenCategory) {
+            if let areas = await loadAreasCommand.execute(input: ()) {
                 DispatchQueue.main.async {
-                    self.meals = meals
-                    self.searchId = UUID()
+                    self.areas = areas
                 }
             } else {
-                throw RecipeBrowserViewModelError.filterError
+                throw RecipeBrowserViewModelError.areasEmptyError
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -79,7 +84,21 @@ class RecipeBrowserViewModel: ObservableObject {
                     self.categories = categories
                 }
             } else {
-                throw RecipeBrowserViewModelError.categoriesEmpty
+                throw RecipeBrowserViewModelError.categoriesEmptyError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    func loadIngredients() async {
+        do {
+            if let ingredients = await loadIngredientsCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.ingredients = ingredients
+                }
+            } else {
+                throw RecipeBrowserViewModelError.ingredientsEmptyError
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -101,14 +120,30 @@ class RecipeBrowserViewModel: ObservableObject {
         }
     }
     
-    func loadAreas() async {
+    func filterByCategory() async {
         do {
-            if let areas = await loadAreasCommand.execute(input: ()) {
+            if let meals = await filterByCategoryCommand.execute(input: chosenCategory) {
                 DispatchQueue.main.async {
-                    self.areas = areas
+                    self.meals = meals
+                    self.searchId = UUID()
                 }
             } else {
-                throw RecipeBrowserViewModelError.areasEmpty
+                throw RecipeBrowserViewModelError.filterError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+        }
+    }
+    
+    func filterByIngredient() async {
+        do {
+            if let meals = await filterByIngredientCommand.execute(input: chosenIngredient) {
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            } else {
+                throw RecipeBrowserViewModelError.filterError
             }
         } catch {
             print("Unexpected error: \(error)")
@@ -117,9 +152,10 @@ class RecipeBrowserViewModel: ObservableObject {
     
     enum RecipeBrowserViewModelError: Error {
         case failed(underlying: Error)
-        case mealsEmpty
-        case categoriesEmpty
-        case areasEmpty
+        case mealsEmptyError
+        case areasEmptyError
+        case categoriesEmptyError
+        case ingredientsEmptyError
         case filterError
     }
 }
@@ -164,14 +200,14 @@ struct RecipeBrowserView: View {
             // --------------   REFACTOR REDUNDANCE ----------------------
             .sheet(isPresented: $viewModel.searchAreaSheetPresented) {
                 // search area
-                AreaList(viewModel: viewModel)
+                AreaListView(viewModel: viewModel)
                     .modifier(DarkModeViewModifier())
                     .presentationDetents([.medium])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             .sheet(isPresented: $viewModel.searchIngredientSheetPresented) {
                 // search ingredients
-                Text("her skal man søke i ingredienser")
+                IngredientListView(viewModel: viewModel)
                     .modifier(DarkModeViewModifier())
                     .presentationDetents([.medium, .large])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
@@ -184,63 +220,63 @@ struct RecipeBrowserView: View {
     }
 }
 
-struct AreaList: View {
+struct IngredientListView: View {
     @StateObject var viewModel: RecipeBrowserViewModel
-    @State private var searchArea: String = ""
+    @State private var searchIngredient: String = ""
     
-    @State var filteredAreas: [Area] = []
-    
-    func performSearch() {
-        Task {
-            if searchArea.isEmpty {
-                filteredAreas = viewModel.areas
-            } else {
-                filteredAreas = viewModel.areas.compactMap { mapArea($0)}
-            }
-        }
-    }
-    
-    func mapArea(_ area: Area) -> Area? {
-        guard area.name.localizedCaseInsensitiveContains(searchArea) else {
-            return nil
-        }
-        return area
-    }
+    @State var filteredIngredients: [Ingredient] = []
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(0..<filteredAreas.count, id: \.self) { index in
+                ForEach(0..<filteredIngredients.count, id: \.self) { index in
                     Group {
-                        if let mappedArea = mapArea(filteredAreas[index]) {
-                            AreaTextBox(area: mappedArea)
+                        if let mappedIngredient = mapIngredient(filteredIngredients[index]) {
+                            Text(mappedIngredient.name!)
                         } else {
-                            AreaTextBox(area: filteredAreas[index])
+                            Text(filteredIngredients[index])
                         }
                     }
                     .listRowBackground(Color.clear)
                     .onTapGesture {
-                        searchArea = ""
-                        viewModel.chosenArea = filteredAreas[index].name
-                        viewModel.searchAreaSheetPresented = false
-                        Task { await viewModel.filterByArea() }
+                        searchIngredient = ""
+                        viewModel.chosenIngredient = filteredIngredients[index].name!
+                        viewModel.searchIngredientSheetPresented = false
+                        Task { await viewModel.filterByIngredient() }
                     }
-                } // Bug: background is not transparent when search input has no results
+                }
             }
             .listStyle(.plain)
-            .navigationBarTitle("Landområder", displayMode: .inline)
-            .searchable(text: $searchArea, prompt: "Søk etter landområder...")
-            .onChange(of: searchArea) { newSearchArea in
+            .navigationBarTitle("Ingredienser", displayMode: .inline)
+            .searchable(text: $searchIngredient, prompt: "Søk etter hovedingrediens...")
+            .onChange(of: searchIngredient) { newSearchIngredient in
                 performSearch()
             }
         }
         .padding()
         .onAppear {
             Task {
-                await viewModel.loadAreas()
+                await viewModel.loadIngredients()
                 performSearch()
             }
         }
+    }
+    
+    func performSearch() {
+        Task {
+            if searchIngredient.isEmpty {
+                filteredIngredients = viewModel.ingredients
+            } else {
+                filteredIngredients = viewModel.ingredients.compactMap { mapIngredient($0)}
+            }
+        }
+    }
+    
+    func mapIngredient(_ ingredient: Ingredient) -> Ingredient? {
+        guard ingredient.name!.localizedCaseInsensitiveContains(searchIngredient) else {
+            return nil
+        }
+        return ingredient
     }
 }
 

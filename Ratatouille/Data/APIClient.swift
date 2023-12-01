@@ -97,6 +97,26 @@ extension APIClient {
         return predicate.evaluate(with: input)
     }
     
+    static func filterMealsByArea(input: String) async -> Result<[MealModel], APIClientError> {
+        do {
+            let searchString = "\(searchByAreaEndpoint)\(input)"
+            
+            let json = try await getJson(endpoint: searchString)
+            let meals = parseJsonToMeals(json)
+            
+            if meals.isEmpty {
+                return .failure(APIClientError.parseError)
+            }
+            
+            return .success(meals)
+            
+        } catch let error as APIClientError {
+            return .failure(error)
+        } catch {
+            return .failure(APIClientError.failed(underlying: error))
+        }
+    }
+    
     static func filterMealsByCategory(input: String) async -> Result<[MealModel], APIClientError> {
         do {
             let searchString = "\(searchByCategoryEndpoint)\(input)"
@@ -117,9 +137,9 @@ extension APIClient {
         }
     }
     
-    static func filterMealsByArea(input: String) async -> Result<[MealModel], APIClientError> {
+    static func filterMealsByIngredient(input: String) async -> Result<[MealModel], APIClientError> {
         do {
-            let searchString = "\(searchByAreaEndpoint)\(input)"
+            let searchString = "\(searchByIngredientEndpoint)\(input)"
             
             let json = try await getJson(endpoint: searchString)
             let meals = parseJsonToMeals(json)

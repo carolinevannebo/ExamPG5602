@@ -32,6 +32,7 @@
 		E42525282B18B99400A099C1 /* InputFieldViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */; };
 		E425252A2B18C9CE00A099C1 /* Representables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42525292B18C9CE00A099C1 /* Representables.swift */; };
 		E425252C2B19174200A099C1 /* FavoriteItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E425252B2B19174200A099C1 /* FavoriteItemView.swift */; };
+		E425252E2B1956FC00A099C1 /* AreaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E425252D2B1956FC00A099C1 /* AreaListView.swift */; };
 		E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469628A2B13B19400D100E6 /* FlagAPIClient.swift */; };
 		E469628E2B13E6C300D100E6 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = E469628D2B13E6C300D100E6 /* Nuke */; };
 		E46962902B13E6C300D100E6 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E469628F2B13E6C300D100E6 /* NukeUI */; };
@@ -107,6 +108,7 @@
 		E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldViewModifier.swift; sourceTree = "<group>"; };
 		E42525292B18C9CE00A099C1 /* Representables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Representables.swift; sourceTree = "<group>"; };
 		E425252B2B19174200A099C1 /* FavoriteItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteItemView.swift; sourceTree = "<group>"; };
+		E425252D2B1956FC00A099C1 /* AreaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaListView.swift; sourceTree = "<group>"; };
 		E469628A2B13B19400D100E6 /* FlagAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagAPIClient.swift; sourceTree = "<group>"; };
 		E46962912B14E59800D100E6 /* ImageLoadingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingAnimation.swift; sourceTree = "<group>"; };
 		E46962952B15334900D100E6 /* remy-eating.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "remy-eating.gif"; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				E406445C2B0D0F3500028CBD /* MealItemView.swift */,
 				E46962992B15448E00D100E6 /* MealListView.swift */,
 				E406445A2B0CF28600028CBD /* RecipeBrowserView.swift */,
+				E425252D2B1956FC00A099C1 /* AreaListView.swift */,
 			);
 			path = RecipeBrowser;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				E425252C2B19174200A099C1 /* FavoriteItemView.swift in Sources */,
 				E40644592B0CDDBC00028CBD /* Commands.swift in Sources */,
 				E40644682B0E725200028CBD /* MealModel.swift in Sources */,
+				E425252E2B1956FC00A099C1 /* AreaListView.swift in Sources */,
 				E406445B2B0CF28600028CBD /* RecipeBrowserView.swift in Sources */,
 				E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */,
 				E4E3B9752B12A0DB008591D3 /* ArchiveCommands.swift in Sources */,

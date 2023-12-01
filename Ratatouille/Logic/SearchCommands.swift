@@ -67,6 +67,46 @@ class SearchMealsCommand: ICommand {
     }
 }
 
+class FilterByAreaCommand: ICommand {
+    typealias Input = String
+    typealias Output = [MealModel]?
+    
+    func execute(input: Input) async -> Output {
+        do {
+            let result = await APIClient.filterMealsByArea(input: input)
+            
+            switch result {
+            case .success(let meals):
+                var completeMeals = try await withThrowingTaskGroup(of: MealModel.self) { group in
+                    for meal in meals {
+                        group.addTask {
+                            do {
+                                return try await APIClient.fetchAdditionalInformation(for: meal)!
+                            } catch {
+                                print("Error fetching additional information: \(error)")
+                                return meal
+                            }
+                        }
+                    }
+                    
+                    return try await group.reduce(into: []) { result, element in
+                        result.append(element)
+                    }
+                }
+                
+                completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
+                return completeMeals
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error in FilterByAreaCommand: \(error)")
+            return nil
+        }
+    }
+}
+
+
 // TODO: this filter logic is slow, fix it -> a little better, but can still be better
 class FilterByCategoryCommand: ICommand {
     typealias Input = String
@@ -111,13 +151,13 @@ class FilterByCategoryCommand: ICommand {
     }
 }
 
-class FilterByAreaCommand: ICommand {
+class FilterByIngredientCommand: ICommand {
     typealias Input = String
     typealias Output = [MealModel]?
     
     func execute(input: Input) async -> Output {
         do {
-            let result = await APIClient.filterMealsByArea(input: input)
+            let result = await APIClient.filterMealsByIngredient(input: input)
             
             switch result {
             case .success(let meals):
@@ -144,7 +184,7 @@ class FilterByAreaCommand: ICommand {
                 throw error
             }
         } catch {
-            print("Unexpected error in FilterByAreaCommand: \(error)")
+            print("Unexpected error in FilterByIngredientCommand: \(error)")
             return nil
         }
     }
