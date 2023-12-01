@@ -1,5 +1,5 @@
 //
-//  AreaListView.swift
+//  AreaSheetView.swift
 //  Ratatouille
 //
 //  Created by Caroline Vannebo on 01/12/2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AreaListView: View {
+struct AreaSheetView: View {
     @StateObject var viewModel: RecipeBrowserViewModel
     @State private var searchArea: String = ""
     

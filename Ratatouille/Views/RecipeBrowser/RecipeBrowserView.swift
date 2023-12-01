@@ -27,6 +27,10 @@ class RecipeBrowserViewModel: ObservableObject {
     @Published var searchAreaSheetPresented: Bool = false
     @Published var searchIngredientSheetPresented: Bool = false
     
+    // Error alert
+    @Published var shouldAlertError: Bool = false
+    @Published var currentError: RecipeBrowserViewModelError? = nil
+    
     // Logic
     let searchCommand = SearchMealsCommand()
     
@@ -60,6 +64,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -74,6 +80,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -88,6 +96,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -102,6 +112,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -117,6 +129,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -132,6 +146,8 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -147,16 +163,35 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+            shouldAlertError = true
         }
     }
     
-    enum RecipeBrowserViewModelError: Error {
+    enum RecipeBrowserViewModelError: Error, LocalizedError {
         case failed(underlying: Error)
         case mealsEmptyError
         case areasEmptyError
         case categoriesEmptyError
         case ingredientsEmptyError
         case filterError
+        
+        var errorDescription: String {
+            switch self {
+            case .failed(underlying: let underlying):
+                return "Unable to establish error: \(underlying)."
+            case .mealsEmptyError:
+                return "No meals matching search. Please provide a valid input."
+            case .areasEmptyError:
+                return "Ratatouille was unable to load areas."
+            case .categoriesEmptyError:
+                return "Ratatouille was unable to load categories."
+            case .ingredientsEmptyError:
+                return "Ratatouille was unable to load ingredients."
+            case .filterError:
+                return "Ratatouille was unable to filter."
+            }
+        }
     }
 }
 
@@ -200,83 +235,28 @@ struct RecipeBrowserView: View {
             // --------------   REFACTOR REDUNDANCE ----------------------
             .sheet(isPresented: $viewModel.searchAreaSheetPresented) {
                 // search area
-                AreaListView(viewModel: viewModel)
+                AreaSheetView(viewModel: viewModel)
                     .modifier(DarkModeViewModifier())
                     .presentationDetents([.medium])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             .sheet(isPresented: $viewModel.searchIngredientSheetPresented) {
                 // search ingredients
-                IngredientListView(viewModel: viewModel)
+                IngredientSheetView(viewModel: viewModel)
                     .modifier(DarkModeViewModifier())
                     .presentationDetents([.medium, .large])
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             // --------------   REFACTOR REDUNDANCE ----------------------
+            .alert(isPresented: $viewModel.shouldAlertError, error: viewModel.currentError) { _ in
+                Button("OK") {}
+            } message: { error in
+                Text(error.errorDescription)
+            }
             
         } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
-    }
-}
-
-struct IngredientListView: View {
-    @StateObject var viewModel: RecipeBrowserViewModel
-    @State private var searchIngredient: String = ""
-    
-    @State var filteredIngredients: [Ingredient] = []
-    
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(0..<filteredIngredients.count, id: \.self) { index in
-                    Group {
-                        if let mappedIngredient = mapIngredient(filteredIngredients[index]) {
-                            Text(mappedIngredient.name!)
-                        } else {
-                            Text(filteredIngredients[index])
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        searchIngredient = ""
-                        viewModel.chosenIngredient = filteredIngredients[index].name!
-                        viewModel.searchIngredientSheetPresented = false
-                        Task { await viewModel.filterByIngredient() }
-                    }
-                }
-            }
-            .listStyle(.plain)
-            .navigationBarTitle("Ingredienser", displayMode: .inline)
-            .searchable(text: $searchIngredient, prompt: "Søk etter hovedingrediens...")
-            .onChange(of: searchIngredient) { newSearchIngredient in
-                performSearch()
-            }
-        }
-        .padding()
-        .onAppear {
-            Task {
-                await viewModel.loadIngredients()
-                performSearch()
-            }
-        }
-    }
-    
-    func performSearch() {
-        Task {
-            if searchIngredient.isEmpty {
-                filteredIngredients = viewModel.ingredients
-            } else {
-                filteredIngredients = viewModel.ingredients.compactMap { mapIngredient($0)}
-            }
-        }
-    }
-    
-    func mapIngredient(_ ingredient: Ingredient) -> Ingredient? {
-        guard ingredient.name!.localizedCaseInsensitiveContains(searchIngredient) else {
-            return nil
-        }
-        return ingredient
     }
 }
 
