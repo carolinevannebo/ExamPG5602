@@ -17,6 +17,7 @@ class ManageCategoriesViewModel: ObservableObject {
     @Published var currentError: Error? = nil
     
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
+    let saveCategoryCommand = AddNewCategoryCommand()
     
     func loadCategories() async {
         do {
@@ -32,6 +33,28 @@ class ManageCategoriesViewModel: ObservableObject {
             currentError = error as? ManageCategoriesViewModelError
             shouldAlertError = true
         }
+    }
+    
+    func saveNewCategory(result: Result<CategoryModel, Error>) async {
+        switch result {
+        case .success(let category):
+            print("Category with name \(category.name) was passed")
+            
+            let saveToCDResult = await saveCategoryCommand.execute(input: category)
+            
+            switch saveToCDResult {
+            case .success(_):
+                print("category was successfully passed and saved")
+                await loadCategories()
+            case .failure(let error):
+                print("Category was passed, but not saved: \(error)")
+            }
+            
+        case .failure(let error):
+            print("Category could not be passed: \(error)")
+        }
+        
+        isPresentingAddCategoryView = false
     }
     
     enum ManageCategoriesViewModelError: Error, LocalizedError {
@@ -81,29 +104,6 @@ struct CategoryCard: View {
     }
 }
 
-//struct CategoryCard: View {
-//    @State var category: Category
-//    
-//    var body: some View {
-//        ZStack {
-//            CircleImage(url: category.image!, width: 150, height: 150, strokeColor: .mySecondaryColor, lineWidth: 4)
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 0, style: .continuous)
-//                    .foregroundColor(.mySecondaryColor)
-//                    .frame(width: 150, height: 150)
-//                    .clipShape(Circle())
-//                    .shadow(radius: 2)
-//                    .opacity(0.6)
-//                VStack {
-//                    Text(category.name)
-//                        .font(.system(size: 17))
-//                        .foregroundColor(.myPrimaryColor)
-//                }
-//            }
-//        }
-//    }
-//}
-
 struct ManageCategoriesView: View {
     @StateObject var viewModel = ManageCategoriesViewModel()
     
@@ -138,7 +138,11 @@ struct ManageCategoriesView: View {
             }
         }
         .sheet(isPresented: $viewModel.isPresentingAddCategoryView) {
-            Text("Her skal du legge til ny kategori")
+            AddCategoryView() { result in
+                Task {
+                    await viewModel.saveNewCategory(result: result)
+                }
+            }
         }
         .onAppear {
             Task { await viewModel.loadCategories() }

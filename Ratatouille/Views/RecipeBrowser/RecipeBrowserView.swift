@@ -260,6 +260,9 @@ struct RecipeBrowserView: View {
         } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 

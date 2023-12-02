@@ -26,9 +26,16 @@ struct CircleImage: View {
                 .clipShape(Circle())
                 .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
                 .shadow(radius: 5)
-                //.padding()
+        } else if let data = Data(base64Encoded: url),
+                  let uiImage = UIImage(data: data) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .frame(width: width, height: height)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(strokeColor, lineWidth: lineWidth))
+                .shadow(radius: 5)
         } else {
-            // You might want to replace this with a placeholder or loading spinner
             ImageLoadingAnimation(width: width, height: height)
                 .onAppear { loadImage() }
         }
