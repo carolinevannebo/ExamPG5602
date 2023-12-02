@@ -13,11 +13,15 @@ class ManageCategoriesViewModel: ObservableObject {
     
     @Published var shouldAlertError: Bool = false
     @Published var isPresentingAddCategoryView: Bool = false
+    @Published var isPresentingEditCategoryView: Bool = false
     
     @Published var currentError: Error? = nil
+    @Published var categoryAuthorized: Bool = true
     
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
     let saveCategoryCommand = AddNewCategoryCommand()
+    let updateCategoryCommand = UpdateCategoryCommand()
+    let deleteCategoryCommand = DeleteCategoryCommand()
     
     func loadCategories() async {
         do {
@@ -44,8 +48,9 @@ class ManageCategoriesViewModel: ObservableObject {
             
             switch saveToCDResult {
             case .success(_):
-                print("category was successfully passed and saved")
+                print("Category was successfully passed and saved")
                 await loadCategories()
+                isPresentingAddCategoryView = false
             case .failure(let error):
                 print("Category was passed, but not saved: \(error)")
             }
@@ -53,8 +58,41 @@ class ManageCategoriesViewModel: ObservableObject {
         case .failure(let error):
             print("Category could not be passed: \(error)")
         }
-        
-        isPresentingAddCategoryView = false
+    }
+    
+    func updateCategory(result: Result<Category, Error>) async {
+        switch result {
+        case .success(let category):
+            print("Category with name \(category.name) was passed")
+            
+            let updateToCDResult = await updateCategoryCommand.execute(input: category)
+            
+            switch updateToCDResult {
+            case .success(_):
+                print("Category was successfully passed and updated")
+                await loadCategories()
+                isPresentingEditCategoryView = false
+            case .failure(let error):
+                print("Category was passed, but not updated: \(error)")
+            }
+            
+        case .failure(let error):
+            print("Category could not be passed: \(error)")
+        }
+    }
+    
+    func checkAuthorization(category: Category) {
+        for i in 0..<14 {
+            if category.id == String(i+1) {
+                DispatchQueue.main.async {
+                    self.categoryAuthorized = false
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.categoryAuthorized = true
+                }
+            }
+        }
     }
     
     enum ManageCategoriesViewModelError: Error, LocalizedError {
@@ -93,7 +131,7 @@ struct CategoryCard: View {
                 .opacity(0.9)
             HStack {
                 Spacer().frame(width: 30)
-                CircleImage(url: category.image!, width: 65, height: 65, strokeColor: .clear, lineWidth: 0)
+                CircleImage(url: category.image ?? "", width: 65, height: 65, strokeColor: .clear, lineWidth: 0)
                 
                 Text(category.name)
                     .padding(.leading)
@@ -111,13 +149,11 @@ struct ManageCategoriesView: View {
         NavigationStack {
             List {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
-                    ZStack {
-                        CategoryCard(category: viewModel.categories[index])
-                        NavigationLink(destination: Text(viewModel.categories[index].name)) {
-                            EmptyView()
-                        }
-                        .opacity(0)
-                    }
+                    ManageCategoryItem(
+                        category: viewModel.categories[index],
+                        viewModel: viewModel,
+                        categoryAuthorized: $viewModel.categoryAuthorized
+                    )
                 } // foreach
                 .listRowBackground(Color.clear)
                 .listRowSeparatorTint(Color.clear)
@@ -151,5 +187,39 @@ struct ManageCategoriesView: View {
             Task { await viewModel.loadCategories() }
         }
         .errorAlert(error: $viewModel.currentError)
+    }
+}
+
+struct ManageCategoryItem: View {
+    @State var category: Category
+    @StateObject var viewModel: ManageCategoriesViewModel
+    @Binding var categoryAuthorized: Bool
+    
+    var body: some View {
+        ZStack {
+            CategoryCard(category: category)
+            NavigationLink(destination:
+                ScrollView {
+                    CategoryDetailView(category: category)
+                }
+                .background(Color.myBackgroundColor)
+                .toolbar {
+                    if categoryAuthorized {
+                        CategoryToolBar(viewModel: viewModel, category: category)
+                    }
+                }
+                .sheet(isPresented: $viewModel.isPresentingEditCategoryView) {
+                    EditCategoryView(category: category) { result in
+                        Task { await viewModel.updateCategory(result: result) }
+                    }
+                }
+            ) {
+                EmptyView()
+            }
+            .opacity(0)
+        }
+        .onAppear {
+            viewModel.checkAuthorization(category: category) // TODO: Need to fix that toolbar doesnt appear for default categories
+        }
     }
 }

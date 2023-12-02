@@ -150,7 +150,7 @@ struct ArchiveToolBar: ToolbarContent {
                     dismiss()
                 }
             } label: {
-                Image(systemName: "arrow.up.bin")
+                Image(systemName: "arrow.up.bin.fill")
             }
             
             Button {
@@ -162,7 +162,7 @@ struct ArchiveToolBar: ToolbarContent {
                     dismiss()
                 }
             } label: {
-                Image(systemName: "trash")
+                Image(systemName: "trash.fill")
             }
         }
     }

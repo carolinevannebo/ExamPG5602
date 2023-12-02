@@ -46,7 +46,11 @@
 		E48815A72B1A459600B00B55 /* ManageCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */; };
 		E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */; };
 		E4A35DB32B1B7A8F00C4FC77 /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB22B1B7A8F00C4FC77 /* HideKeyboard.swift */; };
-		E4A35DB52B1B81A800C4FC77 /* AddNewCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB42B1B81A800C4FC77 /* AddNewCommands.swift */; };
+		E4A35DB52B1B81A800C4FC77 /* CategoryManagingCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */; };
+		E4A35DB72B1B917500C4FC77 /* MyButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB62B1B917500C4FC77 /* MyButtonStyle.swift */; };
+		E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB82B1B976100C4FC77 /* CategoryDetailView.swift */; };
+		E4A35DBC2B1BB1BC00C4FC77 /* CategoryToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DBB2B1BB1BC00C4FC77 /* CategoryToolBar.swift */; };
+		E4A35DBE2B1BB2F200C4FC77 /* EditCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DBD2B1BB2F200C4FC77 /* EditCategoryView.swift */; };
 		E4DA4EA52B195DF3004B4334 /* IngredientSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA4EA42B195DF3004B4334 /* IngredientSheetView.swift */; };
 		E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */; };
 		E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */; };
@@ -127,7 +131,11 @@
 		E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCategoriesView.swift; sourceTree = "<group>"; };
 		E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
 		E4A35DB22B1B7A8F00C4FC77 /* HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
-		E4A35DB42B1B81A800C4FC77 /* AddNewCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCommands.swift; sourceTree = "<group>"; };
+		E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManagingCommands.swift; sourceTree = "<group>"; };
+		E4A35DB62B1B917500C4FC77 /* MyButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyButtonStyle.swift; sourceTree = "<group>"; };
+		E4A35DB82B1B976100C4FC77 /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
+		E4A35DBB2B1BB1BC00C4FC77 /* CategoryToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryToolBar.swift; sourceTree = "<group>"; };
+		E4A35DBD2B1BB2F200C4FC77 /* EditCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoryView.swift; sourceTree = "<group>"; };
 		E4DA4EA42B195DF3004B4334 /* IngredientSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientSheetView.swift; sourceTree = "<group>"; };
 		E4E3B9682B114BD9008591D3 /* CategoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryItemView.swift; sourceTree = "<group>"; };
 		E4E3B96A2B12A005008591D3 /* Archive+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Archive+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -210,6 +218,7 @@
 				E40644942B1035A300028CBD /* MealCardContent.swift */,
 				E4E3B9762B12CD30008591D3 /* MealDetailView.swift */,
 				E406448E2B0F86E200028CBD /* ViewCoordinator.swift */,
+				E4A35DB82B1B976100C4FC77 /* CategoryDetailView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -217,11 +226,10 @@
 		E469629C2B1545E700D100E6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				E4A35DBA2B1BB15E00C4FC77 /* CategoryManagement */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
 				E469629F2B15465900D100E6 /* ArchiveView.swift */,
 				E48815A42B1A452000B00B55 /* ManageAreasView.swift */,
-				E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */,
-				E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -247,6 +255,17 @@
 				E406445A2B0CF28600028CBD /* RecipeBrowserView.swift */,
 			);
 			path = RecipeBrowser;
+			sourceTree = "<group>";
+		};
+		E4A35DBA2B1BB15E00C4FC77 /* CategoryManagement */ = {
+			isa = PBXGroup;
+			children = (
+				E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */,
+				E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */,
+				E4A35DBB2B1BB1BC00C4FC77 /* CategoryToolBar.swift */,
+				E4A35DBD2B1BB2F200C4FC77 /* EditCategoryView.swift */,
+			);
+			path = CategoryManagement;
 			sourceTree = "<group>";
 		};
 		E4EAFC1D2B023AF10095D10B = {
@@ -317,7 +336,7 @@
 				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
 				E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */,
 				E42525292B18C9CE00A099C1 /* Representables.swift */,
-				E4A35DB42B1B81A800C4FC77 /* AddNewCommands.swift */,
+				E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -334,6 +353,7 @@
 				E40644922B10350600028CBD /* ImageWidget.swift */,
 				E40644602B0D2FBC00028CBD /* MyColors.swift */,
 				E40644902B10349500028CBD /* SwipeIcons.swift */,
+				E4A35DB62B1B917500C4FC77 /* MyButtonStyle.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -531,6 +551,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4A35DBC2B1BB1BC00C4FC77 /* CategoryToolBar.swift in Sources */,
 				E4DA4EA52B195DF3004B4334 /* IngredientSheetView.swift in Sources */,
 				E425252C2B19174200A099C1 /* FavoriteItemView.swift in Sources */,
 				E40644592B0CDDBC00028CBD /* Commands.swift in Sources */,
@@ -540,6 +561,7 @@
 				E406445B2B0CF28600028CBD /* RecipeBrowserView.swift in Sources */,
 				E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */,
 				E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */,
+				E4A35DB72B1B917500C4FC77 /* MyButtonStyle.swift in Sources */,
 				E4E3B9752B12A0DB008591D3 /* ArchiveCommands.swift in Sources */,
 				E4EAFC762B02718C0095D10B /* Category+CoreDataClass.swift in Sources */,
 				E40644702B0E951600028CBD /* CategoryModel.swift in Sources */,
@@ -548,6 +570,7 @@
 				E40644722B0E953D00028CBD /* IngredientModel.swift in Sources */,
 				E469628B2B13B19400D100E6 /* FlagAPIClient.swift in Sources */,
 				E48815A72B1A459600B00B55 /* ManageCategoriesView.swift in Sources */,
+				E4A35DBE2B1BB2F200C4FC77 /* EditCategoryView.swift in Sources */,
 				E4EAFC362B023AF80095D10B /* Ratatouille.xcdatamodeld in Sources */,
 				E469629A2B15448E00D100E6 /* MealListView.swift in Sources */,
 				E4E3B9772B12CD30008591D3 /* MealDetailView.swift in Sources */,
@@ -561,7 +584,7 @@
 				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,
 				E42525262B18B8EB00A099C1 /* Placeholder.swift in Sources */,
-				E4A35DB52B1B81A800C4FC77 /* AddNewCommands.swift in Sources */,
+				E4A35DB52B1B81A800C4FC77 /* CategoryManagingCommands.swift in Sources */,
 				E40644952B1035A300028CBD /* MealCardContent.swift in Sources */,
 				E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */,
 				E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */,
@@ -586,6 +609,7 @@
 				E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */,
 				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
+				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -158,7 +158,7 @@ class ArchiveMealCommand: ICommand {
             
             // Fetch meal
             let request: NSFetchRequest<Meal> = Meal.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", input.id)
+                request.predicate = NSPredicate(format: "id == %@", input.id)
             
             // Variables for moving from favorites to archive
             let managedObjectContext = DataController.shared.managedObjectContext

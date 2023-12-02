@@ -103,3 +103,4 @@ struct ManageAreasView: View {
         .errorAlert(error: $viewModel.currentError)
     }
 }
+

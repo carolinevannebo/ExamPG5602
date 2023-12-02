@@ -28,6 +28,8 @@ struct CircleImage: View {
                 .shadow(radius: 5)
         } else if let data = Data(base64Encoded: url),
                   let uiImage = UIImage(data: data) {
+            // This is for images the user has uploaded
+            
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()

@@ -47,7 +47,6 @@ class AddCategoryViewModel: ObservableObject {
             }
             
         } catch let error {
-            errorMessage = NSLocalizedString("Noe gikk galt mens kategori ble laget, prøv igjen.", comment: "")
             isShowingErrorAlert = true
             completion(.failure(error))
         }
@@ -131,12 +130,17 @@ struct AddCategoryView: View {
                         }
                     }
                 }
+                .buttonStyle(MyButtonStyle())
                 
             }
             .navigationTitle("Legg til kategori")
             .navigationBarTitleDisplayMode(.inline)
             .padding(.horizontal)
-            // alert error messages
+            .alert("Feilmelding", isPresented: $viewModel.isShowingErrorAlert) {
+                
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
+            }
         }
         .onTapGesture {
             hideKeyboard()
