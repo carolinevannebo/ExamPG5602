@@ -10,18 +10,18 @@ import SwiftUI
 class ArchiveViewModel: ObservableObject {
     @Published var meals: [Meal] = []
     @Published var hasArchive: Bool = false
+    @Published var listId: UUID?
     
     let loadCommand = LoadArchivesCommand()
     let restoreCommand = RestoreMealCommand()
     let deleteCommand = DeleteMealCommand()
-    
-    @Published var isNavigationActive: Bool = false
     
     func loadArchive() async {
         do {
             if let meals = await loadCommand.execute(input: ()) {
                 DispatchQueue.main.async {
                     self.meals = meals
+                    self.listId = UUID()
                     
                     if !meals.isEmpty {
                         self.hasArchive = true
@@ -45,16 +45,26 @@ class ArchiveViewModel: ObservableObject {
             switch result {
             case .success(let meal):
                 print("\(meal.name) has been restored")
-                // <-- go back
-                DispatchQueue.main.async {
-                    self.isNavigationActive = false
-                }
-                
             case .failure(let error):
                 throw error
             }
         } catch {
             print("Unexpected error when restoring meal from archives: \(error)")
+        }
+    }
+    
+    func deleteMeal(meal: Meal) async {
+        do {
+            let result = await deleteCommand.execute(input: meal)
+            
+            switch result {
+            case .success(_):
+                print("Meal was successfully deleted")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when deleting meal permanently: \(error)")
         }
     }
     
@@ -74,15 +84,7 @@ struct ArchiveView: View {
                         ForEach(0..<viewModel.meals.count, id: \.self) { index in
                             ZStack {
                                 ArchiveItemView(meal: viewModel.meals[index])
-//                                .navigationDestination(isPresented: $viewModel.isNavigationActive) {
-//                                    MealDetailView(meal: viewModel.meals[index])
-//                                    .toolbar {
-//                                        ArchiveToolBar(viewModel: viewModel, meal: viewModel.meals[index])
-////                                            .toolbarRole(.browser)
-//                                    }
-//                                    
-//                                    
-//                                }
+                                
                                 NavigationLink(
                                     destination: {
                                         MealDetailView(meal: viewModel.meals[index])
@@ -94,6 +96,7 @@ struct ArchiveView: View {
                                 .opacity(0)
                             }
                         }
+                        .id(viewModel.listId)
                         .listRowBackground(Color.clear)
                         .listRowSeparatorTint(Color.clear)
                     }
@@ -143,7 +146,7 @@ struct ArchiveToolBar: ToolbarContent {
                 Task {
                     print("måltid \(meal.name) vil bli gjenopprettet")
                     await viewModel.restoreMeal(meal: meal)
-                        // <-- go back
+                    await viewModel.loadArchive()
                     dismiss()
                 }
             } label: {
@@ -152,7 +155,12 @@ struct ArchiveToolBar: ToolbarContent {
             
             Button {
                 // delete permanently
-                print("måltid \(meal.name) vil bli slettet permanent")
+                Task {
+                    print("måltid \(meal.name) vil bli slettet permanent")
+                    await viewModel.deleteMeal(meal: meal)
+                    await viewModel.loadArchive()
+                    dismiss()
+                }
             } label: {
                 Image(systemName: "trash")
             }

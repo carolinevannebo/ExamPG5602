@@ -13,10 +13,9 @@ class FavoriteItemViewModel: ObservableObject {
     @Published var isDragging: Bool = false
     @Published var hasTappedArchive: Bool = false
     
-    // TODO: declare archive logic
     let archiveCommand = ArchiveMealCommand()
     
-    init(meal: Meal) { // tok bort ?
+    init(meal: Meal) {
         self.meal = meal
     }
     
@@ -125,7 +124,6 @@ struct MealCardForFavorites: View {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                     .foregroundColor(.myPrimaryColor)
             )
-            // TODO: fix animations for this type of swipe
             .offset(x: viewModel.offset.width, y: 0)
             .gesture(
                 DragGesture()

@@ -9,7 +9,6 @@ import SwiftUI
 import NukeUI
 
 struct MealDetailView<MealType: MealRepresentable>: View {
-//    @State var meal: MealModel // it should be able to take in both MealModel or Meal
     @State var meal: MealType
     @State var categoryIsPresented: Bool = false
     

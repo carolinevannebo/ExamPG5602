@@ -177,7 +177,8 @@ extension APIClient {
                 if input.count == 1 {
                     searchString = "\(searchByLetterEndpoint)\(input)" // 1 or more results
                 } else {
-                    searchString = "\(searchByNameEndpoint)\(input)" // 1 result
+                    let safeInput = replaceSpaces(withUnderscores: input)
+                    searchString = "\(searchByNameEndpoint)\(safeInput)" // 1 result
                 }
             }
             

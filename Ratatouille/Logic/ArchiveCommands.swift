@@ -122,10 +122,9 @@ class DeleteMealCommand: ICommand {
                         archiveRequest.predicate = NSPredicate(format: "meals CONTAINS %@", fetchedMeal)
                             
                     if let archivedMeal = try managedObjectContext.fetch(archiveRequest).first {
-                            archivedMeal.removeFromMeals(fetchedMeal)
+                        archivedMeal.removeFromMeals(fetchedMeal)
+                        managedObjectContext.delete(fetchedMeal)
                     }
-                            
-                    managedObjectContext.delete(fetchedMeal)
                 }
             }
                     
@@ -141,7 +140,7 @@ class DeleteMealCommand: ICommand {
 }
 
 class ArchiveMealCommand: ICommand {
-    typealias Input = Meal
+    typealias Input = MealRepresentable // Changed input from Meal to MealRepresentable to archive from different views
     typealias Output = Result<Archive, ArchiveMealError>
     
     enum ArchiveMealError: Error {
@@ -150,7 +149,7 @@ class ArchiveMealCommand: ICommand {
         case fetchingMealError
     }
     
-    func execute(input: Input) async -> Output {
+    func execute(input: any Input) async -> Output {
         do {
             // Check for id
             if input.id.isEmpty {

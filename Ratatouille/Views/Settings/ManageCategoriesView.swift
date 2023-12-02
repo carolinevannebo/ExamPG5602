@@ -81,6 +81,29 @@ struct CategoryCard: View {
     }
 }
 
+//struct CategoryCard: View {
+//    @State var category: Category
+//    
+//    var body: some View {
+//        ZStack {
+//            CircleImage(url: category.image!, width: 150, height: 150, strokeColor: .mySecondaryColor, lineWidth: 4)
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 0, style: .continuous)
+//                    .foregroundColor(.mySecondaryColor)
+//                    .frame(width: 150, height: 150)
+//                    .clipShape(Circle())
+//                    .shadow(radius: 2)
+//                    .opacity(0.6)
+//                VStack {
+//                    Text(category.name)
+//                        .font(.system(size: 17))
+//                        .foregroundColor(.myPrimaryColor)
+//                }
+//            }
+//        }
+//    }
+//}
+
 struct ManageCategoriesView: View {
     @StateObject var viewModel = ManageCategoriesViewModel()
     

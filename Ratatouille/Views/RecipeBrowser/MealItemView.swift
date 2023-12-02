@@ -20,6 +20,7 @@ class MealItemViewModel: ObservableObject {
         self.meal = meal
     }
     
+    
     enum MealItemViewModelError: Error {
         case unreachableDemo
         case saveFailed
@@ -42,8 +43,14 @@ class MealItemViewModel: ObservableObject {
                     throw error
                 }
             } else {
-                // TODO: set isArchived to true
-                print("Recipe with name \(meal.name) will be moved to archives")
+                let result = await archiveCommand.execute(input: self.meal)
+                
+                switch result {
+                case .success(let archive):
+                    print("Archive has \(archive.meals?.count ?? 0) records")
+                case .failure(let error):
+                    throw error
+                }
                 
                 DispatchQueue.main.async { // TODO: redundant?
                     self.meal.isFavorite = false
@@ -101,7 +108,6 @@ struct MealItemView: View {
     }
 
     var body: some View {
-        
         ZStack {
             HStack {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
@@ -114,7 +120,7 @@ struct MealItemView: View {
                     HeartIcon(viewModel: viewModel)
                 }
             }
-            MealCardForRecipeBrowser(meal: viewModel.meal)
+            MealCardForRecipeBrowser(viewModel: viewModel)
         }
         .padding(.horizontal)
     }
@@ -122,11 +128,6 @@ struct MealItemView: View {
 
 struct MealCardForRecipeBrowser: View {
     @StateObject var viewModel: MealItemViewModel
-        
-    init(meal: MealModel) {
-        let mealItemViewModel = MealItemViewModel(meal: meal)
-        _viewModel = StateObject(wrappedValue: mealItemViewModel)
-    }
     
     var body: some View {
         HStack {

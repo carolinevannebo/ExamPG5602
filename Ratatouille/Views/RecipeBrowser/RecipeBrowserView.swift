@@ -256,14 +256,7 @@ struct RecipeBrowserView: View {
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             // --------------   REFACTOR REDUNDANCE ----------------------
-            .errorAlert(error: $viewModel.currentError)
-//            .alert(isPresented: $viewModel.shouldAlertError) {
-//                Alert(
-//                    title: Text("Oops!"),
-//                    message: Text(viewModel.currentError?.errorDescription ?? "Ukjent feil")
-//                )
-//            }
-            
+            .errorAlert(error: $viewModel.currentError)            
         } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)

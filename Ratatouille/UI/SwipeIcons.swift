@@ -47,8 +47,8 @@ struct ArchiveIcon: View {
                 Image(systemName: "archivebox.fill")
                     .onTapGesture {
                         Task {
-                            // TODO: can only delete from archives
-//                            viewModel.hasTappedArchive = false
+                            // TODO: bug it only fills after second tap
+                            viewModel.hasTappedArchive = false
 //                            await viewModel.handleTappedArchive()
                         }
                     }
