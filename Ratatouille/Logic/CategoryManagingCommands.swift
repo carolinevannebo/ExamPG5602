@@ -110,45 +110,4 @@ class UpdateCategoryCommand: ICommand {
     }
 }
 
-class DeleteCategoryCommand: ICommand {
-    typealias Input = Category
-    typealias Output = Result<Void, DeleteCategoryError>
-    
-    enum DeleteCategoryError: Error {
-        case missingIdError(String)
-        case deleteError
-        case unauthorizedError
-    }
-    
-    func execute(input: Input) async -> Output {
-        do {
-            if input.id == nil {
-                throw DeleteCategoryError.missingIdError("Category ID is missing.")
-            }
-            
-            // Only allow user to delete categories they have created
-            for i in 0..<14 {
-                if input.id == String(i+1) {
-                    throw DeleteCategoryError.unauthorizedError
-                }
-            }
-            
-            let request: NSFetchRequest<Category> = Category.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", input.id!)
-            
-            let managedObjectContext = DataController.shared.managedObjectContext
-            
-            try await managedObjectContext.perform {
-                if let fetchedCategory = try managedObjectContext.fetch(request).first {
-                    managedObjectContext.delete(fetchedCategory)
-                }
-            }
-            
-            DataController.shared.saveContext()
-            return .success(())
-        } catch {
-            print("Unexpected error in DeleteCategoryCommand: \(error)")
-            return .failure(.deleteError)
-        }
-    }
-}
+

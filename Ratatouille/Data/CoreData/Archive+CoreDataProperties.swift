@@ -16,6 +16,9 @@ extension Archive {
         return NSFetchRequest<Archive>(entityName: "Archive")
     }
 
+    @NSManaged public var areas: NSSet?
+    @NSManaged public var categories: NSSet?
+    @NSManaged public var ingredients: NSSet?
     @NSManaged public var meals: NSSet?
 
 }
@@ -34,7 +37,48 @@ extension Archive {
 
     @objc(removeMeals:)
     @NSManaged public func removeFromMeals(_ values: NSSet)
+    
+    //
+    
+    @objc(addAreasObject:)
+    @NSManaged public func addToAreas(_ value: Area)
 
+    @objc(removeAreasObject:)
+    @NSManaged public func removeFromAreas(_ value: Area)
+
+    @objc(addAreas:)
+    @NSManaged public func addToAreas(_ values: NSSet)
+
+    @objc(removeAreas:)
+    @NSManaged public func removeFromAreas(_ values: NSSet)
+    
+    //
+    
+    @objc(addCategoriesObject:)
+    @NSManaged public func addToCategories(_ value: Category)
+
+    @objc(removeCategoriesObject:)
+    @NSManaged public func removeFromCategories(_ value: Category)
+
+    @objc(addCategories:)
+    @NSManaged public func addToCategories(_ values: NSSet)
+
+    @objc(removeCategories:)
+    @NSManaged public func removeFromCategories(_ values: NSSet)
+
+    //
+    
+    @objc(addIngredientsObject:)
+    @NSManaged public func addToIngredients(_ value: Ingredient)
+
+    @objc(removeIngredientsObject:)
+    @NSManaged public func removeFromIngredients(_ value: Ingredient)
+
+    @objc(addIngredients:)
+    @NSManaged public func addToIngredients(_ values: NSSet)
+
+    @objc(removeIngredients:)
+    @NSManaged public func removeFromIngredients(_ values: NSSet)
 }
 
 extension Archive : Identifiable {

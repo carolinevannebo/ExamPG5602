@@ -61,13 +61,25 @@ class LoadCategoriesFromCDCommand: ICommand {
     
     func execute(input: Input) async -> Output {
         do {
-            let request: NSFetchRequest<Category> = Category.fetchRequest()
-            
             let managedObjectContext = DataController.shared.managedObjectContext
             
-            let categories: [Category] = try managedObjectContext.fetch(request)
+            let categoryRequest: NSFetchRequest<Category> = Category.fetchRequest()
+            let allCategories = try managedObjectContext.fetch(categoryRequest)
+
             
-            return categories
+            let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
+                archiveRequest.predicate = NSPredicate(format: "ANY categories IN %@", allCategories)
+            let archives = try managedObjectContext.fetch(archiveRequest)
+            
+            let categoriesInArchives = archives.compactMap { $0.categories as? Set<Category> }.flatMap { $0 }
+            let categoriesNotInArchives = allCategories.filter { category in
+                !categoriesInArchives.contains { archiveCategory -> Bool in
+                    // comparing categories
+                    return archiveCategory.id == category.id
+                }
+            }
+            
+            return categoriesNotInArchives
             
         } catch {
             print("Unexpected error in LoadCategoriesFromCDCommand: \(error)")

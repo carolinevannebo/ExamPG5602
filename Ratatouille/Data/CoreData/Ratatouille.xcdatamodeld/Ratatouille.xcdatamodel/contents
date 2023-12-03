@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="22G90" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Archive" representedClassName="Archive" syncable="YES">
+        <relationship name="areas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Area" inverseName="archive" inverseEntity="Area"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="archive" inverseEntity="Category"/>
+        <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ingredient" inverseName="archive" inverseEntity="Ingredient"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="archive" inverseEntity="Meal"/>
     </entity>
     <entity name="Area" representedClassName="Area" syncable="YES">
         <attribute name="name" attributeType="String"/>
+        <relationship name="archive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Archive" inverseName="areas" inverseEntity="Archive"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="area" inverseEntity="Meal"/>
     </entity>
     <entity name="Category" representedClassName="Category" syncable="YES">
@@ -12,12 +16,14 @@
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="information" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
+        <relationship name="archive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Archive" inverseName="categories" inverseEntity="Archive"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="category" inverseEntity="Meal"/>
     </entity>
     <entity name="Ingredient" representedClassName="Ingredient" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="information" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="archive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Archive" inverseName="ingredients" inverseEntity="Archive"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="ingredients" inverseEntity="Meal"/>
     </entity>
     <entity name="Meal" representedClassName="Meal" syncable="YES">

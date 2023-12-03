@@ -224,7 +224,6 @@ struct IngredientNSSetContent: View {
 }
 
 struct InstructionsSection<MealType: MealRepresentable>: View {
-    //var meal: MealModel
     var meal: MealType
     
     var body: some View {

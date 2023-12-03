@@ -21,6 +21,7 @@ class ManageCategoriesViewModel: ObservableObject {
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
     let saveCategoryCommand = AddNewCategoryCommand()
     let updateCategoryCommand = UpdateCategoryCommand()
+    let archiveCategoryCommand = ArchiveCategoryCommand()
     let deleteCategoryCommand = DeleteCategoryCommand()
     
     func loadCategories() async {
@@ -51,6 +52,7 @@ class ManageCategoriesViewModel: ObservableObject {
                 print("Category was successfully passed and saved")
                 await loadCategories()
                 isPresentingAddCategoryView = false
+                
             case .failure(let error):
                 print("Category was passed, but not saved: \(error)")
             }
@@ -78,6 +80,24 @@ class ManageCategoriesViewModel: ObservableObject {
             
         case .failure(let error):
             print("Category could not be passed: \(error)")
+        }
+    }
+    
+    func archiveCategory(category: Category) async {
+        do {
+            let result = await archiveCategoryCommand.execute(input: category)
+            
+            switch result {
+            case .success(_):
+                print("successfully archived category")
+                await loadCategories()
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            currentError = error as? ManageCategoriesViewModelError
+            shouldAlertError = true
         }
     }
     
@@ -114,29 +134,6 @@ class ManageCategoriesViewModel: ObservableObject {
                 return "Reload the page."
             default:
                 return "Try again."
-            }
-        }
-    }
-}
-
-struct CategoryCard: View {
-    @State var category: Category
-    
-    var body: some View {
-        ZStack (alignment: .leading) {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .foregroundColor(.myDiffusedColor)
-                .shadow(radius: 2)
-                .frame(height: 50)
-                .opacity(0.9)
-            HStack {
-                Spacer().frame(width: 30)
-                CircleImage(url: category.image ?? "", width: 65, height: 65, strokeColor: .clear, lineWidth: 0)
-                
-                Text(category.name)
-                    .padding(.leading)
-                    .font(.system(size: 17))
-                    .foregroundColor(.myContrastColor)
             }
         }
     }
@@ -220,6 +217,29 @@ struct ManageCategoryItem: View {
         }
         .onAppear {
             viewModel.checkAuthorization(category: category) // TODO: Need to fix that toolbar doesnt appear for default categories
+        }
+    }
+}
+
+struct CategoryCard: View {
+    @State var category: Category
+    
+    var body: some View {
+        ZStack (alignment: .leading) {
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .foregroundColor(.myDiffusedColor)
+                .shadow(radius: 2)
+                .frame(height: 50)
+                .opacity(0.9)
+            HStack {
+                Spacer().frame(width: 30)
+                CircleImage(url: category.image ?? "", width: 65, height: 65, strokeColor: .clear, lineWidth: 0)
+                
+                Text(category.name)
+                    .padding(.leading)
+                    .font(.system(size: 17))
+                    .foregroundColor(.myContrastColor)
+            }
         }
     }
 }

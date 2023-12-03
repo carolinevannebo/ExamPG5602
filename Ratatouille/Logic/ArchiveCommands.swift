@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class LoadArchivesCommand: ICommand {
+class LoadMealsFromArchivesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Meal]?
 
@@ -194,6 +194,131 @@ class ArchiveMealCommand: ICommand {
             return result ?? .failure(.archivingError)
         } catch {
             print("Unexpected error in ArchiveMealCommand: \(error)")
+            return .failure(.archivingError)
+        }
+    }
+}
+
+class LoadCategoriesFromArchivesCommand: ICommand {
+    typealias Input = Void
+    typealias Output = [Category]?
+    
+    func execute(input: Void) async -> [Category]? {
+        // hello :)
+    }
+}
+
+class DeleteCategoryCommand: ICommand {
+    typealias Input = Category
+    typealias Output = Result<Void, DeleteCategoryError>
+    
+    enum DeleteCategoryError: Error {
+        case missingIdError(String)
+        case deleteError
+        case unauthorizedError
+    }
+    
+    func execute(input: Input) async -> Output {
+        do {
+            if input.id == nil {
+                throw DeleteCategoryError.missingIdError("Category ID is missing.")
+            }
+            
+            // Only allow user to delete categories they have created
+            for i in 0..<14 {
+                if input.id == String(i+1) {
+                    throw DeleteCategoryError.unauthorizedError
+                }
+            }
+            
+            let request: NSFetchRequest<Category> = Category.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", input.id!)
+            
+            let managedObjectContext = DataController.shared.managedObjectContext
+            
+            try await managedObjectContext.perform {
+                if let fetchedCategory = try managedObjectContext.fetch(request).first {
+                    
+                    let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
+                    archiveRequest.predicate = NSPredicate(format: "categories CONTAINS %@", fetchedCategory)
+                    
+                    if let archivedCategory = try managedObjectContext.fetch(archiveRequest).first {
+                        archivedCategory.removeFromCategories(fetchedCategory)
+                        managedObjectContext.delete(fetchedCategory)
+                    }
+                }
+            }
+            
+            DataController.shared.saveContext()
+            return .success(())
+        } catch {
+            print("Unexpected error in DeleteCategoryCommand: \(error)")
+            return .failure(.deleteError)
+        }
+    }
+}
+
+
+
+class ArchiveCategoryCommand: ICommand {
+    typealias Input = Category
+    typealias Output = Result<Archive, ArchiveCategoryError>
+    
+    enum ArchiveCategoryError: Error {
+        case missingIdError(String)
+        case archivingError
+        case fetchingCategoryError
+        case unauthorizedError
+    }
+    
+    func execute(input: Input) async -> Output {
+        do {
+            // Check for id
+            if input.id == nil {
+                throw ArchiveCategoryError.missingIdError("Category ID is missing.")
+            }
+            
+            // Only allow user to delete categories they have created
+            for i in 0..<14 {
+                if input.id == String(i+1) {
+                    throw ArchiveCategoryError.unauthorizedError
+                }
+            }
+            
+            let request: NSFetchRequest<Category> = Category.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", input.id!)
+            
+            let managedObjectContext = DataController.shared.managedObjectContext
+            var result: Output?
+            
+            try await managedObjectContext.perform {
+                if let fetchedCategory = try managedObjectContext.fetch(request).first {
+                    
+                    // check archive
+                    let request: NSFetchRequest<Archive> = Archive.fetchRequest()
+                    request.predicate = NSPredicate(format: "categories CONTAINS %@", fetchedCategory)
+                    
+                    if let fetchedArchive = try managedObjectContext.fetch(request).first {
+                        // Category is already archived
+                        result = .success(fetchedArchive)
+                    } else {
+                        // If no categories has been archived yet, create entity
+                        let newArchive = Archive(context: managedObjectContext)
+                        newArchive.categories = NSSet(object: fetchedCategory)
+                        
+                        result = .success(newArchive)
+                    }
+                } else {
+                    result = .failure(.fetchingCategoryError)
+                }
+            }
+            
+            DataController.shared.saveContext()
+            
+            return result ?? .failure(.archivingError)
+            
+        } catch {
+            print("Unexpected error in ArchiveCategoryCommand: \(error)")
             return .failure(.archivingError)
         }
     }

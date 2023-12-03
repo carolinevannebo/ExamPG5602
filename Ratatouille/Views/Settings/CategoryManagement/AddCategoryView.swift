@@ -126,7 +126,7 @@ struct AddCategoryView: View {
                     
                     Button("Legg til kategori") {
                         Task {
-                            await viewModel.addCategory(completion: completion)
+                            let result = await viewModel.addCategory(completion: completion)
                         }
                     }
                 }

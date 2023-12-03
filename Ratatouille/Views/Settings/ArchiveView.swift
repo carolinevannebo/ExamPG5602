@@ -12,13 +12,13 @@ class ArchiveViewModel: ObservableObject {
     @Published var hasArchive: Bool = false
     @Published var listId: UUID?
     
-    let loadCommand = LoadArchivesCommand()
-    let restoreCommand = RestoreMealCommand()
-    let deleteCommand = DeleteMealCommand()
+    let loadMealsCommand = LoadMealsFromArchivesCommand()
+    let restoreMealCommand = RestoreMealCommand()
+    let deleteMealCommand = DeleteMealCommand()
     
-    func loadArchive() async {
+    func loadMealsFromArchive() async {
         do {
-            if let meals = await loadCommand.execute(input: ()) {
+            if let meals = await loadMealsCommand.execute(input: ()) {
                 DispatchQueue.main.async {
                     self.meals = meals
                     self.listId = UUID()
@@ -40,7 +40,7 @@ class ArchiveViewModel: ObservableObject {
     
     func restoreMeal(meal: Meal) async {
         do {
-            let result = await restoreCommand.execute(input: meal)
+            let result = await restoreMealCommand.execute(input: meal)
             
             switch result {
             case .success(let meal):
@@ -55,7 +55,7 @@ class ArchiveViewModel: ObservableObject {
     
     func deleteMeal(meal: Meal) async {
         do {
-            let result = await deleteCommand.execute(input: meal)
+            let result = await deleteMealCommand.execute(input: meal)
             
             switch result {
             case .success(_):
@@ -81,24 +81,31 @@ struct ArchiveView: View {
             VStack {
                 if viewModel.hasArchive {
                     List {
-                        ForEach(0..<viewModel.meals.count, id: \.self) { index in
-                            ZStack {
-                                ArchiveItemView(meal: viewModel.meals[index])
-                                
-                                NavigationLink(
-                                    destination: {
-                                        MealDetailView(meal: viewModel.meals[index])
-                                            .toolbar {
-                                                ArchiveToolBar(viewModel: viewModel, meal: viewModel.meals[index])
-                                            }
-                                    }
-                                ) { EmptyView() }
-                                .opacity(0)
+                        Section("Landområder") {}
+                        Section("Kategorier") {}
+                        
+                        Section("Måltider") {
+                            ForEach(0..<viewModel.meals.count, id: \.self) { index in
+                                ZStack {
+                                    ArchiveItemView(meal: viewModel.meals[index])
+                                    
+                                    NavigationLink(
+                                        destination: {
+                                            MealDetailView(meal: viewModel.meals[index])
+                                                .toolbar {
+                                                    ArchiveMealToolBar(viewModel: viewModel, meal: viewModel.meals[index])
+                                                }
+                                        }
+                                    ) { EmptyView() }
+                                        .opacity(0)
+                                }
                             }
+                            .id(viewModel.listId)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparatorTint(Color.clear)
                         }
-                        .id(viewModel.listId)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparatorTint(Color.clear)
+                        
+                        Section("Ingredienser") {}
                     }
                     .padding(.top)
                     .padding(.horizontal)
@@ -111,10 +118,10 @@ struct ArchiveView: View {
             .background(Color.myBackgroundColor)
         }
         .onAppear {
-            Task { await viewModel.loadArchive() }
+            Task { await viewModel.loadMealsFromArchive() }
         }
         .refreshable {
-            Task { await viewModel.loadArchive() }
+            Task { await viewModel.loadMealsFromArchive() }
         }
     }
 }
@@ -134,7 +141,7 @@ struct ArchiveItemView: View {
     }
 }
 
-struct ArchiveToolBar: ToolbarContent {
+struct ArchiveMealToolBar: ToolbarContent {
     @StateObject var viewModel = ArchiveViewModel()
     @State var meal: Meal
     @Environment(\.dismiss) private var dismiss
@@ -146,7 +153,7 @@ struct ArchiveToolBar: ToolbarContent {
                 Task {
                     print("måltid \(meal.name) vil bli gjenopprettet")
                     await viewModel.restoreMeal(meal: meal)
-                    await viewModel.loadArchive()
+                    await viewModel.loadMealsFromArchive()
                     dismiss()
                 }
             } label: {
@@ -158,7 +165,7 @@ struct ArchiveToolBar: ToolbarContent {
                 Task {
                     print("måltid \(meal.name) vil bli slettet permanent")
                     await viewModel.deleteMeal(meal: meal)
-                    await viewModel.loadArchive()
+                    await viewModel.loadMealsFromArchive()
                     dismiss()
                 }
             } label: {

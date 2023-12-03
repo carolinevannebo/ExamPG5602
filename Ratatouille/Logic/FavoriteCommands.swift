@@ -102,20 +102,7 @@ class SaveFavoriteCommand: ICommand {
                     newFavorite.ingredients = NSSet(array: ingredientEntities)
                     newFavorite.isArchived = false
                     
-                    print("New favorite created: \(newFavorite.name)")
-                    
-                    print("This favorite has the following attributes: ")
-                    print("id: \(newFavorite.id)")
-                    print("image: \(newFavorite.image ?? "unknown image")")
-                    print("area: \(newFavorite.area?.name ?? "unknown area")")
-                    print("category name: \(newFavorite.category?.name ?? "unknown category name")")
-                    print("category id: \(newFavorite.category?.id ?? "unknown category id")")
-                    print("category image: \(newFavorite.category?.image ?? "unknown category image")")
-                    print("category information: \(newFavorite.category?.information ?? "unknown category information")")
-                    print("isArchived: \(newFavorite.isArchived)")
-                    
                     result = .success(newFavorite)
-//                    input.isFavorite = true
                 }
             }
             

@@ -17,7 +17,7 @@ extension Area: AreaRepresentable {
 
     @NSManaged public var name: String
     @NSManaged public var meals: NSSet?
-
+    @NSManaged public var archive: Archive?
 }
 
 // MARK: Generated accessors for meals

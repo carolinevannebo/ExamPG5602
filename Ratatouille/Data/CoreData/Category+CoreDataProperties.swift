@@ -21,7 +21,7 @@ extension Category: CategoryRepresentable {
     @NSManaged public var image: String?
     @NSManaged public var information: String?
     @NSManaged public var meals: NSSet?
-
+    @NSManaged public var archive: Archive?
 }
 
 // MARK: Generated accessors for meals
