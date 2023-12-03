@@ -120,7 +120,7 @@ class LoadIngredientsFromCDCommand: ICommand {
                 !ingredientsInArchives.contains { archiveIngredient -> Bool in
                     // comparing ingredients
                     return archiveIngredient.id == ingredient.id
-                }
+                } && ((ingredient.name?.contains(",")) == false) // workaround
             }
             
             return ingredientsNotInArchives

@@ -13,6 +13,9 @@ class MealItemViewModel: ObservableObject {
     @Published var isDragging: Bool = false
     @Published var hasTappedHeart: Bool = false
     
+    @Published var isShowingErrorAlert: Bool = false
+    @Published var errorMessage: String = ""
+    
     let saveCommand = SaveFavoriteCommand()
     let archiveCommand = ArchiveMealCommand()
     
@@ -59,6 +62,10 @@ class MealItemViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.isShowingErrorAlert = true
+            }
         }
     }
     
@@ -123,6 +130,10 @@ struct MealItemView: View {
             MealCardForRecipeBrowser(viewModel: viewModel)
         }
         .padding(.horizontal)
+        .alert("Feilmelding", isPresented: $viewModel.isShowingErrorAlert) {
+        } message: {
+            Text($viewModel.errorMessage.wrappedValue)
+        }
     }
 }
 

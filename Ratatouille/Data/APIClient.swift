@@ -538,15 +538,6 @@ extension APIClient {
                 }
             }
             
-            // check how many ingredients are saved in coredata
-            let countFetchRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
-            do {
-                let count = try managedObjectContext.count(for: countFetchRequest)
-                print("Number of ingredients saved: \(count)")
-            } catch {
-                print("Error counting ingredients: \(error)")
-            }
-            
         } catch let error {
             print("Could not save ingredients: \(error)")
         }

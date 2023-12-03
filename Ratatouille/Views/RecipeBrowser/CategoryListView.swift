@@ -16,16 +16,16 @@ struct CategoryListView: View {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
                     CategoryItemView(category: viewModel.categories[index])
                         .onTapGesture {
-                            for i in 0..<14 {
-                                if viewModel.categories[index].id == String(i+1) {
+                            
+                            if let categoryId = Int(viewModel.categories[index].id!), (1...14).contains(categoryId) {
+                                DispatchQueue.main.async {
                                     viewModel.chosenCategory = viewModel.categories[index].name
-                                    Task { await viewModel.filterByCategory() }
-                                } else {
-                                    print("API cannot filter meal by category created by user")
-                                    DispatchQueue.main.async {
-                                        viewModel.errorMessage = "Det er ikke mulig å søke etter oppskrifter basert på kategorier du selv har laget."
-                                        viewModel.shouldAlertError = true
-                                    }
+                                }
+                                Task { await viewModel.filterByCategory() }
+                            } else {
+                                DispatchQueue.main.async {
+                                    viewModel.errorMessage = "Det er ikke mulig å søke etter oppskrifter basert på kategorier du selv har laget."
+                                    viewModel.shouldAlertError = true
                                 }
                             }
                         }
