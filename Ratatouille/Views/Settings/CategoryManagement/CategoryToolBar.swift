@@ -10,8 +10,8 @@ import SwiftUI
 
 struct CategoryToolBar: ToolbarContent {
     @StateObject var viewModel: ManageCategoriesViewModel
-//    @State var category: Category
     @Binding var category: Category
+    
     @Environment(\.dismiss) private var dismiss
     
     var body: some ToolbarContent {
@@ -19,7 +19,6 @@ struct CategoryToolBar: ToolbarContent {
             Button {
                 // edit
                 Task {
-                    print("kategori \(category.name) vil bli redigert")
                     viewModel.isPresentingEditCategoryView = true
                 }
             } label: {
@@ -27,7 +26,7 @@ struct CategoryToolBar: ToolbarContent {
             }
             
             Button {
-                // delete permanently MARK: nope, check the exam again
+                // archive
                 Task {
                     await viewModel.archiveCategory(category: category)
                     await viewModel.loadCategories()

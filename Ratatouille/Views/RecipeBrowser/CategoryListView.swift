@@ -16,8 +16,15 @@ struct CategoryListView: View {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
                     CategoryItemView(category: viewModel.categories[index])
                         .onTapGesture {
-                            viewModel.chosenCategory = viewModel.categories[index].name
-                            Task { await viewModel.filterByCategory() }
+                            for i in 0..<14 {
+                                if viewModel.categories[index].id == String(i+1) {
+                                    viewModel.chosenCategory = viewModel.categories[index].name
+                                    Task { await viewModel.filterByCategory() }
+                                } else {
+                                    // TODO: error alert
+                                    print("API cannot filter meal by category created by user")
+                                }
+                            }
                         }
                 }
             }

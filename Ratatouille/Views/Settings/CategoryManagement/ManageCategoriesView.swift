@@ -50,8 +50,12 @@ class ManageCategoriesViewModel: ObservableObject {
             switch saveToCDResult {
             case .success(_):
                 print("Category was successfully passed and saved")
+                
+                DispatchQueue.main.async {
+                    self.isPresentingAddCategoryView = false
+                }
+                
                 await loadCategories()
-                isPresentingAddCategoryView = false
                 
             case .failure(let error):
                 print("Category was passed, but not saved: \(error)")
@@ -203,7 +207,10 @@ struct ManageCategoryItem: View {
                 .background(Color.myBackgroundColor)
                 .toolbar {
 //                    if categoryAuthorized {
-                    CategoryToolBar(viewModel: viewModel, category: $category)
+                    CategoryToolBar(
+                        viewModel: viewModel,
+                        category: $category
+                    )
 //                    }
                 }
                 .sheet(isPresented: $viewModel.isPresentingEditCategoryView) {

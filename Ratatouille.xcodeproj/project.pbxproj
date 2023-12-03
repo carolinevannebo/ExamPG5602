@@ -58,9 +58,16 @@
 		E4E3B96F2B12A0AD008591D3 /* SearchCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B96E2B12A0AD008591D3 /* SearchCommands.swift */; };
 		E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9702B12A0BD008591D3 /* ListCommands.swift */; };
 		E4E3B9732B12A0CA008591D3 /* FavoriteCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */; };
-		E4E3B9752B12A0DB008591D3 /* ArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */; };
+		E4E3B9752B12A0DB008591D3 /* MealArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9742B12A0DB008591D3 /* MealArchiveCommands.swift */; };
 		E4E3B9772B12CD30008591D3 /* MealDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9762B12CD30008591D3 /* MealDetailView.swift */; };
 		E4E3B9792B12D3DF008591D3 /* DemoMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E3B9782B12D3DF008591D3 /* DemoMeal.swift */; };
+		E4EA26C32B1CB769000E8EA6 /* ArchiveMealToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26C22B1CB769000E8EA6 /* ArchiveMealToolBar.swift */; };
+		E4EA26C52B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26C42B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift */; };
+		E4EA26C72B1CBB1C000E8EA6 /* ArchivedAreasList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26C62B1CBB1C000E8EA6 /* ArchivedAreasList.swift */; };
+		E4EA26C92B1CBB60000E8EA6 /* ArchivedCategoriesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26C82B1CBB60000E8EA6 /* ArchivedCategoriesList.swift */; };
+		E4EA26CB2B1CBC44000E8EA6 /* ArchivedMealsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26CA2B1CBC44000E8EA6 /* ArchivedMealsList.swift */; };
+		E4EA26CD2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26CC2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift */; };
+		E4EA26D22B1CBE51000E8EA6 /* CategoryArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -143,9 +150,16 @@
 		E4E3B96E2B12A0AD008591D3 /* SearchCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCommands.swift; sourceTree = "<group>"; };
 		E4E3B9702B12A0BD008591D3 /* ListCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCommands.swift; sourceTree = "<group>"; };
 		E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCommands.swift; sourceTree = "<group>"; };
-		E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCommands.swift; sourceTree = "<group>"; };
+		E4E3B9742B12A0DB008591D3 /* MealArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealArchiveCommands.swift; sourceTree = "<group>"; };
 		E4E3B9762B12CD30008591D3 /* MealDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailView.swift; sourceTree = "<group>"; };
 		E4E3B9782B12D3DF008591D3 /* DemoMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoMeal.swift; sourceTree = "<group>"; };
+		E4EA26C22B1CB769000E8EA6 /* ArchiveMealToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveMealToolBar.swift; sourceTree = "<group>"; };
+		E4EA26C42B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategoryToolBar.swift; sourceTree = "<group>"; };
+		E4EA26C62B1CBB1C000E8EA6 /* ArchivedAreasList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedAreasList.swift; sourceTree = "<group>"; };
+		E4EA26C82B1CBB60000E8EA6 /* ArchivedCategoriesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedCategoriesList.swift; sourceTree = "<group>"; };
+		E4EA26CA2B1CBC44000E8EA6 /* ArchivedMealsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedMealsList.swift; sourceTree = "<group>"; };
+		E4EA26CC2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedIngredientsList.swift; sourceTree = "<group>"; };
+		E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -226,9 +240,9 @@
 		E469629C2B1545E700D100E6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				E4EA26C12B1CB74B000E8EA6 /* Archives */,
 				E4A35DBA2B1BB15E00C4FC77 /* CategoryManagement */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
-				E469629F2B15465900D100E6 /* ArchiveView.swift */,
 				E48815A42B1A452000B00B55 /* ManageAreasView.swift */,
 			);
 			path = Settings;
@@ -266,6 +280,45 @@
 				E4A35DBD2B1BB2F200C4FC77 /* EditCategoryView.swift */,
 			);
 			path = CategoryManagement;
+			sourceTree = "<group>";
+		};
+		E4EA26C12B1CB74B000E8EA6 /* Archives */ = {
+			isa = PBXGroup;
+			children = (
+				E4EA26CF2B1CBD85000E8EA6 /* Lists */,
+				E4EA26CE2B1CBD74000E8EA6 /* Toolbars */,
+				E469629F2B15465900D100E6 /* ArchiveView.swift */,
+			);
+			path = Archives;
+			sourceTree = "<group>";
+		};
+		E4EA26CE2B1CBD74000E8EA6 /* Toolbars */ = {
+			isa = PBXGroup;
+			children = (
+				E4EA26C22B1CB769000E8EA6 /* ArchiveMealToolBar.swift */,
+				E4EA26C42B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift */,
+			);
+			path = Toolbars;
+			sourceTree = "<group>";
+		};
+		E4EA26CF2B1CBD85000E8EA6 /* Lists */ = {
+			isa = PBXGroup;
+			children = (
+				E4EA26C62B1CBB1C000E8EA6 /* ArchivedAreasList.swift */,
+				E4EA26C82B1CBB60000E8EA6 /* ArchivedCategoriesList.swift */,
+				E4EA26CA2B1CBC44000E8EA6 /* ArchivedMealsList.swift */,
+				E4EA26CC2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift */,
+			);
+			path = Lists;
+			sourceTree = "<group>";
+		};
+		E4EA26D02B1CBE26000E8EA6 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				E4E3B9742B12A0DB008591D3 /* MealArchiveCommands.swift */,
+				E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */,
+			);
+			path = Archive;
 			sourceTree = "<group>";
 		};
 		E4EAFC1D2B023AF10095D10B = {
@@ -330,11 +383,11 @@
 		E4EAFC582B02402F0095D10B /* Logic */ = {
 			isa = PBXGroup;
 			children = (
+				E4EA26D02B1CBE26000E8EA6 /* Archive */,
 				E40644582B0CDDBC00028CBD /* Commands.swift */,
 				E4E3B96E2B12A0AD008591D3 /* SearchCommands.swift */,
 				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
 				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
-				E4E3B9742B12A0DB008591D3 /* ArchiveCommands.swift */,
 				E42525292B18C9CE00A099C1 /* Representables.swift */,
 				E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */,
 			);
@@ -562,7 +615,9 @@
 				E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */,
 				E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */,
 				E4A35DB72B1B917500C4FC77 /* MyButtonStyle.swift in Sources */,
-				E4E3B9752B12A0DB008591D3 /* ArchiveCommands.swift in Sources */,
+				E4EA26C92B1CBB60000E8EA6 /* ArchivedCategoriesList.swift in Sources */,
+				E4EA26D22B1CBE51000E8EA6 /* CategoryArchiveCommands.swift in Sources */,
+				E4E3B9752B12A0DB008591D3 /* MealArchiveCommands.swift in Sources */,
 				E4EAFC762B02718C0095D10B /* Category+CoreDataClass.swift in Sources */,
 				E40644702B0E951600028CBD /* CategoryModel.swift in Sources */,
 				E425252A2B18C9CE00A099C1 /* Representables.swift in Sources */,
@@ -583,10 +638,12 @@
 				E4EAFC712B025FF60095D10B /* DataController.swift in Sources */,
 				E4EAFC772B02718C0095D10B /* Category+CoreDataProperties.swift in Sources */,
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,
+				E4EA26C52B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift in Sources */,
 				E42525262B18B8EB00A099C1 /* Placeholder.swift in Sources */,
 				E4A35DB52B1B81A800C4FC77 /* CategoryManagingCommands.swift in Sources */,
 				E40644952B1035A300028CBD /* MealCardContent.swift in Sources */,
 				E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */,
+				E4EA26CB2B1CBC44000E8EA6 /* ArchivedMealsList.swift in Sources */,
 				E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */,
 				E4E3B9732B12A0CA008591D3 /* FavoriteCommands.swift in Sources */,
 				E4A35DB32B1B7A8F00C4FC77 /* HideKeyboard.swift in Sources */,
@@ -597,10 +654,12 @@
 				E4EAFC7E2B028EC40095D10B /* Ingredient+CoreDataClass.swift in Sources */,
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,
 				E40644542B0BE48500028CBD /* Ingredient+CoreDataProperties.swift in Sources */,
+				E4EA26CD2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift in Sources */,
 				E406446C2B0E86F900028CBD /* APIClient.swift in Sources */,
 				E40644522B0BE48500028CBD /* Meal+CoreDataProperties.swift in Sources */,
 				E46962922B14E59800D100E6 /* ImageLoadingAnimation.swift in Sources */,
 				E406446E2B0E94F000028CBD /* AreaModel.swift in Sources */,
+				E4EA26C72B1CBB1C000E8EA6 /* ArchivedAreasList.swift in Sources */,
 				E4E3B96C2B12A005008591D3 /* Archive+CoreDataClass.swift in Sources */,
 				E4EAFC6E2B0259A50095D10B /* Area+CoreDataProperties.swift in Sources */,
 				E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */,
@@ -609,6 +668,7 @@
 				E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */,
 				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
+				E4EA26C32B1CB769000E8EA6 /* ArchiveMealToolBar.swift in Sources */,
 				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

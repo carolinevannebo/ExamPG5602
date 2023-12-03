@@ -23,7 +23,7 @@ class ArchiveViewModel: ObservableObject {
     //TODO: area commands
     
     let loadCategoriesCommand = LoadCategoriesFromArchivesCommand()
-    // TODO: restore
+    let restoreCategoryCommand = RestoreCategoryCommand()
     let deleteCategoryCommand = DeleteCategoryCommand()
     
     //TODO: ingredient commands
@@ -101,6 +101,36 @@ class ArchiveViewModel: ObservableObject {
         }
     }
     
+    func restoreCategory(category: Category) async {
+        do {
+            let result = await restoreCategoryCommand.execute(input: category)
+            
+            switch result {
+            case .success(let category):
+                print("\(category.name) has been restored")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when restoring category from archives: \(error)")
+        }
+    }
+    
+    func deleteCategory(category: Category) async {
+        do {
+            let result = await deleteCategoryCommand.execute(input: category)
+            
+            switch result {
+            case .success(_):
+                print("Category was successfully deleted")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when deleting category permanently: \(error)")
+        }
+    }
+    
     enum ArchiveViewModelError: Error {
         case noMealsInArchives
         case noCategoriesInArchives
@@ -113,83 +143,33 @@ struct ArchiveView: View {
     var body: some View {
         NavigationStack {
             VStack {
-//                if viewModel.hasArchive {
-                    List {
-                        Section("Landområder") { // MARK: unpopulated atm
-                            ForEach(0..<viewModel.areas.count, id: \.self) { index in
-                                ZStack {
-                                    ArchiveListItemView(name: viewModel.areas[index].name)
-                                }
-                            }
-                            .id(viewModel.listId)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparatorTint(Color.clear)
-                        }
-                        
-                        Section("Kategorier") {
-                            ForEach(0..<viewModel.categories.count, id: \.self) { index in
-                                ZStack {
-                                    ArchiveListItemView(name: viewModel.categories[index].name)
-                                }
-                            }
-                            .id(viewModel.listId)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparatorTint(Color.clear)
-                        }
-                        
-                        Section("Måltider") {
-                            ForEach(0..<viewModel.meals.count, id: \.self) { index in
-                                ZStack {
-//                                    ArchiveItemView(meal: viewModel.meals[index])
-                                    ArchiveListItemView(name: viewModel.meals[index].name)
-                                    
-                                    NavigationLink(
-                                        destination: {
-                                            MealDetailView(meal: viewModel.meals[index])
-                                                .toolbar {
-                                                    ArchiveMealToolBar(viewModel: viewModel, meal: viewModel.meals[index])
-                                                }
-                                        }
-                                    ) { EmptyView() }
-                                        .opacity(0)
-                                }
-                            }
-                            .id(viewModel.listId)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparatorTint(Color.clear)
-                        }
-                        
-                        Section("Ingredienser") { // MARK: unpopulated atm
-                            ForEach(0..<viewModel.ingredients.count, id: \.self) { index in
-                                ZStack {
-                                    ArchiveListItemView(name: viewModel.ingredients[index].name)
-                                }
-                            }
-                            .id(viewModel.listId)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparatorTint(Color.clear)
-                        }
-                    }
-                    .padding(.top)
-                    .padding(.horizontal)
-                    .listStyle(.plain)
-//                } else {
-//                    EmptyArchiveView()
-//                }
+                List {
+                    ArchivedAreasList(viewModel: viewModel) // MARK: unpopulated
+                    ArchivedCategoriesList(viewModel: viewModel)
+                    ArchivedMealsList(viewModel: viewModel)
+                    ArchivedIngredientsList(viewModel: viewModel) // MARK: unpopulated
+                }
+                .padding(.top)
+                .padding(.horizontal)
+                .listStyle(.plain)
             }
             .navigationTitle("Arkiv")
             .background(Color.myBackgroundColor)
         }
         .onAppear {
             Task {
-                await viewModel.loadMealsFromArchive()
+                // TODO: await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
+                await viewModel.loadMealsFromArchive()
+                // TODO: await viewModel.loadIngredientsFromArchives()
             }
         }
         .refreshable {
             Task {
-                await viewModel.loadMealsFromArchive()
+                // TODO: await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
+                await viewModel.loadMealsFromArchive()
+                // TODO: await viewModel.loadIngredientsFromArchives()
             }
         }
     }
@@ -204,6 +184,7 @@ struct ArchiveListItemView: View {
                 .foregroundColor(.myAlternativeBgColor)
             HStack {
                 Text(name)
+                    .font(.system(size: 17))
                     .padding(.leading, 30)
             }
             .foregroundColor(.myAlternativeTextColor)
@@ -211,40 +192,7 @@ struct ArchiveListItemView: View {
     }
 }
 
-struct ArchiveMealToolBar: ToolbarContent {
-    @StateObject var viewModel = ArchiveViewModel()
-    @State var meal: Meal
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some ToolbarContent {
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            Button {
-                // restore
-                Task {
-                    print("måltid \(meal.name) vil bli gjenopprettet")
-                    await viewModel.restoreMeal(meal: meal)
-                    await viewModel.loadMealsFromArchive()
-                    dismiss()
-                }
-            } label: {
-                Image(systemName: "arrow.up.bin.fill")
-            }
-            
-            Button {
-                // delete permanently
-                Task {
-                    print("måltid \(meal.name) vil bli slettet permanent")
-                    await viewModel.deleteMeal(meal: meal)
-                    await viewModel.loadMealsFromArchive()
-                    dismiss()
-                }
-            } label: {
-                Image(systemName: "trash.fill")
-            }
-        }
-    }
-}
-
+// now unused
 struct EmptyArchiveView: View {
     var body: some View {
         VStack {
