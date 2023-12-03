@@ -17,6 +17,9 @@ class ArchiveViewModel: ObservableObject {
     @Published var isSheetPresented: Bool = false
     @Published var sheetToPresent: ArchiveSheetType? = nil
     
+    @Published var shouldAlertError: Bool = false
+    @Published var errorMessage: String = ""
+    
     // For readability logic has been placed in extensions in toolbar files
     let loadMealsCommand = LoadMealsFromArchivesCommand()
     let restoreMealCommand = RestoreMealCommand()
@@ -62,6 +65,11 @@ struct ArchiveView: View {
                 .padding(.top)
                 .padding(.horizontal)
                 .listStyle(.plain)
+                .alert("Feilmelding", isPresented: $viewModel.shouldAlertError) {
+                } message: {
+                    Text(viewModel.errorMessage)
+                }
+                
             }
             .navigationTitle("Arkiv")
             .background(Color.myBackgroundColor)

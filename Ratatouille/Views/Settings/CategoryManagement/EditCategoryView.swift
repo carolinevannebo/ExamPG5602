@@ -14,9 +14,6 @@ class EditCategoryViewModel: ObservableObject {
     @Published var image: String = ""
     @Published var information: String = ""
     
-//    @Published var placeHolderImage: UIImage?
-//    @Published var isLoadingPlaceHolderImage = false
-    
     // Variables for uploading image
     @Published var avatarItem: PhotosPickerItem?
     @Published var avatarImage: Image?

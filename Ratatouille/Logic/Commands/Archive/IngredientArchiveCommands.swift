@@ -25,14 +25,14 @@ enum IngredientArchiveError: Error, LocalizedError {
             return NSLocalizedString("Du kan kun arkivere dine egne ingredienser.", comment: "")
         case .fetchingIngredientError:
             return NSLocalizedString("Fikk ikke tak i ingrediens.", comment: "")
+        case .ingredientNotArchivedError:
+            return NSLocalizedString("Ingrediens ligger ikke i arkiv.", comment: "")
         case .archivingError:
             return NSLocalizedString("Kunne ikke arkivere ingrediens.", comment: "")
         case .restoreError:
             return NSLocalizedString("Kunne ikke gjenopprette ingrediens.", comment: "")
-        case .restoreError:
+        case .deleteError:
             return NSLocalizedString("Kunne ikke slette ingrediens.", comment: "")
-        default:
-            return NSLocalizedString("Noe gikk galt.", comment: "")
         }
     }
 }
@@ -161,7 +161,7 @@ class RestoreIngredientCommand: ICommand {
             
         } catch {
             print("Unexpected error in RestoreIngredientCommand: \(error)")
-            return .failure(.restoreError)
+            return .failure(error as! IngredientArchiveError)
         }
     }
 }
@@ -197,7 +197,11 @@ class DeleteIngredientCommand: ICommand {
                     if let archivedIngredient = try managedObjectContext.fetch(archiveRequest).first {
                         archivedIngredient.removeFromIngredients(fetchedIngredient)
                         managedObjectContext.delete(fetchedIngredient)
+                    } else {
+                        throw IngredientArchiveError.ingredientNotArchivedError
                     }
+                } else {
+                    throw IngredientArchiveError.fetchingIngredientError
                 }
             }
             
@@ -205,7 +209,7 @@ class DeleteIngredientCommand: ICommand {
             return .success(())
         } catch {
             print("Unexpected error in DeleteIngredientCommand: \(error)")
-            return .failure(.deleteError)
+            return .failure(error as! IngredientArchiveError)
         }
     }
 }

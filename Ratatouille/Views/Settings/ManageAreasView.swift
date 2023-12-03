@@ -11,12 +11,13 @@ import SwiftUI
 class ManageAreasViewModel: ObservableObject {
     @Published var areas: [Area] = []
     
-    @Published var shouldAlertError: Bool = false
     @Published var isPresentingAddAreaView: Bool = false
     @Published var isPresentingEditAreaView: Bool = false
     
-    @Published var currentError: Error? = nil
-    @Published var areaAuthorized: Bool = true
+//    @Published var currentError: Error? = nil
+//    @Published var areaAuthorized: Bool = true
+    @Published var errorMessage: String = ""
+    @Published var shouldAlertError: Bool = false
     
     let loadAreasCommand = LoadAreasFromCDCommand()
     let saveAreaCommand = AddNewAreaCommand()
@@ -26,24 +27,6 @@ class ManageAreasViewModel: ObservableObject {
     enum ManageAreasViewModelError: Error, LocalizedError {
         case failed(underlying: Error)
         case areasEmptyError
-        
-        var errorDescription: String? {
-            switch self {
-            case .failed(underlying: let underlying):
-                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
-            case .areasEmptyError:
-                return NSLocalizedString("Unable to load areas", comment: "")
-            }
-        }
-        
-        var recoverySuggestion: String? {
-            switch self {
-            case .areasEmptyError:
-                return "Reload the page."
-            default:
-                return "Try again."
-            }
-        }
     }
 }
 
@@ -68,6 +51,10 @@ struct ManageAreasView: View {
             .padding(.top)
             .padding(.horizontal)
             .listStyle(.plain)
+            .alert("Feilmelding", isPresented: $viewModel.shouldAlertError) {
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
+            }
         } // navstack
         .navigationTitle("Rediger landområder")
         .background(Color.myBackgroundColor)
@@ -92,7 +79,7 @@ struct ManageAreasView: View {
         .refreshable {
             Task { await viewModel.loadAreas() }
         }
-        .errorAlert(error: $viewModel.currentError)
+//        .errorAlert(error: $viewModel.currentError)
     }
 }
 
@@ -109,7 +96,7 @@ extension ManageAreasViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageAreasViewModelError
+                self.errorMessage = error.localizedDescription
                 self.shouldAlertError = true
             }
         }
@@ -134,10 +121,18 @@ extension ManageAreasViewModel {
                     
         case .failure(let error):
             print("Area was passed, but not saved: \(error)")
+            DispatchQueue.main.async { // TODO: refaktorer til try/catch
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
                 
         case .failure(let error):
             print("Area could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -160,10 +155,18 @@ extension ManageAreasViewModel {
                 
             case .failure(let error):
                 print("Area was passed, but not updated: \(error)")
+                DispatchQueue.main.async { // TODO: refaktorer
+                    self.errorMessage = error.localizedDescription
+                    self.shouldAlertError = true
+                }
             }
             
         case .failure(let error):
             print("Area could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -182,7 +185,7 @@ extension ManageAreasViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageAreasViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
+                self.errorMessage = error.localizedDescription
                 self.shouldAlertError = true
             }
         }

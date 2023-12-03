@@ -11,13 +11,18 @@ import SwiftUI
 class ManageCategoriesViewModel: ObservableObject {
     @Published var categories: [Category] = []
     
-    @Published var shouldAlertError: Bool = false
+    // Sheets
     @Published var isPresentingAddCategoryView: Bool = false
     @Published var isPresentingEditCategoryView: Bool = false
     
-    @Published var currentError: Error? = nil
-    @Published var categoryAuthorized: Bool = true
+    // Errors
+    @Published var shouldAlertError: Bool = false
+    @Published var errorMessage: String = ""
     
+//    @Published var currentError: Error? = nil
+//    @Published var categoryAuthorized: Bool = true
+    
+    // Logic
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
     let saveCategoryCommand = AddNewCategoryCommand()
     let updateCategoryCommand = UpdateCategoryCommand()
@@ -40,24 +45,6 @@ class ManageCategoriesViewModel: ObservableObject {
     enum ManageCategoriesViewModelError: Error, LocalizedError {
         case failed(underlying: Error)
         case categoriesEmptyError
-        
-        var errorDescription: String? {
-            switch self {
-            case .failed(underlying: let underlying):
-                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
-            case .categoriesEmptyError:
-                return NSLocalizedString("Unable to load categories", comment: "")
-            }
-        }
-        
-        var recoverySuggestion: String? {
-            switch self {
-            case .categoriesEmptyError:
-                return "Reload the page."
-            default:
-                return "Try again."
-            }
-        }
     }
 }
 
@@ -80,6 +67,10 @@ struct ManageCategoriesView: View {
             .padding(.top)
             .padding(.horizontal)
             .listStyle(.plain)
+            .alert("Feilmelding", isPresented: $viewModel.shouldAlertError) {
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
+            }
         } // navstack
         .navigationTitle("Rediger kategorier")
         .background(Color.myBackgroundColor)
@@ -103,14 +94,12 @@ struct ManageCategoriesView: View {
         .refreshable {
             Task { await viewModel.loadCategories() }
         }
-        .errorAlert(error: $viewModel.currentError)
     }
 }
 
 struct ManageCategoryItem: View {
     @Binding var category: Category
     @StateObject var viewModel: ManageCategoriesViewModel
-    //@Binding var categoryAuthorized: Bool
     
     var body: some View {
         ZStack {
@@ -121,12 +110,10 @@ struct ManageCategoryItem: View {
                 }
                 .background(Color.myBackgroundColor)
                 .toolbar {
-//                    if categoryAuthorized {
                     CategoryToolBar(
                         viewModel: viewModel,
                         category: $category
                     )
-//                    }
                 }
                 .sheet(isPresented: $viewModel.isPresentingEditCategoryView) {
                     EditCategoryView(category: category) { result in

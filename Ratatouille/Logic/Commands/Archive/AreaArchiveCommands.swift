@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-enum AreaArchiveError: Error {
+enum AreaArchiveError: Error, LocalizedError {
     case missingIdError(String)
     case unauthorizedError
     case fetchingAreaError
@@ -16,6 +16,25 @@ enum AreaArchiveError: Error {
     case archivingError
     case restoreError
     case deleteError
+    
+    var errorDescription: String? {
+        switch self {
+        case .missingIdError:
+            return NSLocalizedString("Ugyldig id.", comment: "")
+        case .unauthorizedError:
+            return NSLocalizedString("Du kan kun arkivere dine egne landområder.", comment: "")
+        case .fetchingAreaError:
+            return NSLocalizedString("Fikk ikke tak i landområde.", comment: "")
+        case .areaNotArchivedError:
+            return NSLocalizedString("Landområde ligger ikke i arkiv.", comment: "")
+        case .archivingError:
+            return NSLocalizedString("Kunne ikke arkivere landområde.", comment: "")
+        case .restoreError:
+            return NSLocalizedString("Kunne ikke gjenopprette landområde.", comment: "")
+        case .deleteError:
+            return NSLocalizedString("Kunne ikke slette landområde.", comment: "")
+        }
+    }
 }
 
 class LoadAreasFromArchivesCommand: ICommand {
@@ -91,7 +110,7 @@ class ArchiveAreaCommand: ICommand {
             
         } catch {
             print("Unexpected error in ArchiveAreaCommand: \(error)")
-            return .failure(.archivingError)
+            return .failure(error as! AreaArchiveError)
         }
     }
 }
@@ -142,7 +161,7 @@ class RestoreAreaCommand: ICommand {
             
         } catch {
             print("Unexpected error in RestoreAreaCommand: \(error)")
-            return .failure(.restoreError)
+            return .failure(error as! AreaArchiveError)
         }
     }
 }
@@ -178,7 +197,11 @@ class DeleteAreaCommand: ICommand {
                     if let archivedCategory = try managedObjectContext.fetch(archiveRequest).first {
                         archivedCategory.removeFromAreas(fetchedArea)
                         managedObjectContext.delete(fetchedArea)
+                    } else {
+                        throw AreaArchiveError.areaNotArchivedError
                     }
+                } else {
+                    throw AreaArchiveError.fetchingAreaError
                 }
             }
             
@@ -186,7 +209,7 @@ class DeleteAreaCommand: ICommand {
             return .success(())
         } catch {
             print("Unexpected error in DeleteAreaCommand: \(error)")
-            return .failure(.deleteError)
+            return .failure(error as! AreaArchiveError)
         }
     }
 }

@@ -52,7 +52,7 @@ extension ManageCategoriesViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageCategoriesViewModelError
+                self.errorMessage = error.localizedDescription //error as? ManageCategoriesViewModelError
                 self.shouldAlertError = true
             }
         }
@@ -77,10 +77,18 @@ extension ManageCategoriesViewModel {
                 
             case .failure(let error):
                 print("Category was passed, but not saved: \(error)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.shouldAlertError = true
+                }
             }
             
         case .failure(let error):
             print("Category could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -101,12 +109,20 @@ extension ManageCategoriesViewModel {
                 
                 await loadCategories()
                 
-            case .failure(let error):
+            case .failure(let error): //TODO: dette kan refaktoreres til do/catch
                 print("Category was passed, but not updated: \(error)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.shouldAlertError = true
+                }
             }
             
         case .failure(let error):
             print("Category could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -126,7 +142,7 @@ extension ManageCategoriesViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageCategoriesViewModelError
+                self.errorMessage = error.localizedDescription
                 self.shouldAlertError = true
             }
         }

@@ -8,13 +8,30 @@
 import Foundation
 import CoreData
 
-enum MealArchiveError: Error {
-    case missingIdError(String)
+enum MealArchiveError: Error, LocalizedError {
+    case missingIdError(String?)
     case fetchingMealError
     case mealNotArchivedError
     case archivingError
     case restoreError
     case deleteError
+    
+    var errorDescription: String? {
+        switch self {
+        case .missingIdError:
+            return NSLocalizedString("Ugyldig id.", comment: "")
+        case .fetchingMealError:
+            return NSLocalizedString("Fikk ikke tak i måltid.", comment: "")
+        case .mealNotArchivedError:
+            return NSLocalizedString("Måltid ligger ikke i arkiv.", comment: "")
+        case .archivingError:
+            return NSLocalizedString("Kunne ikke arkivere måltid.", comment: "")
+        case .restoreError:
+            return NSLocalizedString("Kunne ikke gjenopprette måltid.", comment: "")
+        case .deleteError:
+            return NSLocalizedString("Kunne ikke slette måltid.", comment: "")
+        }
+    }
 }
 
 class LoadMealsFromArchivesCommand: ICommand {
@@ -90,7 +107,7 @@ class ArchiveMealCommand: ICommand {
             return result ?? .failure(.archivingError)
         } catch {
             print("Unexpected error in ArchiveMealCommand: \(error)")
-            return .failure(.archivingError)
+            return .failure(error as! MealArchiveError)
         }
     }
 }
@@ -142,7 +159,7 @@ class RestoreMealCommand: ICommand {
             return result ?? .failure(.restoreError)
         } catch {
             print("Unexpected error in RestoreMealCommand: \(error)")
-            return .failure(.restoreError)
+            return .failure(error as! MealArchiveError)
         }
     }
 }
@@ -175,7 +192,11 @@ class DeleteMealCommand: ICommand {
                     if let archivedMeal = try managedObjectContext.fetch(archiveRequest).first {
                         archivedMeal.removeFromMeals(fetchedMeal)
                         managedObjectContext.delete(fetchedMeal)
+                    } else {
+                        throw MealArchiveError.mealNotArchivedError
                     }
+                } else {
+                    throw MealArchiveError.fetchingMealError
                 }
             }
                     
@@ -185,7 +206,7 @@ class DeleteMealCommand: ICommand {
             return .success(())
         } catch {
             print("Unexpected error in DeleteMealCommand: \(error)")
-            return .failure(.deleteError)
+            return .failure(error as! MealArchiveError)
         }
     }
 }

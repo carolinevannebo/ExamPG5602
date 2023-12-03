@@ -8,14 +8,33 @@
 import Foundation
 import CoreData
 
-enum CategoryArchiveError: Error {
-    case missingIdError(String)
+enum CategoryArchiveError: Error, LocalizedError {
+    case missingIdError(String?)
     case unauthorizedError
     case fetchingCategoryError
     case categoryNotArchivedError
     case archivingError
     case restoreError
     case deleteError
+    
+    var errorDescription: String? {
+        switch self {
+            case .missingIdError:
+                return NSLocalizedString("Ugyldig id.", comment: "")
+            case .unauthorizedError:
+                return NSLocalizedString("Du kan kun arkivere dine egne kategorier.", comment: "")
+            case .fetchingCategoryError:
+                return NSLocalizedString("Fikk ikke tak i kategori.", comment: "")
+            case .categoryNotArchivedError:
+                return NSLocalizedString("Kategori ligger ikke i arkiv.", comment: "")
+            case .archivingError:
+                return NSLocalizedString("Kunne ikke arkivere kategori.", comment: "")
+            case .restoreError:
+                return NSLocalizedString("Kunne ikke gjenopprette kategori.", comment: "")
+            case .deleteError:
+                return NSLocalizedString("Kunne ikke slette kategori.", comment: "")
+        }
+    }
 }
 
 class LoadCategoriesFromArchivesCommand: ICommand {
@@ -91,7 +110,7 @@ class ArchiveCategoryCommand: ICommand {
             
         } catch {
             print("Unexpected error in ArchiveCategoryCommand: \(error)")
-            return .failure(.archivingError)
+            return .failure(error as! CategoryArchiveError)
         }
     }
 }
@@ -142,7 +161,7 @@ class RestoreCategoryCommand: ICommand {
             
         } catch {
             print("Unexpected error in RestoreCategoryCommand: \(error)")
-            return .failure(.restoreError)
+            return .failure(error as! CategoryArchiveError)
         }
     }
 }
@@ -178,7 +197,11 @@ class DeleteCategoryCommand: ICommand {
                     if let archivedCategory = try managedObjectContext.fetch(archiveRequest).first {
                         archivedCategory.removeFromCategories(fetchedCategory)
                         managedObjectContext.delete(fetchedCategory)
+                    } else {
+                        throw CategoryArchiveError.categoryNotArchivedError
                     }
+                } else {
+                    throw CategoryArchiveError.fetchingCategoryError
                 }
             }
             
@@ -186,7 +209,7 @@ class DeleteCategoryCommand: ICommand {
             return .success(())
         } catch {
             print("Unexpected error in DeleteCategoryCommand: \(error)")
-            return .failure(.deleteError)
+            return .failure(error as! CategoryArchiveError)
         }
     }
 }
