@@ -28,7 +28,7 @@ struct SettingsView: View {
                     }
                     
                     NavigationLink {
-                        Text("Rediger ingredienser")
+                        ManageIngredientsView()
                     } label : {
                         Text("Rediger ingredienser")
                     }

@@ -23,6 +23,80 @@ class ManageAreasViewModel: ObservableObject {
     let updateAreaCommand = UpdateAreaCommand()
     let archiveAreaCommand = ArchiveAreaCommand()
     
+    enum ManageAreasViewModelError: Error, LocalizedError {
+        case failed(underlying: Error)
+        case areasEmptyError
+        
+        var errorDescription: String? {
+            switch self {
+            case .failed(underlying: let underlying):
+                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
+            case .areasEmptyError:
+                return NSLocalizedString("Unable to load areas", comment: "")
+            }
+        }
+        
+        var recoverySuggestion: String? {
+            switch self {
+            case .areasEmptyError:
+                return "Reload the page."
+            default:
+                return "Try again."
+            }
+        }
+    }
+}
+
+struct ManageAreasView: View {
+    @StateObject var viewModel = ManageAreasViewModel()
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(0..<viewModel.areas.count, id: \.self) { index in
+                    AreaTextBox(area: viewModel.areas[index], backgroundColor: .myDiffusedColor, textColor: .myContrastColor)
+                    //TODO: sett editsheet til true ontap
+                        .onTapGesture {
+                            Task {
+                                viewModel.isPresentingEditAreaView = true
+                            }
+                        }
+                } // foreach
+                .listRowBackground(Color.clear)
+                .listRowSeparatorTint(Color.clear)
+            } // list
+            .padding(.top)
+            .padding(.horizontal)
+            .listStyle(.plain)
+        } // navstack
+        .navigationTitle("Rediger landområder")
+        .background(Color.myBackgroundColor)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    viewModel.isPresentingAddAreaView = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $viewModel.isPresentingAddAreaView) {
+            Text("Her skal du legge til nytt landområde")
+        }
+        .sheet(isPresented: $viewModel.isPresentingEditAreaView) {
+            Text("Her skal du redigere landområde")
+        }
+        .onAppear {
+            Task { await viewModel.loadAreas() }
+        }
+        .refreshable {
+            Task { await viewModel.loadAreas() }
+        }
+        .errorAlert(error: $viewModel.currentError)
+    }
+}
+
+extension ManageAreasViewModel {
     func loadAreas() async {
         do {
             if let areas = await loadAreasCommand.execute(input: ()) {
@@ -109,77 +183,4 @@ class ManageAreasViewModel: ObservableObject {
             shouldAlertError = true
         }
     }
-    
-    enum ManageAreasViewModelError: Error, LocalizedError {
-        case failed(underlying: Error)
-        case areasEmptyError
-        
-        var errorDescription: String? {
-            switch self {
-            case .failed(underlying: let underlying):
-                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
-            case .areasEmptyError:
-                return NSLocalizedString("Unable to load areas", comment: "")
-            }
-        }
-        
-        var recoverySuggestion: String? {
-            switch self {
-            case .areasEmptyError:
-                return "Reload the page."
-            default:
-                return "Try again."
-            }
-        }
-    }
 }
-
-struct ManageAreasView: View {
-    @StateObject var viewModel = ManageAreasViewModel()
-    
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(0..<viewModel.areas.count, id: \.self) { index in
-                    AreaTextBox(area: viewModel.areas[index], backgroundColor: .myDiffusedColor, textColor: .myContrastColor)
-                    //TODO: sett editsheet til true ontap
-                        .onTapGesture {
-                            Task {
-                                viewModel.isPresentingEditAreaView = true
-                            }
-                        }
-                } // foreach
-                .listRowBackground(Color.clear)
-                .listRowSeparatorTint(Color.clear)
-            } // list
-            .padding(.top)
-            .padding(.horizontal)
-            .listStyle(.plain)
-        } // navstack
-        .navigationTitle("Rediger landområder")
-        .background(Color.myBackgroundColor)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.isPresentingAddAreaView = true
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-        .sheet(isPresented: $viewModel.isPresentingAddAreaView) {
-            Text("Her skal du legge til nytt landområde")
-        }
-        .sheet(isPresented: $viewModel.isPresentingEditAreaView) {
-            Text("Her skal du redigere landområde")
-        }
-        .onAppear {
-            Task { await viewModel.loadAreas() }
-        }
-        .refreshable {
-            Task { await viewModel.loadAreas() }
-        }
-        .errorAlert(error: $viewModel.currentError)
-    }
-}
-

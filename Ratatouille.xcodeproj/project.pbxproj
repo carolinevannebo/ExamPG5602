@@ -74,6 +74,7 @@
 		E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */; };
 		E4EA26DE2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DD2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift */; };
 		E4EA26E02B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */; };
+		E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -172,6 +173,7 @@
 		E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientCommand.swift; sourceTree = "<group>"; };
 		E4EA26DD2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveAreaToolBar.swift; sourceTree = "<group>"; };
 		E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveIngredientsToolBar.swift; sourceTree = "<group>"; };
+		E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientsView.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				E4A35DBA2B1BB15E00C4FC77 /* CategoryManagement */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
 				E48815A42B1A452000B00B55 /* ManageAreasView.swift */,
+				E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */,
 				E4EA26C32B1CB769000E8EA6 /* ArchiveMealToolBar.swift in Sources */,
 				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
+				E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
