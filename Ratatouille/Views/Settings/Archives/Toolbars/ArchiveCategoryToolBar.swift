@@ -40,3 +40,50 @@ struct ArchiveCategoryToolBar: ToolbarContent {
         }
     }
 }
+
+extension ArchiveViewModel {
+    func loadCategoriesFromArchives() async {
+        do {
+            if let categories = await loadCategoriesCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.categories = categories
+                    self.listId = UUID()
+                }
+            } else {
+                throw ArchiveViewModelError.noCategoriesInArchives
+            }
+        } catch {
+            print("Unexpected error when loading archived categories to View: \(error)")
+        }
+    }
+    
+    func restoreCategory(category: Category) async {
+        do {
+            let result = await restoreCategoryCommand.execute(input: category)
+            
+            switch result {
+            case .success(let category):
+                print("\(category.name) has been restored")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when restoring category from archives: \(error)")
+        }
+    }
+    
+    func deleteCategory(category: Category) async {
+        do {
+            let result = await deleteCategoryCommand.execute(input: category)
+            
+            switch result {
+            case .success(_):
+                print("Category was successfully deleted")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when deleting category permanently: \(error)")
+        }
+    }
+}

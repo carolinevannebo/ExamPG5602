@@ -39,3 +39,51 @@ struct ArchiveMealToolBar: ToolbarContent {
         }
     }
 }
+
+extension ArchiveViewModel {
+    func loadMealsFromArchive() async {
+        do {
+            if let meals = await loadMealsCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.listId = UUID()
+                }
+            } else {
+                throw ArchiveViewModelError.noMealsInArchives
+            }
+            
+        } catch {
+            print("Unexpected error when loading archived meals to View: \(error)")
+        }
+    }
+    
+    func restoreMeal(meal: Meal) async {
+        do {
+            let result = await restoreMealCommand.execute(input: meal)
+            
+            switch result {
+            case .success(let meal):
+                print("\(meal.name) has been restored")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when restoring meal from archives: \(error)")
+        }
+    }
+    
+    func deleteMeal(meal: Meal) async {
+        do {
+            let result = await deleteMealCommand.execute(input: meal)
+            
+            switch result {
+            case .success(_):
+                print("Meal was successfully deleted")
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error when deleting meal permanently: \(error)")
+        }
+    }
+}

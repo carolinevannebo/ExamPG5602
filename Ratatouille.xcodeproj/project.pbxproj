@@ -72,6 +72,8 @@
 		E4EA26D62B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */; };
 		E4EA26D82B1CE44A000E8EA6 /* ManageAreaCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */; };
 		E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */; };
+		E4EA26DE2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DD2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift */; };
+		E4EA26E02B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -168,6 +170,8 @@
 		E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAreaCommands.swift; sourceTree = "<group>"; };
 		E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientCommand.swift; sourceTree = "<group>"; };
+		E4EA26DD2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveAreaToolBar.swift; sourceTree = "<group>"; };
+		E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveIngredientsToolBar.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -305,6 +309,8 @@
 			children = (
 				E4EA26C22B1CB769000E8EA6 /* ArchiveMealToolBar.swift */,
 				E4EA26C42B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift */,
+				E4EA26DD2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift */,
+				E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */,
 			);
 			path = Toolbars;
 			sourceTree = "<group>";
@@ -643,6 +649,7 @@
 				E406445B2B0CF28600028CBD /* RecipeBrowserView.swift in Sources */,
 				E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */,
 				E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */,
+				E4EA26E02B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift in Sources */,
 				E4A35DB72B1B917500C4FC77 /* MyButtonStyle.swift in Sources */,
 				E4EA26C92B1CBB60000E8EA6 /* ArchivedCategoriesList.swift in Sources */,
 				E4EA26D22B1CBE51000E8EA6 /* CategoryArchiveCommands.swift in Sources */,
@@ -673,6 +680,7 @@
 				E40644952B1035A300028CBD /* MealCardContent.swift in Sources */,
 				E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */,
 				E4EA26CB2B1CBC44000E8EA6 /* ArchivedMealsList.swift in Sources */,
+				E4EA26DE2B1CE8AA000E8EA6 /* ArchiveAreaToolBar.swift in Sources */,
 				E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */,
 				E4E3B9732B12A0CA008591D3 /* FavoriteCommands.swift in Sources */,
 				E4A35DB32B1B7A8F00C4FC77 /* HideKeyboard.swift in Sources */,

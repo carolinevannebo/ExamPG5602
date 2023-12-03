@@ -13,129 +13,33 @@ class ArchiveViewModel: ObservableObject {
     @Published var categories: [Category] = []
     @Published var ingredients: [Ingredient] = []
     
-    @Published var hasArchive: Bool = false
     @Published var listId: UUID?
     
+    // For readability logic has been placed in extensions in toolbar files
     let loadMealsCommand = LoadMealsFromArchivesCommand()
     let restoreMealCommand = RestoreMealCommand()
     let deleteMealCommand = DeleteMealCommand()
     
-    //TODO: area commands
+    let loadAreasCommand = LoadAreasFromArchivesCommand()
+    let restoreAreaCommand = RestoreAreaCommand()
+    let deleteAreaCommand = DeleteAreaCommand()
     
     let loadCategoriesCommand = LoadCategoriesFromArchivesCommand()
     let restoreCategoryCommand = RestoreCategoryCommand()
     let deleteCategoryCommand = DeleteCategoryCommand()
     
-    //TODO: ingredient commands
-    
-    func loadMealsFromArchive() async {
-        do {
-            if let meals = await loadMealsCommand.execute(input: ()) {
-                DispatchQueue.main.async {
-                    self.meals = meals
-                    self.listId = UUID()
-                    
-                    if !meals.isEmpty {
-                        self.hasArchive = true
-                    } else {
-                        self.hasArchive = false
-                    }
-                }
-            } else {
-                throw ArchiveViewModelError.noMealsInArchives
-            }
-            
-        } catch {
-            print("Unexpected error when loading archived meals to View: \(error)")
-        }
-    }
-    
-    func restoreMeal(meal: Meal) async {
-        do {
-            let result = await restoreMealCommand.execute(input: meal)
-            
-            switch result {
-            case .success(let meal):
-                print("\(meal.name) has been restored")
-            case .failure(let error):
-                throw error
-            }
-        } catch {
-            print("Unexpected error when restoring meal from archives: \(error)")
-        }
-    }
-    
-    func deleteMeal(meal: Meal) async {
-        do {
-            let result = await deleteMealCommand.execute(input: meal)
-            
-            switch result {
-            case .success(_):
-                print("Meal was successfully deleted")
-            case .failure(let error):
-                throw error
-            }
-        } catch {
-            print("Unexpected error when deleting meal permanently: \(error)")
-        }
-    }
-    
-    func loadCategoriesFromArchives() async {
-        do {
-            if let categories = await loadCategoriesCommand.execute(input: ()) {
-                DispatchQueue.main.async {
-                    self.categories = categories
-                    self.listId = UUID()
-                    
-                    if !categories.isEmpty {
-                        self.hasArchive = true // TODO: you should remove this boolean from archive view
-                    } else {
-                        self.hasArchive = false
-                    }
-                }
-            } else {
-                throw ArchiveViewModelError.noCategoriesInArchives
-            }
-        } catch {
-            print("Unexpected error when loading archived categories to View: \(error)")
-        }
-    }
-    
-    func restoreCategory(category: Category) async {
-        do {
-            let result = await restoreCategoryCommand.execute(input: category)
-            
-            switch result {
-            case .success(let category):
-                print("\(category.name) has been restored")
-            case .failure(let error):
-                throw error
-            }
-        } catch {
-            print("Unexpected error when restoring category from archives: \(error)")
-        }
-    }
-    
-    func deleteCategory(category: Category) async {
-        do {
-            let result = await deleteCategoryCommand.execute(input: category)
-            
-            switch result {
-            case .success(_):
-                print("Category was successfully deleted")
-            case .failure(let error):
-                throw error
-            }
-        } catch {
-            print("Unexpected error when deleting category permanently: \(error)")
-        }
-    }
+    let loadIngredientsCommand = LoadIngredientsFromArchivesCommand()
+    let restoreIngredientCommand = RestoreIngredientCommand()
+    let deleteIngredientCommand = DeleteIngredientCommand()
     
     enum ArchiveViewModelError: Error {
         case noMealsInArchives
+        case noAreasInArchives
         case noCategoriesInArchives
+        case noIngredientsInArchives
     }
 }
+
 
 struct ArchiveView: View {
     @StateObject var viewModel = ArchiveViewModel()
@@ -158,7 +62,7 @@ struct ArchiveView: View {
         }
         .onAppear {
             Task {
-                // TODO: await viewModel.loadAreasFromArchives()
+                await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
                 await viewModel.loadMealsFromArchive()
                 // TODO: await viewModel.loadIngredientsFromArchives()
@@ -166,7 +70,7 @@ struct ArchiveView: View {
         }
         .refreshable {
             Task {
-                // TODO: await viewModel.loadAreasFromArchives()
+                await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
                 await viewModel.loadMealsFromArchive()
                 // TODO: await viewModel.loadIngredientsFromArchives()
