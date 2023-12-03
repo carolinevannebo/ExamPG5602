@@ -1,5 +1,5 @@
 //
-//  AddNewCommands.swift
+//  ManageCategoryCommands.swift
 //  Ratatouille
 //
 //  Created by Caroline Vannebo on 02/12/2023.
@@ -8,21 +8,24 @@
 import Foundation
 import CoreData
 
+enum ManageCategoryError: Error {
+    case missingIdError(String)
+    case unauthorizedError
+    case duplicateError
+    case fetchError
+    case imageConversionError
+    case updateError
+    case savingError
+}
+
 class AddNewCategoryCommand: ICommand {
     typealias Input = CategoryModel
-    typealias Output = Result<Category, AddNewCategoryError>
-    
-    enum AddNewCategoryError: Error {
-        case missingIdError(String)
-        case savingError
-        case duplicateError
-        case imageConversionError
-    }
+    typealias Output = Result<Category, ManageCategoryError>
     
     func execute(input: Input) async -> Output {
         do {
             if input.id == nil {
-                throw AddNewCategoryError.missingIdError("Meal ID is missing.")
+                throw ManageCategoryError.missingIdError("Meal ID is missing.")
             }
             
             let request: NSFetchRequest<Category> = Category.fetchRequest()
@@ -60,25 +63,18 @@ class AddNewCategoryCommand: ICommand {
 
 class UpdateCategoryCommand: ICommand {
     typealias Input = Category
-    typealias Output = Result<Category, UpdateCategoryError>
-    
-    enum UpdateCategoryError: Error {
-        case missingIdError(String)
-        case updateError
-        case unauthorizedError
-        case fetchError
-    }
+    typealias Output = Result<Category, ManageCategoryError>
     
     func execute(input: Input) async -> Output {
         do {
             if input.id == nil {
-                throw UpdateCategoryError.missingIdError("Category ID is missing.")
+                throw ManageCategoryError.missingIdError("Category ID is missing.")
             }
             
             // Only allow user to update categories they have created
             for i in 0..<14 {
                 if input.id == String(i+1) {
-                    throw UpdateCategoryError.unauthorizedError
+                    throw ManageCategoryError.unauthorizedError
                 }
             }
             

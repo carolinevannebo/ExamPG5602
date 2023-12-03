@@ -46,7 +46,7 @@
 		E48815A72B1A459600B00B55 /* ManageCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */; };
 		E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */; };
 		E4A35DB32B1B7A8F00C4FC77 /* HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB22B1B7A8F00C4FC77 /* HideKeyboard.swift */; };
-		E4A35DB52B1B81A800C4FC77 /* CategoryManagingCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */; };
+		E4A35DB52B1B81A800C4FC77 /* ManageCategoryCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB42B1B81A800C4FC77 /* ManageCategoryCommands.swift */; };
 		E4A35DB72B1B917500C4FC77 /* MyButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB62B1B917500C4FC77 /* MyButtonStyle.swift */; };
 		E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB82B1B976100C4FC77 /* CategoryDetailView.swift */; };
 		E4A35DBC2B1BB1BC00C4FC77 /* CategoryToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DBB2B1BB1BC00C4FC77 /* CategoryToolBar.swift */; };
@@ -70,6 +70,7 @@
 		E4EA26D22B1CBE51000E8EA6 /* CategoryArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */; };
 		E4EA26D42B1CC9AF000E8EA6 /* AreaArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */; };
 		E4EA26D62B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */; };
+		E4EA26D82B1CE44A000E8EA6 /* ManageAreaCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -140,7 +141,7 @@
 		E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCategoriesView.swift; sourceTree = "<group>"; };
 		E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
 		E4A35DB22B1B7A8F00C4FC77 /* HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideKeyboard.swift; sourceTree = "<group>"; };
-		E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManagingCommands.swift; sourceTree = "<group>"; };
+		E4A35DB42B1B81A800C4FC77 /* ManageCategoryCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCategoryCommands.swift; sourceTree = "<group>"; };
 		E4A35DB62B1B917500C4FC77 /* MyButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyButtonStyle.swift; sourceTree = "<group>"; };
 		E4A35DB82B1B976100C4FC77 /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
 		E4A35DBB2B1BB1BC00C4FC77 /* CategoryToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryToolBar.swift; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientArchiveCommands.swift; sourceTree = "<group>"; };
+		E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAreaCommands.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -395,7 +397,8 @@
 				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
 				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
 				E42525292B18C9CE00A099C1 /* Representables.swift */,
-				E4A35DB42B1B81A800C4FC77 /* CategoryManagingCommands.swift */,
+				E4A35DB42B1B81A800C4FC77 /* ManageCategoryCommands.swift */,
+				E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -647,7 +650,7 @@
 				E40644832B0EE95D00028CBD /* DarkModeViewModifier.swift in Sources */,
 				E4EA26C52B1CB7C5000E8EA6 /* ArchiveCategoryToolBar.swift in Sources */,
 				E42525262B18B8EB00A099C1 /* Placeholder.swift in Sources */,
-				E4A35DB52B1B81A800C4FC77 /* CategoryManagingCommands.swift in Sources */,
+				E4A35DB52B1B81A800C4FC77 /* ManageCategoryCommands.swift in Sources */,
 				E40644952B1035A300028CBD /* MealCardContent.swift in Sources */,
 				E4E3B9692B114BD9008591D3 /* CategoryItemView.swift in Sources */,
 				E4EA26CB2B1CBC44000E8EA6 /* ArchivedMealsList.swift in Sources */,
@@ -673,6 +676,7 @@
 				E406448F2B0F86E200028CBD /* ViewCoordinator.swift in Sources */,
 				E4EAFC692B0259A50095D10B /* Meal+CoreDataClass.swift in Sources */,
 				E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */,
+				E4EA26D82B1CE44A000E8EA6 /* ManageAreaCommands.swift in Sources */,
 				E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */,
 				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
