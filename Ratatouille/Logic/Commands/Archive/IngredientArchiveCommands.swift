@@ -8,14 +8,33 @@
 import Foundation
 import CoreData
 
-enum IngredientArchiveError: Error {
-    case missingIdError(String)
+enum IngredientArchiveError: Error, LocalizedError {
+    case missingIdError(String?)
     case unauthorizedError
     case fetchingIngredientError
     case ingredientNotArchivedError
     case archivingError
     case restoreError
     case deleteError
+    
+    var errorDescription: String? {
+        switch self {
+        case .missingIdError:
+            return NSLocalizedString("Ugyldig id.", comment: "")
+        case .unauthorizedError:
+            return NSLocalizedString("Du kan kun arkivere dine egne ingredienser.", comment: "")
+        case .fetchingIngredientError:
+            return NSLocalizedString("Fikk ikke tak i ingrediens.", comment: "")
+        case .archivingError:
+            return NSLocalizedString("Kunne ikke arkivere ingrediens.", comment: "")
+        case .restoreError:
+            return NSLocalizedString("Kunne ikke gjenopprette ingrediens.", comment: "")
+        case .restoreError:
+            return NSLocalizedString("Kunne ikke slette ingrediens.", comment: "")
+        default:
+            return NSLocalizedString("Noe gikk galt.", comment: "")
+        }
+    }
 }
 
 class LoadIngredientsFromArchivesCommand: ICommand {
@@ -91,7 +110,7 @@ class ArchiveIngredientCommand: ICommand {
             
         } catch {
             print("Unexpected error in ArchiveIngredientCommand: \(error)")
-            return .failure(.archivingError)
+            return .failure(error as! IngredientArchiveError)
         }
     }
 }

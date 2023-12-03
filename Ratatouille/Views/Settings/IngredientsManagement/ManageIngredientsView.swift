@@ -16,7 +16,7 @@ class ManageIngredientsViewModel: ObservableObject {
     @Published var isPresentingEditIngredientView: Bool = false
     
     // Error handling
-    @Published var currentError: Error? = nil
+    @Published var errorMessage: String = ""
     @Published var shouldAlertError: Bool = false
     @Published var ingredientAuthorized: Bool = true
     
@@ -34,24 +34,6 @@ class ManageIngredientsViewModel: ObservableObject {
     enum ManageIngredientsViewModelError: Error, LocalizedError {
         case failed(underlying: Error)
         case ingredientsEmptyError
-        
-        var errorDescription: String? {
-            switch self {
-            case .failed(underlying: let underlying):
-                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
-            case .ingredientsEmptyError:
-                return NSLocalizedString("Unable to load ingredient", comment: "")
-            }
-        }
-        
-        var recoverySuggestion: String? {
-            switch self {
-            case .ingredientsEmptyError:
-                return "Reload the page."
-            default:
-                return "Try again."
-            }
-        }
     }
 }
 
@@ -129,6 +111,11 @@ struct ManageIngredientsView: View {
             .onChange(of: viewModel.searchIngredient) { newSearchIngredient in
                 viewModel.performSearch()
             }
+            .alert("Feilmelding", isPresented: $viewModel.shouldAlertError) {
+                
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
+            }
         } // navstack
         .navigationTitle("Rediger ingredienser")
         .background(Color.myBackgroundColor)
@@ -163,7 +150,6 @@ struct ManageIngredientsView: View {
                 viewModel.performSearch()
             }
         }
-        .errorAlert(error: $viewModel.currentError)
     }
 }
 
@@ -197,7 +183,7 @@ extension ManageIngredientsViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageIngredientsViewModelError
+                self.errorMessage = error.localizedDescription //.currentError = error as? ManageIngredientsViewModelError
                 self.shouldAlertError = true
             }
         }
@@ -222,10 +208,18 @@ extension ManageIngredientsViewModel {
                     
         case .failure(let error):
             print("Ingredient was passed, but not saved: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
                 
         case .failure(let error):
             print("Ingredient could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -248,10 +242,18 @@ extension ManageIngredientsViewModel {
                 
             case .failure(let error):
                 print("Ingredient was passed, but not updated: \(error)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.shouldAlertError = true
+                }
             }
             
         case .failure(let error):
             print("Ingredient could not be passed: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -270,7 +272,7 @@ extension ManageIngredientsViewModel {
         } catch {
             print("Unexpected error: \(error)")
             DispatchQueue.main.async {
-                self.currentError = error as? ManageIngredientsViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
+                self.errorMessage = error.localizedDescription
                 self.shouldAlertError = true
             }
         }
