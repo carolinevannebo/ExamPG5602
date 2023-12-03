@@ -21,8 +21,11 @@ struct CategoryListView: View {
                                     viewModel.chosenCategory = viewModel.categories[index].name
                                     Task { await viewModel.filterByCategory() }
                                 } else {
-                                    // TODO: error alert
                                     print("API cannot filter meal by category created by user")
+                                    DispatchQueue.main.async {
+                                        viewModel.errorMessage = "Det er ikke mulig å søke etter oppskrifter basert på kategorier du selv har laget."
+                                        viewModel.shouldAlertError = true
+                                    }
                                 }
                             }
                         }

@@ -41,15 +41,32 @@ struct APIClient {
         }
     }
     
-    enum APIClientError: Error {
-        case statusCode(Int)
+    enum APIClientError: Error, LocalizedError {
+        case statusCode(Int?)
         case clientError
         case serverError
         case parseError
-        case failed(underlying: Error)
+        case failed(underlying: Error?)
         case badInput
         case unMatchedId
         case unknown
+        
+        var errorDescription: String? {
+            switch self {
+            case .clientError:
+                return NSLocalizedString("Noe gikk galt hos klienten.", comment: "")
+            case .serverError:
+                return NSLocalizedString("Noe gikk galt hos serveren.", comment: "")
+            case .parseError:
+                return NSLocalizedString("Klarte ikke omgjøre data til et leselig format.", comment: "")
+            case .badInput:
+                return NSLocalizedString("Vennligst oppi gyldig input.", comment: "")
+            case .unMatchedId:
+                return NSLocalizedString("Ugyldig id.", comment: "")
+            default:
+                return NSLocalizedString("Noe gikk galt, prøv igjen.", comment: "")
+            }
+        }
     }
 }
 

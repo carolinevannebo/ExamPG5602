@@ -31,7 +31,7 @@ class SearchRandomCommand: ICommand {
 
 class SearchMealsCommand: ICommand {
     typealias Input = String
-    typealias Output = [MealModel]?
+    typealias Output = Result<[MealModel], Error>
     
     func execute(input: Input) async -> Output {
         do {
@@ -45,10 +45,10 @@ class SearchMealsCommand: ICommand {
                 
                 meals = await ConnectAttributesCommand().execute(input: meals)
                 
-                return meals
+                return .success(meals)
                 
             case .failure(let error):
-                switch error {
+                switch error { // TODO: burde fikse error messages som i archivecommands, men prioriter funksjonalitet nå
                     case .badInput:
                         print("No results for the provided input")
                         throw error
@@ -61,15 +61,53 @@ class SearchMealsCommand: ICommand {
                 }
             }
         } catch {
-            print("Error in SearchMealsCommand: \(error)") // TODO: feilhåndtering med meldinger til UI
-            return nil
+            print("Error in SearchMealsCommand: \(error)")
+            return .failure(error)
         }
     }
 }
 
+//class SearchMealsCommand: ICommand {
+//    typealias Input = String
+//    typealias Output = [MealModel]?
+//    
+//    func execute(input: Input) async -> Output {
+//        do {
+//            print("Searching for meals with input: \(input)")
+//            let result = await APIClient.getMeals(input: input)
+//            
+//            switch result {
+//                
+//            case .success(var meals):
+//                print("Got \(meals.count) meals, loading isFavorite attribute...")
+//                
+//                meals = await ConnectAttributesCommand().execute(input: meals)
+//                
+//                return meals
+//                
+//            case .failure(let error):
+//                switch error {
+//                    case .badInput:
+//                        print("No results for the provided input")
+//                        throw error
+//                    case .unMatchedId:
+//                        print("No id matched search")
+//                        throw error
+//                    default:
+//                        print("Unexpected error: \(error)")
+//                        throw error
+//                }
+//            }
+//        } catch {
+//            print("Error in SearchMealsCommand: \(error)") // TODO: feilhåndtering med meldinger til UI
+//            return nil
+//        }
+//    }
+//}
+
 class FilterByAreaCommand: ICommand {
     typealias Input = String
-    typealias Output = [MealModel]?
+    typealias Output = Result<[MealModel], Error>
     
     func execute(input: Input) async -> Output {
         do {
@@ -95,25 +133,63 @@ class FilterByAreaCommand: ICommand {
                 }
                 
                 completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
-                return completeMeals
+                return .success(completeMeals)
             case .failure(let error):
                 throw error
             }
         } catch {
             print("Unexpected error in FilterByAreaCommand: \(error)")
-            return nil
+            return .failure(error)
         }
     }
 }
 
+//class FilterByAreaCommand: ICommand {
+//    typealias Input = String
+//    typealias Output = [MealModel]?
+//    
+//    func execute(input: Input) async -> Output {
+//        do {
+//            let result = await APIClient.filterMealsByArea(input: input)
+//            
+//            switch result {
+//            case .success(let meals):
+//                var completeMeals = try await withThrowingTaskGroup(of: MealModel.self) { group in
+//                    for meal in meals {
+//                        group.addTask {
+//                            do {
+//                                return try await APIClient.fetchAdditionalInformation(for: meal)!
+//                            } catch {
+//                                print("Error fetching additional information: \(error)")
+//                                return meal
+//                            }
+//                        }
+//                    }
+//                    
+//                    return try await group.reduce(into: []) { result, element in
+//                        result.append(element)
+//                    }
+//                }
+//                
+//                completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
+//                return completeMeals
+//            case .failure(let error):
+//                throw error
+//            }
+//        } catch {
+//            print("Unexpected error in FilterByAreaCommand: \(error)")
+//            return nil
+//        }
+//    }
+//}
 
-// TODO: this filter logic is slow, fix it -> a little better, but can still be better
 class FilterByCategoryCommand: ICommand {
     typealias Input = String
-    typealias Output = [MealModel]?
+    typealias Output = Result<[MealModel], Error>
 
     func execute(input: Input) async -> Output {
         do {
+            
             let result = await APIClient.filterMealsByCategory(input: input)
 
             switch result {
@@ -140,20 +216,64 @@ class FilterByCategoryCommand: ICommand {
                 // Assigning isFavorite attribute based on match/no match in CoreData
                 completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
                 
-                return completeMeals
+                return .success(completeMeals)
                 case .failure(let error):
                     throw error
             }
         } catch {
             print("Unexpected error in FilterByCategoryCommand: \(error)")
-            return nil
+            return .failure(error)
         }
     }
 }
 
+// TODO: this filter logic is slow, fix it -> a little better, but can still be better
+//class FilterByCategoryCommand: ICommand {
+//    typealias Input = String
+//    typealias Output = [MealModel]?
+//
+//    func execute(input: Input) async -> Output {
+//        do {
+//            let result = await APIClient.filterMealsByCategory(input: input)
+//
+//            switch result {
+//                case .success(let meals):
+//                
+//                // API responds with incomplete meals, matching information with id to fetch additional attributes
+//                var completeMeals = try await withThrowingTaskGroup(of: MealModel.self) { group in
+//                    for meal in meals {
+//                        group.addTask {
+//                            do {
+//                                return try await APIClient.fetchAdditionalInformation(for: meal)!
+//                            } catch {
+//                                print("Error fetching additional information: \(error)")
+//                                return meal
+//                            }
+//                        }
+//                    }
+//                    
+//                    return try await group.reduce(into: []) { result, element in
+//                        result.append(element)
+//                    }
+//                }
+//                
+//                // Assigning isFavorite attribute based on match/no match in CoreData
+//                completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
+//                
+//                return completeMeals
+//                case .failure(let error):
+//                    throw error
+//            }
+//        } catch {
+//            print("Unexpected error in FilterByCategoryCommand: \(error)")
+//            return nil
+//        }
+//    }
+//}
+
 class FilterByIngredientCommand: ICommand {
     typealias Input = String
-    typealias Output = [MealModel]?
+    typealias Output = Result<[MealModel], Error>
     
     func execute(input: Input) async -> Output {
         do {
@@ -179,13 +299,52 @@ class FilterByIngredientCommand: ICommand {
                 }
                 
                 completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
-                return completeMeals
+                return .success(completeMeals)
             case .failure(let error):
                 throw error
             }
         } catch {
             print("Unexpected error in FilterByIngredientCommand: \(error)")
-            return nil
+            return .failure(error)
         }
     }
 }
+
+//class FilterByIngredientCommand: ICommand {
+//    typealias Input = String
+//    typealias Output = [MealModel]?
+//    
+//    func execute(input: Input) async -> Output {
+//        do {
+//            let result = await APIClient.filterMealsByIngredient(input: input)
+//            
+//            switch result {
+//            case .success(let meals):
+//                var completeMeals = try await withThrowingTaskGroup(of: MealModel.self) { group in
+//                    for meal in meals {
+//                        group.addTask {
+//                            do {
+//                                return try await APIClient.fetchAdditionalInformation(for: meal)!
+//                            } catch {
+//                                print("Error fetching additional information: \(error)")
+//                                return meal
+//                            }
+//                        }
+//                    }
+//                    
+//                    return try await group.reduce(into: []) { result, element in
+//                        result.append(element)
+//                    }
+//                }
+//                
+//                completeMeals = await ConnectAttributesCommand().execute(input: completeMeals)
+//                return completeMeals
+//            case .failure(let error):
+//                throw error
+//            }
+//        } catch {
+//            print("Unexpected error in FilterByIngredientCommand: \(error)")
+//            return nil
+//        }
+//    }
+//}

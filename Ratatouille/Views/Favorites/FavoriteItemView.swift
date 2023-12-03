@@ -13,6 +13,10 @@ class FavoriteItemViewModel: ObservableObject {
     @Published var isDragging: Bool = false
     @Published var hasTappedArchive: Bool = false
     
+    // Error messages
+    @Published var isShowingErrorAlert: Bool = false
+    @Published var errorMessage: String = ""
+    
     let archiveCommand = ArchiveMealCommand()
     
     init(meal: Meal) {
@@ -39,12 +43,16 @@ class FavoriteItemViewModel: ObservableObject {
             } else {
                 print("Recipe with name \(meal.name ) will be moved from archives")
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { // dette må du dobbeltsjekke
                     self.meal.isArchived = false
                 }
             }
         } catch {
             print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.isShowingErrorAlert = true
+            }
         }
     }
     
@@ -98,6 +106,10 @@ struct FavoriteItemView: View {
             MealCardForFavorites(meal: viewModel.meal)
         }
         .padding(.horizontal)
+        .alert("Feilmelding", isPresented: $viewModel.isShowingErrorAlert) {
+        } message: {
+            Text($viewModel.errorMessage.wrappedValue)
+        }
     }
 }
 

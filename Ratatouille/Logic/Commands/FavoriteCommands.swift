@@ -8,6 +8,29 @@
 import Foundation
 import CoreData
 
+enum SaveFavoriteError: Error, LocalizedError {
+    case missingIdError(String?)
+    case locatedInArchiveError(String?)
+    case noMatchingPredicateError
+    case duplicateError
+    case savingError
+    
+    var errorDescription: String? {
+        switch self {
+        case .missingIdError:
+            return NSLocalizedString("Ugyldig id.", comment: "")
+        case .locatedInArchiveError:
+            return NSLocalizedString("Kan ikke lagre et måltid som ligger i arkiv.", comment: "")
+        case .noMatchingPredicateError:
+            return NSLocalizedString("Forespørselen oppfylte ikke kravene.", comment: "")
+        case .duplicateError:
+            return NSLocalizedString("Oppskriften er allerede lagret som favoritt.", comment: "")
+        case .savingError:
+            return NSLocalizedString("Kunne ikke lagre måltid til favoritter.", comment: "")
+        }
+    }
+}
+
 class LoadFavoritesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Meal]?
@@ -35,14 +58,6 @@ class LoadFavoritesCommand: ICommand {
 class SaveFavoriteCommand: ICommand {
     typealias Input = MealModel
     typealias Output = Result<Meal, SaveFavoriteError>
-    
-    enum SaveFavoriteError: Error {
-        case missingIdError(String)
-        case noMatchingPredicateError
-        case fetchingAttributeError
-        case savingError
-        case locatedInArchive(String)
-    }
     
     func execute(input: Input) async -> Output {
         do {
@@ -86,10 +101,10 @@ class SaveFavoriteCommand: ICommand {
                     
                     if fetchedFavorite.isArchived {
                         print("Meal is in archives.")
-                        result = .failure(.locatedInArchive("Cannot perform action"))
+                        result = .failure(.locatedInArchiveError("Cannot perform action"))
                     } else {
                         print("Favorite meal is already saved: \(fetchedFavorite.name)")
-                        result = .success(fetchedFavorite)
+                        result = .failure(.duplicateError)
                     }
                 } else {
                     let newFavorite = Meal(context: managedObjectContext)
@@ -112,7 +127,7 @@ class SaveFavoriteCommand: ICommand {
             return result ?? .failure(.savingError)
         } catch {
             print("Unexpected error in SaveFavoriteCommand: \(error)")
-            return .failure(.savingError)
+            return .failure(error as! SaveFavoriteError)
         }
     }
 }

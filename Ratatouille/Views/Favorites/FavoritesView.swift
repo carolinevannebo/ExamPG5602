@@ -13,6 +13,10 @@ class FavoritesViewModel: ObservableObject {
     @Published var hasFavorites: Bool = false
     @Published var listId: UUID = UUID()
     
+//    // Error messages
+//    @Published var isShowingErrorAlert: Bool = false
+//    @Published var errorMessage: String = ""
+    
     let loadCommand = LoadFavoritesCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
@@ -67,6 +71,10 @@ struct FavoritesView: View {
             .navigationTitle("Favoritter")
             .background(Color.myBackgroundColor)
             .toolbarBackground(.visible, for: .tabBar)
+//            .alert("Feilmelding", isPresented: $viewModel.isShowingErrorAlert) {
+//            } message: { // tror ikke noen errors blir sendt hit, load command kaster ikke error
+//                Text($viewModel.errorMessage.wrappedValue)
+//            }
         }
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)

@@ -10,6 +10,7 @@ import SwiftUI
 struct IngredientSheetView: View {
     @StateObject var viewModel: RecipeBrowserViewModel
     @State private var searchIngredient: String = ""
+    @State private var shouldAlertError: Bool = false
     
     @State var filteredIngredients: [Ingredient] = []
     
@@ -27,9 +28,19 @@ struct IngredientSheetView: View {
                     .listRowBackground(Color.clear)
                     .onTapGesture {
                         searchIngredient = ""
-                        viewModel.chosenIngredient = filteredIngredients[index].name!
-                        viewModel.searchIngredientSheetPresented = false
-                        Task { await viewModel.filterByIngredient() }
+                        
+                        if let ingredientID = Int(filteredIngredients[index].id!), (1...608).contains(ingredientID) {
+                            DispatchQueue.main.async {
+                                viewModel.chosenIngredient = filteredIngredients[index].name!
+                                viewModel.searchIngredientSheetPresented = false
+                            }
+                            Task { await viewModel.filterByIngredient() }
+                        } else {
+                            DispatchQueue.main.async {
+                                viewModel.errorMessage = "Det er ikke mulig å søke etter oppskrifter basert på kategorier du selv har laget."
+                                shouldAlertError = true
+                            }
+                        }
                     }
                 }
             }
@@ -38,6 +49,10 @@ struct IngredientSheetView: View {
             .searchable(text: $searchIngredient, prompt: "Søk etter ingrediens...")
             .onChange(of: searchIngredient) { newSearchIngredient in
                 performSearch()
+            }
+            .alert("Feilmelding", isPresented: $shouldAlertError) {
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
             }
         }
         .padding()

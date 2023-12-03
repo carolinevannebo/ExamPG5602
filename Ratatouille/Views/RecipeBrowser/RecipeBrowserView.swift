@@ -29,7 +29,7 @@ class RecipeBrowserViewModel: ObservableObject {
     
     // Error alert
     @Published var shouldAlertError: Bool = false
-    @Published var currentError: Error? = nil
+    @Published var errorMessage: String = ""
     
     // Logic
     let searchCommand = SearchMealsCommand()
@@ -44,173 +44,19 @@ class RecipeBrowserViewModel: ObservableObject {
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
-    func searchMeals(isDemo: Bool) async {
-        do {
-            var mutableInput: String
-            
-            if isDemo {
-                mutableInput = "A"
-            } else {
-                mutableInput = input
-            }
-            
-            if let meals = await searchCommand.execute(input: mutableInput) {
-                DispatchQueue.main.async {
-                    self.meals = meals
-                    self.searchId = UUID()
-                }
-            } else {
-                throw RecipeBrowserViewModelError.mealsEmptyError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func loadAreas() async {
-        do {
-            if let areas = await loadAreasCommand.execute(input: ()) {
-                DispatchQueue.main.async {
-                    self.areas = areas
-                }
-            } else {
-                throw RecipeBrowserViewModelError.areasEmptyError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func loadCategories() async {
-        do {
-            if let categories = await loadCategoriesCommand.execute(input: ()) {
-                DispatchQueue.main.async {
-                    self.categories = categories
-                }
-            } else {
-                throw RecipeBrowserViewModelError.categoriesEmptyError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func loadIngredients() async {
-        do {
-            if let ingredients = await loadIngredientsCommand.execute(input: ()) {
-                DispatchQueue.main.async {
-                    self.ingredients = ingredients
-                }
-            } else {
-                throw RecipeBrowserViewModelError.ingredientsEmptyError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func filterByArea() async {
-        do {
-            if let meals = await filterByAreaCommand.execute(input: chosenArea) {
-                DispatchQueue.main.async {
-                    self.meals = meals
-                    self.searchId = UUID()
-                }
-            } else {
-                throw RecipeBrowserViewModelError.filterError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func filterByCategory() async {
-        do {
-            if let meals = await filterByCategoryCommand.execute(input: chosenCategory) {
-                DispatchQueue.main.async {
-                    self.meals = meals
-                    self.searchId = UUID()
-                }
-            } else {
-                throw RecipeBrowserViewModelError.filterError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
-    func filterByIngredient() async {
-        do {
-            if let meals = await filterByIngredientCommand.execute(input: chosenIngredient) {
-                DispatchQueue.main.async {
-                    self.meals = meals
-                    self.searchId = UUID()
-                }
-            } else {
-                throw RecipeBrowserViewModelError.filterError
-            }
-        } catch {
-            print("Unexpected error: \(error)")
-            DispatchQueue.main.async {
-                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-                self.shouldAlertError = true
-            }
-        }
-    }
-    
     enum RecipeBrowserViewModelError: Error, LocalizedError {
-        case failed(underlying: Error)
-        case mealsEmptyError
         case areasEmptyError
         case categoriesEmptyError
         case ingredientsEmptyError
-        case filterError
         
-        var errorDescription: String? { // TODO: error messages should be in norwegian
+        var errorDescription: String? {
             switch self {
-            case .failed(underlying: let underlying):
-                return NSLocalizedString("Unable to establish error: \(underlying).", comment: "")
-            case .mealsEmptyError:
-                return NSLocalizedString("No meals matching search.", comment: "")
             case .areasEmptyError:
-                return NSLocalizedString("Ratatouille was unable to load areas.", comment: "")
+                return NSLocalizedString("Kunne ikke laste inn landområder.", comment: "")
             case .categoriesEmptyError:
-                return NSLocalizedString("Ratatouille was unable to load categories.", comment: "")
+                return NSLocalizedString("Kunne ikke laste inn kategorier.", comment: "")
             case .ingredientsEmptyError:
-                return NSLocalizedString("Ratatouille was unable to load ingredients.", comment: "")
-            case .filterError:
-                return NSLocalizedString("Ratatouille was unable to filter.", comment: "")
-            }
-        }
-        
-        var recoverySuggestion: String? {
-            switch self {
-            case .mealsEmptyError: return "Please provide a valid input."
-            default: return "Try again."
+                return NSLocalizedString("Kunne ikke laste inn ingredienser.", comment: "")
             }
         }
     }
@@ -232,6 +78,10 @@ struct RecipeBrowserView: View {
             .navigationTitle("Oppskrifter")
             .background(Color.myBackgroundColor)
             .toolbarBackground(.visible, for: .tabBar)
+            .alert("Feilmelding", isPresented: $viewModel.shouldAlertError) {
+            } message: {
+                Text($viewModel.errorMessage.wrappedValue)
+            }
             .toolbar {
                 ToolbarItem {
                     Button {
@@ -269,7 +119,6 @@ struct RecipeBrowserView: View {
                     .presentationBackground(Color.myBackgroundColor.opacity(0.8))
             }
             // --------------   REFACTOR REDUNDANCE ----------------------
-            .errorAlert(error: $viewModel.currentError)            
         } // navStack
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
@@ -296,3 +145,154 @@ struct RecipeBrowserView_Previews: PreviewProvider {
     }
 }
 
+extension RecipeBrowserViewModel {
+    func searchMeals(isDemo: Bool) async {
+        do {
+            var mutableInput: String
+            
+            if isDemo {
+                mutableInput = "A"
+            } else {
+                mutableInput = input
+            }
+            
+            let result = await searchCommand.execute(input: mutableInput)
+            
+            switch result {
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+    
+    func loadAreas() async {
+        do {
+            if let areas = await loadAreasCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.areas = areas
+                }
+            } else {
+                throw RecipeBrowserViewModelError.areasEmptyError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+    
+    func loadCategories() async {
+        do {
+            if let categories = await loadCategoriesCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.categories = categories
+                }
+            } else {
+                throw RecipeBrowserViewModelError.categoriesEmptyError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+    
+    func loadIngredients() async {
+        do {
+            if let ingredients = await loadIngredientsCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.ingredients = ingredients
+                }
+            } else {
+                throw RecipeBrowserViewModelError.ingredientsEmptyError
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+    
+    func filterByArea() async {
+        do {
+            let result = await filterByAreaCommand.execute(input: chosenArea)
+            
+            switch result {
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+
+    func filterByCategory() async {
+        do {
+            let result = await filterByCategoryCommand.execute(input: chosenCategory)
+            
+            switch result {
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+    
+    func filterByIngredient() async {
+        do {
+            let result = await filterByIngredientCommand.execute(input: chosenIngredient)
+            
+            switch result {
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.meals = meals
+                    self.searchId = UUID()
+                }
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                self.shouldAlertError = true
+            }
+        }
+    }
+}
