@@ -11,13 +11,21 @@ import SwiftUI
 class ManageIngredientsViewModel: ObservableObject {
     @Published var ingredients: [Ingredient] = []
     
-    @Published var shouldAlertError: Bool = false
+    // Sheets for add/edit
     @Published var isPresentingAddIngredientView: Bool = false
     @Published var isPresentingEditIngredientView: Bool = false
     
+    // Error handling
     @Published var currentError: Error? = nil
+    @Published var shouldAlertError: Bool = false
     @Published var ingredientAuthorized: Bool = true
     
+    // Searching the long list of ingredients for usability
+    @Published var searchIngredient: String = ""
+    @Published var filteredIngredients: [Ingredient] = []
+    @Published var chosenIngredient: Ingredient?
+    
+    // Logic used, functions located in extension at the bottom of this file
     let loadIngredientsCommand = LoadIngredientsFromCDCommand()
     let saveIngredientCommand = AddNewIngredientCommand()
     let updateIngredientCommand = UpdateIngredientCommand()
@@ -53,20 +61,31 @@ struct ManageIngredientsView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(0..<viewModel.ingredients.count, id: \.self) { index in
-                    Text(viewModel.ingredients[index].name ?? "ukjent navn?") //MARK: midlertidig
-                        .onTapGesture {
-                            Task {
-                                viewModel.isPresentingEditIngredientView = true
-                            }
+                ForEach(0..<viewModel.filteredIngredients.count, id: \.self) { index in
+                    Group {
+                        if let mappedIngredient = viewModel.mapIngredient(viewModel.filteredIngredients[index]) {
+                            Text(mappedIngredient.name!)
+                        } else {
+                            Text(viewModel.filteredIngredients[index].name!)
                         }
+                    }
+                    .listRowBackground(Color.clear)
+                    .onTapGesture {
+                        Task {
+                            viewModel.searchIngredient = ""
+                            viewModel.chosenIngredient = viewModel.filteredIngredients[index]
+                            viewModel.isPresentingEditIngredientView = true
+                        }
+                    }
                 } // foreach
-                .listRowBackground(Color.clear)
-                .listRowSeparatorTint(Color.clear)
             } // list
             .padding(.top)
             .padding(.horizontal)
             .listStyle(.plain)
+            .searchable(text: $viewModel.searchIngredient, prompt: "Søk etter ingrediens...")
+            .onChange(of: viewModel.searchIngredient) { newSearchIngredient in
+                viewModel.performSearch()
+            }
         } // navstack
         .navigationTitle("Rediger ingredienser")
         .background(Color.myBackgroundColor)
@@ -83,19 +102,43 @@ struct ManageIngredientsView: View {
             Text("Her skal du legge til ny ingrediens")
         }
         .sheet(isPresented: $viewModel.isPresentingEditIngredientView) {
-            Text("Her skal du redigere ingrediens")
+            Text("Her skal du redigere ingrediens med navn \((viewModel.chosenIngredient! as Ingredient).name!)")
         }
         .onAppear {
-            Task { await viewModel.loadIngredient() }
+            Task {
+                await viewModel.loadIngredient()
+                viewModel.performSearch()
+            }
         }
         .refreshable {
-            Task { await viewModel.loadIngredient() }
+            Task {
+                await viewModel.loadIngredient()
+                viewModel.performSearch()
+            }
         }
         .errorAlert(error: $viewModel.currentError)
     }
 }
 
 extension ManageIngredientsViewModel {
+    
+    func performSearch() {
+        Task {
+            if searchIngredient.isEmpty {
+                self.filteredIngredients = ingredients
+            } else {
+                self.filteredIngredients = ingredients.compactMap { mapIngredient($0)}
+            }
+        }
+    }
+        
+    func mapIngredient(_ ingredient: Ingredient) -> Ingredient? {
+        guard ingredient.name!.localizedCaseInsensitiveContains(searchIngredient) else {
+            return nil
+        }
+        return ingredient
+    }
+    
     func loadIngredient() async {
         do {
             if let ingredients = await loadIngredientsCommand.execute(input: ()) {
