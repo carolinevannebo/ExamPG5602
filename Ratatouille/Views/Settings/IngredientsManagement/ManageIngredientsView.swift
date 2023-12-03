@@ -100,6 +100,7 @@ struct ManageIngredientsListContent: View {
                     viewModel.isPresentingEditIngredientView = true
                 }
             }
+            
         } // foreach
     }
 }
