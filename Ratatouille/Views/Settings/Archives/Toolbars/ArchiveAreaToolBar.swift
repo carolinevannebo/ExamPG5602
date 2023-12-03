@@ -6,8 +6,40 @@
 //
 
 import Foundation
+import SwiftUI
 
-//TODO: toolbar
+struct ArchiveAreaToolBar: ToolbarContent {
+    @StateObject var viewModel: ArchiveViewModel
+    @Binding var area: Area
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some ToolbarContent {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            Button {
+                // restore
+                Task {
+                    await viewModel.restoreArea(area: area)
+                    await viewModel.loadAreasFromArchives()
+                    dismiss()
+                }
+            } label: {
+                Image(systemName: "arrow.up.bin.fill")
+            }
+            
+            Button {
+                // delete permanently
+                Task {
+                    await viewModel.deleteArea(area: area)
+                    await viewModel.loadAreasFromArchives()
+                    dismiss()
+                }
+            } label: {
+                Image(systemName: "trash.fill")
+            }
+        }
+    }
+}
 
 extension ArchiveViewModel {
     func loadAreasFromArchives() async {

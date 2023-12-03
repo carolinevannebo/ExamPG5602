@@ -40,7 +40,6 @@ class ArchiveViewModel: ObservableObject {
     }
 }
 
-
 struct ArchiveView: View {
     @StateObject var viewModel = ArchiveViewModel()
     
@@ -48,10 +47,10 @@ struct ArchiveView: View {
         NavigationStack {
             VStack {
                 List {
-                    ArchivedAreasList(viewModel: viewModel) // MARK: unpopulated
+                    ArchivedAreasList(viewModel: viewModel) // MARK: unpopulated atm
                     ArchivedCategoriesList(viewModel: viewModel)
                     ArchivedMealsList(viewModel: viewModel)
-                    ArchivedIngredientsList(viewModel: viewModel) // MARK: unpopulated
+                    ArchivedIngredientsList(viewModel: viewModel) // MARK: unpopulated atm
                 }
                 .padding(.top)
                 .padding(.horizontal)
@@ -65,7 +64,7 @@ struct ArchiveView: View {
                 await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
                 await viewModel.loadMealsFromArchive()
-                // TODO: await viewModel.loadIngredientsFromArchives()
+                await viewModel.loadIngredientsFromArchives()
             }
         }
         .refreshable {
@@ -73,7 +72,7 @@ struct ArchiveView: View {
                 await viewModel.loadAreasFromArchives()
                 await viewModel.loadCategoriesFromArchives()
                 await viewModel.loadMealsFromArchive()
-                // TODO: await viewModel.loadIngredientsFromArchives()
+                await viewModel.loadIngredientsFromArchives()
             }
         }
     }
