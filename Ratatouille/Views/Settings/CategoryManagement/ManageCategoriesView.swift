@@ -101,19 +101,19 @@ class ManageCategoriesViewModel: ObservableObject {
         }
     }
     
-    func checkAuthorization(category: Category) {
-        for i in 0..<14 {
-            if category.id == String(i+1) {
-                DispatchQueue.main.async {
-                    self.categoryAuthorized = false
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.categoryAuthorized = true
-                }
-            }
-        }
-    }
+//    func checkAuthorization(category: Category) {
+//        for i in 0..<14 {
+//            if category.id == String(i+1) {
+//                DispatchQueue.main.async {
+//                    self.categoryAuthorized = false
+//                }
+//            } else {
+//                DispatchQueue.main.async {
+//                    self.categoryAuthorized = true
+//                }
+//            }
+//        }
+//    }
     
     enum ManageCategoriesViewModelError: Error, LocalizedError {
         case failed(underlying: Error)
@@ -148,8 +148,8 @@ struct ManageCategoriesView: View {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
                     ManageCategoryItem(
                         category: $viewModel.categories[index],
-                        viewModel: viewModel,
-                        categoryAuthorized: $viewModel.categoryAuthorized
+                        viewModel: viewModel//,
+                        //categoryAuthorized: $viewModel.categoryAuthorized
                     )
                 } // foreach
                 .listRowBackground(Color.clear)
@@ -191,7 +191,7 @@ struct ManageCategoryItem: View {
 //    @State var category: Category
     @Binding var category: Category
     @StateObject var viewModel: ManageCategoriesViewModel
-    @Binding var categoryAuthorized: Bool
+    //@Binding var categoryAuthorized: Bool
     
     var body: some View {
         ZStack {
