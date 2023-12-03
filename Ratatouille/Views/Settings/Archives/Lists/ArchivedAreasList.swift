@@ -16,6 +16,11 @@ struct ArchivedAreasList: View {
             ForEach(0..<viewModel.areas.count, id: \.self) { index in
                 ZStack {
                     ArchiveListItemView(name: viewModel.areas[index].name)
+                        .onTapGesture { // MARK: må du i dispatchqueue main?
+                            viewModel.sheetToPresent = .area
+                            viewModel.isSheetPresented = true
+                        }
+                    
                 }
             }
             .id(viewModel.listId)

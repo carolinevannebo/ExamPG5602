@@ -42,6 +42,7 @@ struct ArchiveAreaToolBar: ToolbarContent {
 }
 
 extension ArchiveViewModel {
+    
     func loadAreasFromArchives() async {
         do {
             if let areas = await loadAreasCommand.execute(input: ()) {

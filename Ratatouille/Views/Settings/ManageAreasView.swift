@@ -13,10 +13,15 @@ class ManageAreasViewModel: ObservableObject {
     
     @Published var shouldAlertError: Bool = false
     @Published var isPresentingAddAreaView: Bool = false
+    @Published var isPresentingEditAreaView: Bool = false
     
     @Published var currentError: Error? = nil
+    @Published var areaAuthorized: Bool = true
     
     let loadAreasCommand = LoadAreasFromCDCommand()
+    let saveAreaCommand = AddNewAreaCommand()
+    let updateAreaCommand = UpdateAreaCommand()
+    let archiveAreaCommand = ArchiveAreaCommand()
     
     func loadAreas() async {
         do {
@@ -30,6 +35,77 @@ class ManageAreasViewModel: ObservableObject {
         } catch {
             print("Unexpected error: \(error)")
             currentError = error as? ManageAreasViewModelError
+            shouldAlertError = true
+        }
+    }
+    
+    func saveNewArea(result: Result<AreaModel, Error>) async {
+        switch result {
+        case .success(let area):
+            print("Area with name \(area.name) was passed")
+                
+            let saveToCDResult = await saveAreaCommand.execute(input: area)
+                
+        switch saveToCDResult {
+        case .success(_):
+            print("Area was successfully passed and saved")
+                    
+            DispatchQueue.main.async {
+                self.isPresentingAddAreaView = false
+            }
+            
+            await loadAreas()
+                    
+        case .failure(let error):
+            print("Area was passed, but not saved: \(error)")
+        }
+                
+        case .failure(let error):
+            print("Area could not be passed: \(error)")
+        }
+    }
+    
+    func updateArea(result: Result<Area, Error>) async {
+        switch result {
+        case .success(let area):
+            print("Area with name \(area.name) was passed")
+            
+            let updateToCDResult = await updateAreaCommand.execute(input: area)
+                
+            switch updateToCDResult {
+            case .success(_):
+                print("Area was successfully passed and updated")
+                
+                DispatchQueue.main.async {
+                    self.isPresentingEditAreaView = false
+                }
+                
+                await loadAreas()
+                
+            case .failure(let error):
+                print("Area was passed, but not updated: \(error)")
+            }
+            
+        case .failure(let error):
+            print("Area could not be passed: \(error)")
+        }
+    }
+    
+    func archiveArea(area: Area) async {
+        do {
+            let result = await archiveAreaCommand.execute(input: area)
+                
+            switch result {
+            case .success(_):
+                print("Successfully archived area")
+                await loadAreas()
+                
+            case .failure(let error):
+                throw error
+            }
+        } catch {
+            print("Unexpected error: \(error)")
+            currentError = error as? ManageAreasViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
             shouldAlertError = true
         }
     }
@@ -65,13 +141,13 @@ struct ManageAreasView: View {
         NavigationStack {
             List {
                 ForEach(0..<viewModel.areas.count, id: \.self) { index in
-                    ZStack {
-                        AreaTextBox(area: viewModel.areas[index], backgroundColor: .myDiffusedColor, textColor: .myContrastColor)
-                        NavigationLink(destination: Text(viewModel.areas[index].name.value)) {
-                            EmptyView()
+                    AreaTextBox(area: viewModel.areas[index], backgroundColor: .myDiffusedColor, textColor: .myContrastColor)
+                    //TODO: sett editsheet til true ontap
+                        .onTapGesture {
+                            Task {
+                                viewModel.isPresentingEditAreaView = true
+                            }
                         }
-                        .opacity(0)
-                    }
                 } // foreach
                 .listRowBackground(Color.clear)
                 .listRowSeparatorTint(Color.clear)
@@ -93,6 +169,9 @@ struct ManageAreasView: View {
         }
         .sheet(isPresented: $viewModel.isPresentingAddAreaView) {
             Text("Her skal du legge til nytt landområde")
+        }
+        .sheet(isPresented: $viewModel.isPresentingEditAreaView) {
+            Text("Her skal du redigere landområde")
         }
         .onAppear {
             Task { await viewModel.loadAreas() }

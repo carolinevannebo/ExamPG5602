@@ -14,6 +14,8 @@ class ArchiveViewModel: ObservableObject {
     @Published var ingredients: [Ingredient] = []
     
     @Published var listId: UUID?
+    @Published var isSheetPresented: Bool = false
+    @Published var sheetToPresent: ArchiveSheetType? = nil
     
     // For readability logic has been placed in extensions in toolbar files
     let loadMealsCommand = LoadMealsFromArchivesCommand()
@@ -38,6 +40,11 @@ class ArchiveViewModel: ObservableObject {
         case noCategoriesInArchives
         case noIngredientsInArchives
     }
+    
+    enum ArchiveSheetType {
+        case area
+        case ingredient
+    }
 }
 
 struct ArchiveView: View {
@@ -58,6 +65,26 @@ struct ArchiveView: View {
             }
             .navigationTitle("Arkiv")
             .background(Color.myBackgroundColor)
+            .sheet(isPresented: $viewModel.isSheetPresented) {
+                switch(viewModel.sheetToPresent) {
+                case .area:
+                    Text("area sheet")
+                case .ingredient:
+                    Text("ingredient sheet")
+                case .none:
+                    Text("none?")
+                }
+                // if isAreaSheetPresented
+                //      NavigationStack
+                //          ArchivedListItemView
+                //              .toolbar { ArchiveAreaToolBar }
+                
+                // if isIngredientSheetPresented
+                //      NavigationStack
+                //          ArchivedListItemView
+                //              .toolbar { ArchiveIngredientToolBar }
+                
+            }
         }
         .onAppear {
             Task {
