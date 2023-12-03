@@ -100,6 +100,15 @@ struct ManageIngredientsListContent: View {
                     viewModel.isPresentingEditIngredientView = true
                 }
             }
+            .swipeActions {
+                Button {
+                    Task {
+                        await viewModel.archiveIngredient(ingredient: $viewModel.filteredIngredients[index].wrappedValue)
+                    }
+                } label: {
+                    Image(systemName: "archivebox.fill")
+                }
+            }
             
         } // foreach
     }
