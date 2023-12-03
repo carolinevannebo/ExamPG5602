@@ -8,7 +8,38 @@
 import Foundation
 import SwiftUI
 
-//TODO: toolbar
+struct ArchiveIngredientToolBar: ToolbarContent {
+    @StateObject var viewModel: ArchiveViewModel
+    @Binding var ingredient: Ingredient
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some ToolbarContent {
+        ToolbarItemGroup(placement: .navigationBarTrailing) {
+            Button {
+                // restore
+                Task {
+                    await viewModel.restoreIngredient(ingredient: ingredient)
+                    await viewModel.loadIngredientsFromArchives()
+                    dismiss()
+                }
+            } label: {
+                Image(systemName: "arrow.up.bin.fill")
+            }
+            
+            Button {
+                // delete permanently
+                Task {
+                    await viewModel.deleteIngredient(ingredient: ingredient)
+                    await viewModel.loadIngredientsFromArchives()
+                    dismiss()
+                }
+            } label: {
+                Image(systemName: "trash.fill")
+            }
+        }
+    }
+}
 
 extension ArchiveViewModel {
     func loadIngredientsFromArchives() async {
