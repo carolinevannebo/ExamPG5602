@@ -25,7 +25,7 @@ class AddNewCategoryCommand: ICommand {
     func execute(input: Input) async -> Output {
         do {
             if input.id == nil {
-                throw ManageCategoryError.missingIdError("Meal ID is missing.")
+                throw ManageCategoryError.missingIdError("Category ID is missing.")
             }
             
             let request: NSFetchRequest<Category> = Category.fetchRequest()

@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+// MARK: Protocol for all logic between UI and Data
 public protocol ICommand {
     associatedtype Input
     associatedtype Output
@@ -15,6 +16,7 @@ public protocol ICommand {
     func execute(input: Input) async -> Output
 }
 
+// MARK: Miscellaneous commands
 class InitCDCommand: ICommand {
     typealias Input = NSManagedObjectContext
     typealias Output = Void

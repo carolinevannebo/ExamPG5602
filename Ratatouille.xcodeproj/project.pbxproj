@@ -71,6 +71,7 @@
 		E4EA26D42B1CC9AF000E8EA6 /* AreaArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */; };
 		E4EA26D62B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */; };
 		E4EA26D82B1CE44A000E8EA6 /* ManageAreaCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */; };
+		E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -166,6 +167,7 @@
 		E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAreaCommands.swift; sourceTree = "<group>"; };
+		E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientCommand.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -329,6 +331,29 @@
 			path = Archive;
 			sourceTree = "<group>";
 		};
+		E4EA26D92B1CE60F000E8EA6 /* Manage */ = {
+			isa = PBXGroup;
+			children = (
+				E4A35DB42B1B81A800C4FC77 /* ManageCategoryCommands.swift */,
+				E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */,
+				E4EA26DB2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift */,
+			);
+			path = Manage;
+			sourceTree = "<group>";
+		};
+		E4EA26DA2B1CE62B000E8EA6 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				E4EA26D92B1CE60F000E8EA6 /* Manage */,
+				E4EA26D02B1CBE26000E8EA6 /* Archive */,
+				E40644582B0CDDBC00028CBD /* Commands.swift */,
+				E4E3B96E2B12A0AD008591D3 /* SearchCommands.swift */,
+				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
+				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
 		E4EAFC1D2B023AF10095D10B = {
 			isa = PBXGroup;
 			children = (
@@ -391,14 +416,8 @@
 		E4EAFC582B02402F0095D10B /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				E4EA26D02B1CBE26000E8EA6 /* Archive */,
-				E40644582B0CDDBC00028CBD /* Commands.swift */,
-				E4E3B96E2B12A0AD008591D3 /* SearchCommands.swift */,
-				E4E3B9702B12A0BD008591D3 /* ListCommands.swift */,
-				E4E3B9722B12A0CA008591D3 /* FavoriteCommands.swift */,
+				E4EA26DA2B1CE62B000E8EA6 /* Commands */,
 				E42525292B18C9CE00A099C1 /* Representables.swift */,
-				E4A35DB42B1B81A800C4FC77 /* ManageCategoryCommands.swift */,
-				E4EA26D72B1CE44A000E8EA6 /* ManageAreaCommands.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -680,6 +699,7 @@
 				E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */,
 				E406448A2B0F82E700028CBD /* AnimatedGif.swift in Sources */,
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
+				E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */,
 				E4EA26C32B1CB769000E8EA6 /* ArchiveMealToolBar.swift in Sources */,
 				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
 			);
