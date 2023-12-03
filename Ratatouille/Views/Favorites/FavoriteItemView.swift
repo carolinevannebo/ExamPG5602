@@ -37,7 +37,6 @@ class FavoriteItemViewModel: ObservableObject {
                     throw error
                 }
             } else {
-                // TODO: set isArchived to false
                 print("Recipe with name \(meal.name ) will be moved from archives")
                 
                 DispatchQueue.main.async {

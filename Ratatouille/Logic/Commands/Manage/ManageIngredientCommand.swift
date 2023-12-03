@@ -44,6 +44,7 @@ class AddNewIngredientCommand: ICommand {
                     newIngredient.id = input.id
                     newIngredient.name = input.name
                     newIngredient.information = input.information
+                    newIngredient.image = input.image
                     
                     result = .success(newIngredient)
                 }

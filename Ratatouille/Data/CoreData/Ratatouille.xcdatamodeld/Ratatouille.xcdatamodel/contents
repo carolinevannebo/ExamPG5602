@@ -22,6 +22,7 @@
     </entity>
     <entity name="Ingredient" representedClassName="Ingredient" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="information" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="archive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Archive" inverseName="ingredients" inverseEntity="Archive"/>

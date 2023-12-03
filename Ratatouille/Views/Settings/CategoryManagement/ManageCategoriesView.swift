@@ -94,9 +94,7 @@ struct ManageCategoriesView: View {
         }
         .sheet(isPresented: $viewModel.isPresentingAddCategoryView) {
             AddCategoryView() { result in
-                Task {
-                    await viewModel.saveNewCategory(result: result)
-                }
+                Task { await viewModel.saveNewCategory(result: result) }
             }
         }
         .onAppear {

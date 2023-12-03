@@ -19,6 +19,7 @@ extension Ingredient: IngredientRepresentable {
     @NSManaged public var id: String?
     @NSManaged public var information: String?
     @NSManaged public var name: String?
+    @NSManaged public var image: String?
     @NSManaged public var meals: NSSet?
     @NSManaged public var archive: Archive?
 }
@@ -45,5 +46,6 @@ extension Ingredient : Identifiable {
         case id
         case name
         case information
+        case image
     }
 }

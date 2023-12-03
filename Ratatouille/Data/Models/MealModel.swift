@@ -85,7 +85,7 @@ struct MealModel: Codable, Identifiable, MealRepresentable {
             for ingredient in dynamicIngredients {
                 if !ingredient.isEmpty {
                     //var ingredientModel = try IngredientModel(from: decoder)
-                    let ingredientModel = IngredientModel(id: UUID().uuidString, name: ingredient, information: nil)
+                    let ingredientModel = IngredientModel(id: UUID().uuidString, name: ingredient, information: nil, image: nil)
                     
 //                    ingredientModel.self.id = UUID().uuidString
 //                    ingredientModel.self.name = ingredient

@@ -23,8 +23,6 @@ class AddCategoryViewModel: ObservableObject {
     @Published var isShowingErrorAlert: Bool = false
     @Published var errorMessage: String = ""
     
-//    @Environment(\.dismiss) var dismiss
-    
     func addCategory(completion: @escaping (Result<CategoryModel, Error>) -> Void) async {
         var base64Image = ""
         
@@ -43,7 +41,6 @@ class AddCategoryViewModel: ObservableObject {
                 image: base64Image,
                 information: information
             ) {
-//                dismiss()
                 completion(.success(newCategory))
             } else {
                 throw AddCategoryViewModelError.createNewCategoryError
@@ -71,8 +68,11 @@ class AddCategoryViewModel: ObservableObject {
     
     func isEmptyInput(_ input: String, _ message: String) -> Bool {
         if input.isEmpty {
-            errorMessage = message
-            isShowingErrorAlert = true
+            DispatchQueue.main.async {
+                self.errorMessage = message
+                self.isShowingErrorAlert = true
+            }
+            
             return true
         }
         return false

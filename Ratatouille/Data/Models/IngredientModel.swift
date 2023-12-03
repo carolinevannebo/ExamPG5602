@@ -11,11 +11,13 @@ struct IngredientModel: Codable, Identifiable, IngredientRepresentable {
     var id: String?
     var name: String?
     var information: String?
+    var image: String?
     
-    init?(id: String, name: String, information: String?) {
+    init?(id: String, name: String, information: String?, image: String?) {
         self.id = id
         self.name = name
         self.information = information
+        self.image = image
     }
     
     init(from decoder: Decoder) throws {

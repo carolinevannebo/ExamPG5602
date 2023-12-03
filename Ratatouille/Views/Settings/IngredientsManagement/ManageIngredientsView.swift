@@ -55,29 +55,62 @@ class ManageIngredientsViewModel: ObservableObject {
     }
 }
 
+struct ManageIngredientItem: View {
+    @State var name: String
+    @State var image: String?
+    
+    var body: some View {
+        HStack {
+            Text(name).padding(.horizontal)
+            Spacer()
+            
+            if image != nil {
+                Image(uiImage: UIImage(data: Data(base64Encoded: image!)!)!)
+                    .resizable()
+                    .scaledToFit()
+            }
+        }
+        .frame(height: 25)
+    }
+}
+
+struct ManageIngredientsListContent: View {
+    @StateObject var viewModel: ManageIngredientsViewModel
+    
+    var body: some View {
+        ForEach(0..<viewModel.filteredIngredients.count, id: \.self) { index in
+            Group {
+                if let mappedIngredient = viewModel.mapIngredient(viewModel.filteredIngredients[index]) {
+                    ManageIngredientItem(
+                        name: mappedIngredient.name!,
+                        image: mappedIngredient.image
+                    )
+                } else {
+                    ManageIngredientItem(
+                        name: $viewModel.filteredIngredients[index].wrappedValue.name!,
+                        image: $viewModel.filteredIngredients[index].wrappedValue.image
+                    )
+                }
+            }
+            .listRowBackground(Color.clear)
+            .onTapGesture {
+                Task {
+                    viewModel.searchIngredient = ""
+                    viewModel.chosenIngredient = viewModel.filteredIngredients[index]
+                    viewModel.isPresentingEditIngredientView = true
+                }
+            }
+        } // foreach
+    }
+}
+
 struct ManageIngredientsView: View {
     @StateObject var viewModel = ManageIngredientsViewModel()
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(0..<viewModel.filteredIngredients.count, id: \.self) { index in
-                    Group {
-                        if let mappedIngredient = viewModel.mapIngredient(viewModel.filteredIngredients[index]) {
-                            Text(mappedIngredient.name!)
-                        } else {
-                            Text(viewModel.filteredIngredients[index].name!)
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        Task {
-                            viewModel.searchIngredient = ""
-                            viewModel.chosenIngredient = viewModel.filteredIngredients[index]
-                            viewModel.isPresentingEditIngredientView = true
-                        }
-                    }
-                } // foreach
+                ManageIngredientsListContent(viewModel: viewModel)
             } // list
             .padding(.top)
             .padding(.horizontal)
@@ -92,14 +125,18 @@ struct ManageIngredientsView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    viewModel.isPresentingAddIngredientView = true
+                    viewModel.isPresentingAddIngredientView = true // TODO: skal denne være i main thread?
                 } label: {
                     Image(systemName: "plus")
                 }
             }
         }
         .sheet(isPresented: $viewModel.isPresentingAddIngredientView) {
-            Text("Her skal du legge til ny ingrediens")
+            AddIngredientView() { result in
+                Task {
+                    await viewModel.saveNewIngredient(result: result)
+                }
+            }
         }
         .sheet(isPresented: $viewModel.isPresentingEditIngredientView) {
             Text("Her skal du redigere ingrediens med navn \((viewModel.chosenIngredient! as Ingredient).name!)")
@@ -121,7 +158,6 @@ struct ManageIngredientsView: View {
 }
 
 extension ManageIngredientsViewModel {
-    
     func performSearch() {
         Task {
             if searchIngredient.isEmpty {
@@ -150,8 +186,10 @@ extension ManageIngredientsViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageIngredientsViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageIngredientsViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -221,8 +259,10 @@ extension ManageIngredientsViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageIngredientsViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageIngredientsViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
+                self.shouldAlertError = true
+            }
         }
     }
 }

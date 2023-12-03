@@ -21,6 +21,7 @@ public class Ingredient: NSManagedObject, Decodable {
         let id = try container.decodeIfPresent(String.self, forKey: .id)
         let name = try container.decode(String.self, forKey: .name)
         let information = try container.decodeIfPresent(String.self, forKey: .information)
+        let image = try container.decodeIfPresent(String.self, forKey: .image)
         
         let managedObjectContext = DataController.shared.managedObjectContext
         
@@ -29,5 +30,6 @@ public class Ingredient: NSManagedObject, Decodable {
         self.id = id
         self.name = name
         self.information = information
+        self.image = image
     }
 }

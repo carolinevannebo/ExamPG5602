@@ -64,9 +64,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
-            
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -81,8 +82,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -97,8 +100,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -113,8 +118,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -130,8 +137,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -147,8 +156,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -164,8 +175,10 @@ class RecipeBrowserViewModel: ObservableObject {
             }
         } catch {
             print("Unexpected error: \(error)")
-            self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? RecipeBrowserViewModel.RecipeBrowserViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     

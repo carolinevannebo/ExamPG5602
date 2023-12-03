@@ -51,8 +51,10 @@ extension ManageCategoriesViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageCategoriesViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageCategoriesViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -123,8 +125,10 @@ extension ManageCategoriesViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageCategoriesViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageCategoriesViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
 }

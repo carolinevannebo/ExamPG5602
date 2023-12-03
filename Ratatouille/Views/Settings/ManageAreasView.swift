@@ -108,8 +108,10 @@ extension ManageAreasViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageAreasViewModelError
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageAreasViewModelError
+                self.shouldAlertError = true
+            }
         }
     }
     
@@ -179,8 +181,10 @@ extension ManageAreasViewModel {
             }
         } catch {
             print("Unexpected error: \(error)")
-            currentError = error as? ManageAreasViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
-            shouldAlertError = true
+            DispatchQueue.main.async {
+                self.currentError = error as? ManageAreasViewModelError // TODO: burde sjekke alle set error, kanskje sett på main thread
+                self.shouldAlertError = true
+            }
         }
     }
 }
