@@ -10,7 +10,8 @@ import SwiftUI
 
 struct CategoryToolBar: ToolbarContent {
     @StateObject var viewModel: ManageCategoriesViewModel
-    @State var category: Category
+//    @State var category: Category
+    @Binding var category: Category
     @Environment(\.dismiss) private var dismiss
     
     var body: some ToolbarContent {
@@ -28,18 +29,7 @@ struct CategoryToolBar: ToolbarContent {
             Button {
                 // delete permanently MARK: nope, check the exam again
                 Task {
-//                    print("kategori \(category.name) med id \(category.id ?? "ukjent id") vil bli slettet permanent") // hvis den ikke har id 1-14
-//                    let result = await viewModel.deleteCategoryCommand.execute(input: category)
-                    
                     await viewModel.archiveCategory(category: category)
-                    
-//                    switch result {
-//                    case .success(_):
-//                        print("Category with name was deleted")
-//                    case .failure(let error):
-//                        print("Category could not be deleted: \(error)")
-//                    }
-                    
                     await viewModel.loadCategories()
                     dismiss()
                 }

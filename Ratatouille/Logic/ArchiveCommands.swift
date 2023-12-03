@@ -26,7 +26,7 @@ class LoadMealsFromArchivesCommand: ICommand {
             return archives
             
         } catch {
-            print("Unexpected error in LoadArchivesCommand: \(error)")
+            print("Unexpected error in LoadMealsFromArchivesCommand: \(error)")
             return nil
         }
     }
@@ -203,8 +203,20 @@ class LoadCategoriesFromArchivesCommand: ICommand {
     typealias Input = Void
     typealias Output = [Category]?
     
-    func execute(input: Void) async -> [Category]? {
-        // hello :)
+    func execute(input: Input) async -> Output {
+        do {
+            let managedObjectContext = DataController.shared.managedObjectContext
+            
+            let request: NSFetchRequest<Archive> = Archive.fetchRequest()
+            let archives = try managedObjectContext.fetch(request)
+            
+            let categories = archives.compactMap { $0.categories as? Set<Category> }.flatMap { $0 }
+            
+            return categories
+        } catch {
+            print("Unexpected error in LoadCategoriesFromArchivesCommand: \(error)")
+            return nil
+        }
     }
 }
 

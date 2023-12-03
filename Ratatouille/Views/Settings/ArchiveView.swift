@@ -9,12 +9,24 @@ import SwiftUI
 
 class ArchiveViewModel: ObservableObject {
     @Published var meals: [Meal] = []
+    @Published var areas: [Area] = []
+    @Published var categories: [Category] = []
+    @Published var ingredients: [Ingredient] = []
+    
     @Published var hasArchive: Bool = false
     @Published var listId: UUID?
     
     let loadMealsCommand = LoadMealsFromArchivesCommand()
     let restoreMealCommand = RestoreMealCommand()
     let deleteMealCommand = DeleteMealCommand()
+    
+    //TODO: area commands
+    
+    let loadCategoriesCommand = LoadCategoriesFromArchivesCommand()
+    // TODO: restore
+    let deleteCategoryCommand = DeleteCategoryCommand()
+    
+    //TODO: ingredient commands
     
     func loadMealsFromArchive() async {
         do {
@@ -30,11 +42,11 @@ class ArchiveViewModel: ObservableObject {
                     }
                 }
             } else {
-                throw ArchiveViewModelError.noArchives
+                throw ArchiveViewModelError.noMealsInArchives
             }
             
         } catch {
-            print("Unexpected error when loading archives to View: \(error)")
+            print("Unexpected error when loading archived meals to View: \(error)")
         }
     }
     
@@ -68,8 +80,30 @@ class ArchiveViewModel: ObservableObject {
         }
     }
     
+    func loadCategoriesFromArchives() async {
+        do {
+            if let categories = await loadCategoriesCommand.execute(input: ()) {
+                DispatchQueue.main.async {
+                    self.categories = categories
+                    self.listId = UUID()
+                    
+                    if !categories.isEmpty {
+                        self.hasArchive = true // TODO: you should remove this boolean from archive view
+                    } else {
+                        self.hasArchive = false
+                    }
+                }
+            } else {
+                throw ArchiveViewModelError.noCategoriesInArchives
+            }
+        } catch {
+            print("Unexpected error when loading archived categories to View: \(error)")
+        }
+    }
+    
     enum ArchiveViewModelError: Error {
-        case noArchives
+        case noMealsInArchives
+        case noCategoriesInArchives
     }
 }
 
@@ -79,15 +113,35 @@ struct ArchiveView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.hasArchive {
+//                if viewModel.hasArchive {
                     List {
-                        Section("Landområder") {}
-                        Section("Kategorier") {}
+                        Section("Landområder") { // MARK: unpopulated atm
+                            ForEach(0..<viewModel.areas.count, id: \.self) { index in
+                                ZStack {
+                                    ArchiveListItemView(name: viewModel.areas[index].name)
+                                }
+                            }
+                            .id(viewModel.listId)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparatorTint(Color.clear)
+                        }
+                        
+                        Section("Kategorier") {
+                            ForEach(0..<viewModel.categories.count, id: \.self) { index in
+                                ZStack {
+                                    ArchiveListItemView(name: viewModel.categories[index].name)
+                                }
+                            }
+                            .id(viewModel.listId)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparatorTint(Color.clear)
+                        }
                         
                         Section("Måltider") {
                             ForEach(0..<viewModel.meals.count, id: \.self) { index in
                                 ZStack {
-                                    ArchiveItemView(meal: viewModel.meals[index])
+//                                    ArchiveItemView(meal: viewModel.meals[index])
+                                    ArchiveListItemView(name: viewModel.meals[index].name)
                                     
                                     NavigationLink(
                                         destination: {
@@ -105,36 +159,52 @@ struct ArchiveView: View {
                             .listRowSeparatorTint(Color.clear)
                         }
                         
-                        Section("Ingredienser") {}
+                        Section("Ingredienser") { // MARK: unpopulated atm
+                            ForEach(0..<viewModel.ingredients.count, id: \.self) { index in
+                                ZStack {
+                                    ArchiveListItemView(name: viewModel.ingredients[index].name)
+                                }
+                            }
+                            .id(viewModel.listId)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparatorTint(Color.clear)
+                        }
                     }
                     .padding(.top)
                     .padding(.horizontal)
                     .listStyle(.plain)
-                } else {
-                    EmptyArchiveView()
-                }
+//                } else {
+//                    EmptyArchiveView()
+//                }
             }
             .navigationTitle("Arkiv")
             .background(Color.myBackgroundColor)
         }
         .onAppear {
-            Task { await viewModel.loadMealsFromArchive() }
+            Task {
+                await viewModel.loadMealsFromArchive()
+                await viewModel.loadCategoriesFromArchives()
+            }
         }
         .refreshable {
-            Task { await viewModel.loadMealsFromArchive() }
+            Task {
+                await viewModel.loadMealsFromArchive()
+                await viewModel.loadCategoriesFromArchives()
+            }
         }
     }
 }
 
-struct ArchiveItemView: View {
-    @State var meal: Meal
+struct ArchiveListItemView: View {
+    @State var name: String
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .foregroundColor(.myAlternativeBgColor)
             HStack {
-                Text(meal.name)
+                Text(name)
+                    .padding(.leading, 30)
             }
             .foregroundColor(.myAlternativeTextColor)
         }

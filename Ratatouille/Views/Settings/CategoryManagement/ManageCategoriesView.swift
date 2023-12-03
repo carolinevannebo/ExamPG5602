@@ -147,7 +147,7 @@ struct ManageCategoriesView: View {
             List {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
                     ManageCategoryItem(
-                        category: viewModel.categories[index],
+                        category: $viewModel.categories[index],
                         viewModel: viewModel,
                         categoryAuthorized: $viewModel.categoryAuthorized
                     )
@@ -188,7 +188,8 @@ struct ManageCategoriesView: View {
 }
 
 struct ManageCategoryItem: View {
-    @State var category: Category
+//    @State var category: Category
+    @Binding var category: Category
     @StateObject var viewModel: ManageCategoriesViewModel
     @Binding var categoryAuthorized: Bool
     
@@ -201,9 +202,9 @@ struct ManageCategoryItem: View {
                 }
                 .background(Color.myBackgroundColor)
                 .toolbar {
-                    if categoryAuthorized {
-                        CategoryToolBar(viewModel: viewModel, category: category)
-                    }
+//                    if categoryAuthorized {
+                    CategoryToolBar(viewModel: viewModel, category: $category)
+//                    }
                 }
                 .sheet(isPresented: $viewModel.isPresentingEditCategoryView) {
                     EditCategoryView(category: category) { result in
@@ -215,9 +216,9 @@ struct ManageCategoryItem: View {
             }
             .opacity(0)
         }
-        .onAppear {
-            viewModel.checkAuthorization(category: category) // TODO: Need to fix that toolbar doesnt appear for default categories
-        }
+//        .onAppear {
+//            viewModel.checkAuthorization(category: category) // TODO: Need to fix that toolbar doesnt appear for default categories
+//        }
     }
 }
 
