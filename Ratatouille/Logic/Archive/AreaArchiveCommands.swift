@@ -1,5 +1,5 @@
 //
-//  CategoryArchiveCommands.swift
+//  AreaArchiveCommands.swift
 //  Ratatouille
 //
 //  Created by Caroline Vannebo on 03/12/2023.
@@ -8,19 +8,19 @@
 import Foundation
 import CoreData
 
-enum CategoryArchiveError: Error {
+enum AreaArchiveError: Error {
     case missingIdError(String)
     case unauthorizedError
-    case fetchingCategoryError
-    case categoryNotArchivedError
+    case fetchingAreaError
+    case areaNotArchivedError
     case archivingError
     case restoreError
     case deleteError
 }
 
-class LoadCategoriesFromArchivesCommand: ICommand {
+class LoadAreasFromArchivesCommand: ICommand {
     typealias Input = Void
-    typealias Output = [Category]?
+    typealias Output = [Area]?
     
     func execute(input: Input) async -> Output {
         do {
@@ -29,59 +29,59 @@ class LoadCategoriesFromArchivesCommand: ICommand {
             let request: NSFetchRequest<Archive> = Archive.fetchRequest()
             let archives = try managedObjectContext.fetch(request)
             
-            let categories = archives.compactMap { $0.categories as? Set<Category> }.flatMap { $0 }
+            let areas = archives.compactMap { $0.areas as? Set<Area> }.flatMap { $0 }
             
-            return categories
+            return areas
         } catch {
-            print("Unexpected error in LoadCategoriesFromArchivesCommand: \(error)")
+            print("Unexpected error in LoadAreasFromArchivesCommand: \(error)")
             return nil
         }
     }
 }
 
-class ArchiveCategoryCommand: ICommand {
-    typealias Input = Category
-    typealias Output = Result<Archive, CategoryArchiveError>
+class ArchiveAreaCommand: ICommand {
+    typealias Input = Area
+    typealias Output = Result<Archive, AreaArchiveError>
     
     func execute(input: Input) async -> Output {
         do {
             // Check for id
             if input.id == nil {
-                throw CategoryArchiveError.missingIdError("Category ID is missing.")
+                throw AreaArchiveError.missingIdError("Area ID is missing.")
             }
             
-            // Only allow user to archive categories they have created
-            for i in 0..<14 {
+            // Only allow user to archive areas they have created
+            for i in 0..<28 {
                 if input.id == String(i+1) {
-                    throw CategoryArchiveError.unauthorizedError
+                    throw AreaArchiveError.unauthorizedError
                 }
             }
             
-            let request: NSFetchRequest<Category> = Category.fetchRequest()
+            let request: NSFetchRequest<Area> = Area.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", input.id!)
             
             let managedObjectContext = DataController.shared.managedObjectContext
             var result: Output?
             
             try await managedObjectContext.perform {
-                if let fetchedCategory = try managedObjectContext.fetch(request).first {
+                if let fetchedArea = try managedObjectContext.fetch(request).first {
                     
                     // check archive
                     let request: NSFetchRequest<Archive> = Archive.fetchRequest()
-                    request.predicate = NSPredicate(format: "categories CONTAINS %@", fetchedCategory)
+                    request.predicate = NSPredicate(format: "areas CONTAINS %@", fetchedArea)
                     
                     if let fetchedArchive = try managedObjectContext.fetch(request).first {
-                        // Category is already archived
+                        // Area is already archived
                         result = .success(fetchedArchive)
                     } else {
-                        // If no categories has been archived yet, create entity
+                        // If no areas has been archived yet, create entity
                         let newArchive = Archive(context: managedObjectContext)
-                        newArchive.categories = NSSet(object: fetchedCategory)
+                        newArchive.areas = NSSet(object: fetchedArea)
                         
                         result = .success(newArchive)
                     }
                 } else {
-                    result = .failure(.fetchingCategoryError)
+                    result = .failure(.fetchingAreaError)
                 }
             }
             
@@ -90,26 +90,26 @@ class ArchiveCategoryCommand: ICommand {
             return result ?? .failure(.archivingError)
             
         } catch {
-            print("Unexpected error in ArchiveCategoryCommand: \(error)")
+            print("Unexpected error in ArchiveAreaCommand: \(error)")
             return .failure(.archivingError)
         }
     }
 }
 
-class RestoreCategoryCommand: ICommand {
-    typealias Input = Category
-    typealias Output = Result<Category, CategoryArchiveError>
+class RestoreAreaCommand: ICommand {
+    typealias Input = Area
+    typealias Output = Result<Area, AreaArchiveError>
     
     func execute(input: Input) async -> Output {
         do {
             // Check for id
             if input.id == nil {
-                throw CategoryArchiveError.missingIdError("Category ID is missing.")
+                throw AreaArchiveError.missingIdError("Area ID is missing.")
             }
             
-            // Fetch category
-            let categoryRequest: NSFetchRequest<Category> = Category.fetchRequest()
-            categoryRequest.predicate = NSPredicate(format: "id == %@", input.id!)
+            // Fetch area
+            let areaRequest: NSFetchRequest<Area> = Area.fetchRequest()
+                areaRequest.predicate = NSPredicate(format: "id == %@", input.id!)
             
             // Variables for restoration
             let managedObjectContext = DataController.shared.managedObjectContext
@@ -117,67 +117,67 @@ class RestoreCategoryCommand: ICommand {
             
             // Perform restoration
             try await managedObjectContext.perform {
-                if let fetchedCategory = try managedObjectContext.fetch(categoryRequest).first {
+                if let fetchedArea = try managedObjectContext.fetch(areaRequest).first {
                     
-                    // Check that category is in archives
+                    // Check that area is in archives
                     let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
-                        archiveRequest.predicate = NSPredicate(format: "categories CONTAINS %@", fetchedCategory)
+                        archiveRequest.predicate = NSPredicate(format: "areas CONTAINS %@", fetchedArea)
                     
                     if let archive = try managedObjectContext.fetch(archiveRequest).first {
-                        archive.removeFromCategories(fetchedCategory) // Remove category from archive
-                        result = .success(fetchedCategory)
+                        archive.removeFromAreas(fetchedArea) // Remove area from archive
+                        result = .success(fetchedArea)
                     } else {
-                        result = .failure(.categoryNotArchivedError)
+                        result = .failure(.areaNotArchivedError)
                     }
                 } else {
-                    result = .failure(.fetchingCategoryError)
+                    result = .failure(.fetchingAreaError)
                 }
             }
             
             // Save the context after restoration
-            print("Restoring category...")
+            print("Restoring area...")
             DataController.shared.saveContext()
                     
             return result ?? .failure(.restoreError)
             
         } catch {
-            print("Unexpected error in RestoreCategoryCommand: \(error)")
+            print("Unexpected error in RestoreAreaCommand: \(error)")
             return .failure(.restoreError)
         }
     }
 }
 
-class DeleteCategoryCommand: ICommand {
-    typealias Input = Category
-    typealias Output = Result<Void, CategoryArchiveError>
+class DeleteAreaCommand: ICommand {
+    typealias Input = Area
+    typealias Output = Result<Void, AreaArchiveError>
     
     func execute(input: Input) async -> Output {
         do {
             if input.id == nil {
-                throw CategoryArchiveError.missingIdError("Category ID is missing.")
+                throw AreaArchiveError.missingIdError("Area ID is missing.")
             }
             
-            // Users should not be able to archive certain categories in the first place, so this is better safe than sorry
+            // Users should not be able to archive certain areas in the first place, so this is better safe than sorry
             for i in 0..<14 {
                 if input.id == String(i+1) {
-                    throw CategoryArchiveError.unauthorizedError
+                    throw AreaArchiveError.unauthorizedError
                 }
             }
             
-            let request: NSFetchRequest<Category> = Category.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %@", input.id!)
+            let request: NSFetchRequest<Area> = Area.fetchRequest()
+                request.predicate = NSPredicate(format: "id == %@", input.id!)
             
             let managedObjectContext = DataController.shared.managedObjectContext
             
             try await managedObjectContext.perform {
-                if let fetchedCategory = try managedObjectContext.fetch(request).first {
+                if let fetchedArea = try managedObjectContext.fetch(request).first {
                     
                     let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
-                    archiveRequest.predicate = NSPredicate(format: "categories CONTAINS %@", fetchedCategory)
+                        archiveRequest.predicate = NSPredicate(format: "areas CONTAINS %@", fetchedArea)
                     
                     if let archivedCategory = try managedObjectContext.fetch(archiveRequest).first {
-                        archivedCategory.removeFromCategories(fetchedCategory)
-                        managedObjectContext.delete(fetchedCategory)
+                        archivedCategory.removeFromAreas(fetchedArea)
+                        managedObjectContext.delete(fetchedArea)
                     }
                 }
             }
@@ -185,9 +185,8 @@ class DeleteCategoryCommand: ICommand {
             DataController.shared.saveContext()
             return .success(())
         } catch {
-            print("Unexpected error in DeleteCategoryCommand: \(error)")
+            print("Unexpected error in DeleteAreaCommand: \(error)")
             return .failure(.deleteError)
         }
     }
 }
-

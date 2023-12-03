@@ -68,6 +68,8 @@
 		E4EA26CB2B1CBC44000E8EA6 /* ArchivedMealsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26CA2B1CBC44000E8EA6 /* ArchivedMealsList.swift */; };
 		E4EA26CD2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26CC2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift */; };
 		E4EA26D22B1CBE51000E8EA6 /* CategoryArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */; };
+		E4EA26D42B1CC9AF000E8EA6 /* AreaArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */; };
+		E4EA26D62B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -160,6 +162,8 @@
 		E4EA26CA2B1CBC44000E8EA6 /* ArchivedMealsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedMealsList.swift; sourceTree = "<group>"; };
 		E4EA26CC2B1CBC83000E8EA6 /* ArchivedIngredientsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedIngredientsList.swift; sourceTree = "<group>"; };
 		E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryArchiveCommands.swift; sourceTree = "<group>"; };
+		E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaArchiveCommands.swift; sourceTree = "<group>"; };
+		E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientArchiveCommands.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -317,6 +321,8 @@
 			children = (
 				E4E3B9742B12A0DB008591D3 /* MealArchiveCommands.swift */,
 				E4EA26D12B1CBE51000E8EA6 /* CategoryArchiveCommands.swift */,
+				E4EA26D32B1CC9AF000E8EA6 /* AreaArchiveCommands.swift */,
+				E4EA26D52B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
@@ -611,6 +617,7 @@
 				E48815A52B1A452000B00B55 /* ManageAreasView.swift in Sources */,
 				E40644682B0E725200028CBD /* MealModel.swift in Sources */,
 				E425252E2B1956FC00A099C1 /* AreaSheetView.swift in Sources */,
+				E4EA26D62B1CDE4D000E8EA6 /* IngredientArchiveCommands.swift in Sources */,
 				E406445B2B0CF28600028CBD /* RecipeBrowserView.swift in Sources */,
 				E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */,
 				E4E3B9712B12A0BD008591D3 /* ListCommands.swift in Sources */,
@@ -650,6 +657,7 @@
 				E48815A32B1A228500B00B55 /* ErrorAlert.swift in Sources */,
 				E42525282B18B99400A099C1 /* InputFieldViewModifier.swift in Sources */,
 				E406445D2B0D0F3500028CBD /* MealItemView.swift in Sources */,
+				E4EA26D42B1CC9AF000E8EA6 /* AreaArchiveCommands.swift in Sources */,
 				E40644912B10349500028CBD /* SwipeIcons.swift in Sources */,
 				E4EAFC7E2B028EC40095D10B /* Ingredient+CoreDataClass.swift in Sources */,
 				E4EAFC6D2B0259A50095D10B /* Area+CoreDataClass.swift in Sources */,

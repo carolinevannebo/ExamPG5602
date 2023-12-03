@@ -41,13 +41,24 @@ class LoadAreasFromCDCommand: ICommand {
 
     func execute(input: Input) async -> Output {
         do {
-            let request: NSFetchRequest<Area> = Area.fetchRequest()
-            
             let managedObjectContext = DataController.shared.managedObjectContext
             
-            let areas: [Area] = try managedObjectContext.fetch(request)
+            let areaRequest: NSFetchRequest<Area> = Area.fetchRequest()
+            let allAreas = try managedObjectContext.fetch(areaRequest)
             
-            return areas
+            let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
+            archiveRequest.predicate = NSPredicate(format: "ANY areas IN %@", allAreas)
+            let archives = try managedObjectContext.fetch(archiveRequest)
+            
+            let areasInArchives = archives.compactMap { $0.areas as? Set<Area> }.flatMap { $0 }
+            let areasNotInArchives = allAreas.filter { area in
+                !areasInArchives.contains { archiveArea -> Bool in
+                    // comparing areas
+                    return archiveArea.id == area.id
+                }
+            }
+            
+            return areasNotInArchives
         } catch {
             print("Unexpected error in LoadAreasFromCDCommand: \(error)")
             return nil
@@ -94,13 +105,25 @@ class LoadIngredientsFromCDCommand: ICommand {
     
     func execute(input: Input) async -> Output {
         do {
-            let request: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
-            
             let managedObjectContext = DataController.shared.managedObjectContext
             
-            let ingredients: [Ingredient] = try managedObjectContext.fetch(request)
+            let ingredientRequest: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
+            let allIngredients = try managedObjectContext.fetch(ingredientRequest)
+
             
-            return ingredients
+            let archiveRequest: NSFetchRequest<Archive> = Archive.fetchRequest()
+                archiveRequest.predicate = NSPredicate(format: "ANY ingredients IN %@", allIngredients)
+            let archives = try managedObjectContext.fetch(archiveRequest)
+            
+            let ingredientsInArchives = archives.compactMap { $0.ingredients as? Set<Ingredient> }.flatMap { $0 }
+            let ingredientsNotInArchives = allIngredients.filter { ingredient in
+                !ingredientsInArchives.contains { archiveIngredient -> Bool in
+                    // comparing ingredients
+                    return archiveIngredient.id == ingredient.id
+                }
+            }
+            
+            return ingredientsNotInArchives
             
         } catch {
             print("Unexpected error in LoadIngredientsFromCDCommand: \(error)")

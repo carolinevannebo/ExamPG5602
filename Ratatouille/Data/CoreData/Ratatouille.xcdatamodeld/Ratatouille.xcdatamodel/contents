@@ -7,6 +7,7 @@
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="archive" inverseEntity="Meal"/>
     </entity>
     <entity name="Area" representedClassName="Area" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="archive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Archive" inverseName="areas" inverseEntity="Archive"/>
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="area" inverseEntity="Meal"/>

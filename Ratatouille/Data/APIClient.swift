@@ -255,8 +255,14 @@ extension APIClient {
     
     private static func parseJsonToAreas(_ json: Data) -> [AreaModel] {
         do {
-            let areasWrapper = try JSONDecoder().decode(AreaWrapper.self, from: json)
+            var areasWrapper = try JSONDecoder().decode(AreaWrapper.self, from: json)
             if !areasWrapper.meals.isEmpty {
+                
+                // need to give areas an id (1-28)
+                for i in 0..<areasWrapper.meals.count {
+                    areasWrapper.meals[i].id = String(i+1)
+                }
+                
                 return areasWrapper.meals
             } else {
                 throw APIClientError.parseError
@@ -294,23 +300,25 @@ extension APIClient {
             for areaData in areas {
                 // Fetch or create Area
                 let areaFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
-                areaFetchRequest.predicate = NSPredicate(format: "name == %@", areaData.name.capitalized)
+                areaFetchRequest.predicate = NSPredicate(format: "name == %@", areaData.name.capitalized) // nå som du har ordna id burde predicate endres
                 
                 if let fetchedArea = try managedObjectContext.fetch(areaFetchRequest).first {
-                    // Area already exists, update it if needed
-//                    fetchedArea.name = areaData.name // TODO: You should give area an id
-                    print("Area already exists: \(fetchedArea.name)")
+                    // Area already exists
+                    if fetchedArea.id == nil {
+                        fetchedArea.id = areaData.id
+                    }
+                    print("Area already exists: \(fetchedArea.name) with id: \(fetchedArea.id ?? "no id")")
                 } else {
                     // Create a new Area
                     let newArea = Area(context: managedObjectContext)
                     newArea.name = areaData.name
+                    newArea.id = areaData.id //String(areas.count + 1) <-- denne skal til add new area
                     
                     print("New area created: \(newArea.name)")
-                    DataController.shared.saveContext()
                 }
             }
             
-//            DataController.shared.saveContext()
+            DataController.shared.saveContext()
             
             // check how many areas are saved in coredata
             let countFetchRequest: NSFetchRequest<Area> = Area.fetchRequest()
@@ -499,7 +507,7 @@ extension APIClient {
                 
                 try await managedObjectContext.perform {
                     if let fetchedIngredient = try managedObjectContext.fetch(ingredientFetchRequest).first {
-                        print("Ingredient already exists: \(fetchedIngredient.name ?? "unknown" )")
+                        print("Ingredient already exists: \(fetchedIngredient.name ?? "unknown" ) with ID: \(fetchedIngredient.id ?? "unknown")")
                     } else {
                         // Create new ingredient
                         let newIngredient = Ingredient(context: managedObjectContext)

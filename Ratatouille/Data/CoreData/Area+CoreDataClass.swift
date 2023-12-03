@@ -19,11 +19,13 @@ public class Area: NSManagedObject, Decodable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let name = try container.decode(String.self, forKey: .name)
+        let id = try container.decodeIfPresent(String.self, forKey: .id)
         
         let managedObjectContext = DataController.shared.managedObjectContext
         
         super.init(entity: .entity(forEntityName: "Area", in: managedObjectContext)!, insertInto: managedObjectContext)
         
         self.name = name
+        self.id = id
     }
 }

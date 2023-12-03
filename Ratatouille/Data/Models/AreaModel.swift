@@ -10,6 +10,7 @@ import UIKit
 
 struct AreaModel: Codable, AreaRepresentable {
     var name: String
+    var id: String?
     
     init?(name: String) {
         self.name = name
@@ -27,6 +28,6 @@ enum AreaCodingKeys: CodingKey {
 }
 
 struct AreaWrapper: Decodable {
-    let meals: [AreaModel] // Has to be meals, to recognize the field in the API
+    var meals: [AreaModel] // Has to be meals, to recognize the field in the API
 }
 

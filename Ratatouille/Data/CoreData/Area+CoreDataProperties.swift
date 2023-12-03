@@ -16,6 +16,7 @@ extension Area: AreaRepresentable {
     }
 
     @NSManaged public var name: String
+    @NSManaged public var id: String?
     @NSManaged public var meals: NSSet?
     @NSManaged public var archive: Archive?
 }
@@ -40,6 +41,7 @@ extension Area {
 extension Area : Identifiable {
     enum CodingKeys: CodingKey {
         case name
+        case id
     }
 }
 
