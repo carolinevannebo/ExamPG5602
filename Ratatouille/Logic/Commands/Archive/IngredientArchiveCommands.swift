@@ -70,10 +70,8 @@ class ArchiveIngredientCommand: ICommand {
             }
             
             // Only allow user to archive ingredients they have created
-            for i in 0..<608 {
-                if input.id == String(i+1) {
-                    throw IngredientArchiveError.unauthorizedError
-                }
+            if let ingredientId = Int(input.id!), (1...608).contains(ingredientId) {
+                throw IngredientArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
@@ -177,10 +175,8 @@ class DeleteIngredientCommand: ICommand {
             }
             
             // Users should not be able to archive certain ingredients in the first place, so this is better safe than sorry
-            for i in 0..<608 {
-                if input.id == String(i+1) {
-                    throw IngredientArchiveError.unauthorizedError
-                }
+            if let ingredientId = Int(input.id!), (1...608).contains(ingredientId) {
+                throw IngredientArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()

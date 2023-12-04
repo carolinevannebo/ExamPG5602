@@ -70,10 +70,8 @@ class ArchiveCategoryCommand: ICommand {
             }
             
             // Only allow user to archive categories they have created
-            for i in 0..<14 {
-                if input.id == String(i+1) {
-                    throw CategoryArchiveError.unauthorizedError
-                }
+            if let categoryId = Int(input.id!), (1...14).contains(categoryId) {
+                throw CategoryArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Category> = Category.fetchRequest()
@@ -177,10 +175,8 @@ class DeleteCategoryCommand: ICommand {
             }
             
             // Users should not be able to archive certain categories in the first place, so this is better safe than sorry
-            for i in 0..<14 {
-                if input.id == String(i+1) {
-                    throw CategoryArchiveError.unauthorizedError
-                }
+            if let categoryId = Int(input.id!), (1...14).contains(categoryId) {
+                throw CategoryArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Category> = Category.fetchRequest()

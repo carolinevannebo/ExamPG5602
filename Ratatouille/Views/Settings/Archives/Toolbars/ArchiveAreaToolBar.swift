@@ -41,6 +41,16 @@ struct ArchiveAreaToolBar: ToolbarContent {
     }
 }
 
+struct AreaArchiveSheet: View {
+    @StateObject var viewModel: ArchiveViewModel
+    
+    var body: some View {
+        NavigationStack {
+            Text("area archive sheet")
+        }
+    }
+}
+
 extension ArchiveViewModel {
     
     func loadAreasFromArchives() async {

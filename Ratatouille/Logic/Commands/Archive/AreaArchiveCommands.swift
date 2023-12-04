@@ -70,10 +70,8 @@ class ArchiveAreaCommand: ICommand {
             }
             
             // Only allow user to archive areas they have created
-            for i in 0..<28 {
-                if input.id == String(i+1) {
-                    throw AreaArchiveError.unauthorizedError
-                }
+            if let areaId = Int(input.id!), (1...28).contains(areaId) {
+                throw AreaArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Area> = Area.fetchRequest()
@@ -177,10 +175,8 @@ class DeleteAreaCommand: ICommand {
             }
             
             // Users should not be able to archive certain areas in the first place, so this is better safe than sorry
-            for i in 0..<14 {
-                if input.id == String(i+1) {
-                    throw AreaArchiveError.unauthorizedError
-                }
+            if let areaId = Int(input.id!), (1...28).contains(areaId) {
+                throw AreaArchiveError.unauthorizedError
             }
             
             let request: NSFetchRequest<Area> = Area.fetchRequest()

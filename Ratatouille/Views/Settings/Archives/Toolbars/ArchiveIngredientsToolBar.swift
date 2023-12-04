@@ -19,6 +19,7 @@ struct ArchiveIngredientToolBar: ToolbarContent {
             Button {
                 // restore
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.restoreIngredient(ingredient: ingredient)
                     await viewModel.loadIngredientsFromArchives()
                     dismiss()
@@ -30,12 +31,52 @@ struct ArchiveIngredientToolBar: ToolbarContent {
             Button {
                 // delete permanently
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.deleteIngredient(ingredient: ingredient)
                     await viewModel.loadIngredientsFromArchives()
                     dismiss()
                 }
             } label: {
                 Image(systemName: "trash.fill")
+            }
+        }
+    }
+}
+
+struct IngredientArchiveSheet: View { // TODO: style om du får tid
+    @StateObject var viewModel: ArchiveViewModel
+    @State var ingredient: Ingredient
+    
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading) {
+                
+                Text(ingredient.name ?? "")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .padding()
+                
+                Spacer()
+                
+                HStack {
+                    Text(ingredient.information ?? "")
+                    
+                    Spacer()
+                    if ingredient.image != nil {
+                        Image(uiImage: UIImage(data: Data(base64Encoded: ingredient.image!)!)!)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                    }
+                }
+                .padding()
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .toolbar {
+                ArchiveIngredientToolBar(viewModel: viewModel, ingredient: $ingredient)
             }
         }
     }

@@ -87,7 +87,7 @@ struct ArchiveView: View {
             .background(Color.myBackgroundColor)
             .sheet(isPresented: $viewModel.isSheetPresented) {
                 if let sheetType = viewModel.selectSheet {
-                    viewModel.sheet(for: sheetType)
+                    viewModel.sheet(for: sheetType).presentationDetents([.medium])
                 }
             }
         }
@@ -123,32 +123,6 @@ struct ArchiveListItemView: View {
                     .padding(.leading, 30)
             }
             .foregroundColor(.myAlternativeTextColor)
-        }
-    }
-}
-
-struct AreaArchiveSheet: View {
-    @StateObject var viewModel: ArchiveViewModel
-    
-    var body: some View {
-        NavigationStack {
-            Text("area archive sheet")
-        }
-    }
-}
-
-struct IngredientArchiveSheet: View {
-    @StateObject var viewModel: ArchiveViewModel
-    @State var ingredient: Ingredient
-    
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Text("ingredient archive sheet")
-            }
-        }
-        .toolbar {
-            ArchiveIngredientToolBar(viewModel: viewModel, ingredient: $ingredient)
         }
     }
 }
