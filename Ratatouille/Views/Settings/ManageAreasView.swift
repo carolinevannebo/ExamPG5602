@@ -79,7 +79,6 @@ struct ManageAreasView: View {
         .refreshable {
             Task { await viewModel.loadAreas() }
         }
-//        .errorAlert(error: $viewModel.currentError)
     }
 }
 

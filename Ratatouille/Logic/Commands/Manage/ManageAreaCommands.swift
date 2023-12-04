@@ -53,7 +53,7 @@ class AddNewAreaCommand: ICommand {
             
         } catch {
             print("Unexpected error in AddNewAreaCommand: \(error)")
-            return .failure(.savingError)
+            return .failure(error as! ManageAreaError)
         }
     }
 }
@@ -69,10 +69,8 @@ class UpdateAreaCommand: ICommand {
             }
             
             // Only allow user to update areas they have created
-            for i in 0..<28 {
-                if input.id == String(i+1) {
-                    throw ManageAreaError.unauthorizedError
-                }
+            if let areaId = Int(input.id!), (1...28).contains(areaId) {
+                throw ManageAreaError.unauthorizedError
             }
             
             let request: NSFetchRequest<Area> = Area.fetchRequest()
@@ -96,7 +94,7 @@ class UpdateAreaCommand: ICommand {
             return result ?? .failure(.updateError)
         } catch {
             print("Unexpected error in UpdateAreaCommand: \(error)")
-            return .failure(.updateError)
+            return .failure(error as! ManageAreaError)
         }
     }
 }

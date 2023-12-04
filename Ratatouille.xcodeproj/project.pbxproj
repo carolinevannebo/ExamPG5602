@@ -41,7 +41,6 @@
 		E46962982B15421B00D100E6 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962972B15421B00D100E6 /* CategoryListView.swift */; };
 		E469629A2B15448E00D100E6 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46962992B15448E00D100E6 /* MealListView.swift */; };
 		E46962A02B15465900D100E6 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469629F2B15465900D100E6 /* ArchiveView.swift */; };
-		E48815A32B1A228500B00B55 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48815A22B1A228500B00B55 /* ErrorAlert.swift */; };
 		E48815A52B1A452000B00B55 /* ManageAreasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48815A42B1A452000B00B55 /* ManageAreasView.swift */; };
 		E48815A72B1A459600B00B55 /* ManageCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */; };
 		E4A35DB12B1B65B200C4FC77 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */; };
@@ -76,6 +75,7 @@
 		E4EA26E02B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */; };
 		E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */; };
 		E4EA26E52B1D0C60000E8EA6 /* AddIngredientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */; };
+		E4EA26E72B1D53B0000E8EA6 /* EditIngredientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -141,7 +141,6 @@
 		E46962972B15421B00D100E6 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		E46962992B15448E00D100E6 /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		E469629F2B15465900D100E6 /* ArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
-		E48815A22B1A228500B00B55 /* ErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
 		E48815A42B1A452000B00B55 /* ManageAreasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAreasView.swift; sourceTree = "<group>"; };
 		E48815A62B1A459600B00B55 /* ManageCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCategoriesView.swift; sourceTree = "<group>"; };
 		E4A35DB02B1B65B200C4FC77 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
@@ -176,6 +175,7 @@
 		E4EA26DF2B1CEE10000E8EA6 /* ArchiveIngredientsToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveIngredientsToolBar.swift; sourceTree = "<group>"; };
 		E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientsView.swift; sourceTree = "<group>"; };
 		E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientView.swift; sourceTree = "<group>"; };
+		E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIngredientView.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -370,6 +370,7 @@
 			children = (
 				E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */,
 				E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */,
+				E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */,
 			);
 			path = IngredientsManagement;
 			sourceTree = "<group>";
@@ -486,7 +487,6 @@
 			isa = PBXGroup;
 			children = (
 				E40644822B0EE95D00028CBD /* DarkModeViewModifier.swift */,
-				E48815A22B1A228500B00B55 /* ErrorAlert.swift */,
 				E42525272B18B99400A099C1 /* InputFieldViewModifier.swift */,
 				E42525252B18B8EB00A099C1 /* Placeholder.swift */,
 				E4A35DB22B1B7A8F00C4FC77 /* HideKeyboard.swift */,
@@ -699,7 +699,6 @@
 				E4E3B96D2B12A005008591D3 /* Archive+CoreDataProperties.swift in Sources */,
 				E4E3B9732B12A0CA008591D3 /* FavoriteCommands.swift in Sources */,
 				E4A35DB32B1B7A8F00C4FC77 /* HideKeyboard.swift in Sources */,
-				E48815A32B1A228500B00B55 /* ErrorAlert.swift in Sources */,
 				E42525282B18B99400A099C1 /* InputFieldViewModifier.swift in Sources */,
 				E406445D2B0D0F3500028CBD /* MealItemView.swift in Sources */,
 				E4EA26D42B1CC9AF000E8EA6 /* AreaArchiveCommands.swift in Sources */,
@@ -724,6 +723,7 @@
 				E406447D2B0EB94700028CBD /* SettingsView.swift in Sources */,
 				E4EA26DC2B1CE6C0000E8EA6 /* ManageIngredientCommand.swift in Sources */,
 				E4EA26C32B1CB769000E8EA6 /* ArchiveMealToolBar.swift in Sources */,
+				E4EA26E72B1D53B0000E8EA6 /* EditIngredientView.swift in Sources */,
 				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
 				E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */,
 			);

@@ -11,6 +11,7 @@ import SwiftUI
 struct CategoryToolBar: ToolbarContent {
     @StateObject var viewModel: ManageCategoriesViewModel
     @Binding var category: Category
+    @State var unAuthorized: Bool
     
     @Environment(\.dismiss) private var dismiss
     
@@ -23,7 +24,7 @@ struct CategoryToolBar: ToolbarContent {
                 }
             } label: {
                 Image(systemName: "square.and.pencil")
-            }
+            } .disabled(unAuthorized)
             
             Button {
                 // archive
@@ -34,7 +35,7 @@ struct CategoryToolBar: ToolbarContent {
                 }
             } label: {
                 Image(systemName: "archivebox.fill")
-            }
+            } .disabled(unAuthorized)
         }
     }
 }
@@ -104,7 +105,7 @@ extension ManageCategoriesViewModel {
                 print("Category was successfully passed and updated")
                 
                 DispatchQueue.main.async {
-                    self.isPresentingAddCategoryView = false
+                    self.isPresentingEditCategoryView = false
                 }
                 
                 await loadCategories()

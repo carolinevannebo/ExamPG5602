@@ -12,11 +12,17 @@ struct ArchivedIngredientsList: View {
     @StateObject var viewModel: ArchiveViewModel
     
     var body: some View {
-        Section("Ingredienser") { // MARK: unpopulated atm
+        Section("Ingredienser") {
             ForEach(0..<viewModel.ingredients.count, id: \.self) { index in
-                ZStack {
-                    ArchiveListItemView(name: viewModel.ingredients[index].name!)
-                }
+                ArchiveListItemView(name: viewModel.ingredients[index].name!)
+                    .onTapGesture {
+                        DispatchQueue.main.async { // her kan den klage på multi-threading
+                            viewModel.passingIngredient = viewModel.ingredients[index]
+                            viewModel.selectSheet = .ingredient
+                            viewModel.isSheetPresented = true
+                        }
+                    }
+                
             }
             .id(viewModel.listId)
             .listRowBackground(Color.clear)
@@ -24,3 +30,4 @@ struct ArchivedIngredientsList: View {
         }
     }
 }
+

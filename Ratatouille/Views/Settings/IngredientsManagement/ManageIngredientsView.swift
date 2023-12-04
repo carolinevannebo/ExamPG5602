@@ -76,7 +76,7 @@ struct ManageIngredientsListContent: View {
             }
             .listRowBackground(Color.clear)
             .onTapGesture {
-                Task {
+                DispatchQueue.main.async {
                     viewModel.searchIngredient = ""
                     viewModel.chosenIngredient = viewModel.filteredIngredients[index]
                     viewModel.isPresentingEditIngredientView = true
@@ -136,7 +136,11 @@ struct ManageIngredientsView: View {
             }
         }
         .sheet(isPresented: $viewModel.isPresentingEditIngredientView) {
-            Text("Her skal du redigere ingrediens med navn \((viewModel.chosenIngredient! as Ingredient).name!)")
+            EditIngredientView(ingredient: viewModel.chosenIngredient!) { result in
+                Task {
+                    await viewModel.updateIngredient(result: result)
+                }
+            }
         }
         .onAppear {
             Task {
@@ -155,11 +159,11 @@ struct ManageIngredientsView: View {
 
 extension ManageIngredientsViewModel {
     func performSearch() {
-        Task {
-            if searchIngredient.isEmpty {
-                self.filteredIngredients = ingredients
+        DispatchQueue.main.async {
+            if self.searchIngredient.isEmpty {
+                self.filteredIngredients = self.ingredients
             } else {
-                self.filteredIngredients = ingredients.compactMap { mapIngredient($0)}
+                self.filteredIngredients = self.ingredients.compactMap { self.mapIngredient($0)}
             }
         }
     }

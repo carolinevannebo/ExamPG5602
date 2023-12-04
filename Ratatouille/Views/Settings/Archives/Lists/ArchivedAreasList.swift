@@ -17,7 +17,7 @@ struct ArchivedAreasList: View {
                 ZStack {
                     ArchiveListItemView(name: viewModel.areas[index].name)
                         .onTapGesture { // MARK: må du i dispatchqueue main?
-                            viewModel.sheetToPresent = .area
+                            viewModel.selectSheet = .area
                             viewModel.isSheetPresented = true
                         }
                     

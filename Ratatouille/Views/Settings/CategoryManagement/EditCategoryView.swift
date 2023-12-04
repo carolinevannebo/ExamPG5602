@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import _PhotosUI_SwiftUI
+import PhotosUI
 
 class EditCategoryViewModel: ObservableObject {
     @Published var name: String = ""

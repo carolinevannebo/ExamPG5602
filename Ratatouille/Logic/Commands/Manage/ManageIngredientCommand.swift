@@ -55,7 +55,7 @@ class AddNewIngredientCommand: ICommand {
             
         } catch {
             print("Unexpected error in AddNewIngredientCommand: \(error)")
-            return .failure(.savingError)
+            return .failure(error as! ManageIngredientError)
         }
     }
 }
@@ -70,13 +70,6 @@ class UpdateIngredientCommand: ICommand {
                 throw ManageIngredientError.missingIdError("Ingredient ID is missing.")
             }
             
-            // Only allow user to update ingredients they have created
-            for i in 0..<608 {
-                if input.id == String(i+1) {
-                    throw ManageIngredientError.unauthorizedError
-                }
-            }
-            
             let request: NSFetchRequest<Ingredient> = Ingredient.fetchRequest()
             request.predicate = NSPredicate(format: "id == %@", input.id!)
             
@@ -86,8 +79,13 @@ class UpdateIngredientCommand: ICommand {
             
             try await managedObjectContext.perform {
                 if let fetchedIngredient = try managedObjectContext.fetch(request).first {
-                    fetchedIngredient.name = input.name
+                    // Only allow user to update name on ingredients they have created
+                    if let ingredientId = Int(input.id!), !(1...608).contains(ingredientId) {
+                        fetchedIngredient.name = input.name
+                    }
+                    
                     fetchedIngredient.information = input.information
+                    fetchedIngredient.image = input.image
                     
                     result = .success(fetchedIngredient)
                 } else {
@@ -99,7 +97,7 @@ class UpdateIngredientCommand: ICommand {
             return result ?? .failure(.updateError)
         } catch {
             print("Unexpected error in UpdateIngredientCommand: \(error)")
-            return .failure(.updateError)
+            return .failure(error as! ManageIngredientError)
         }
     }
 }

@@ -19,9 +19,6 @@ class ManageCategoriesViewModel: ObservableObject {
     @Published var shouldAlertError: Bool = false
     @Published var errorMessage: String = ""
     
-//    @Published var currentError: Error? = nil
-//    @Published var categoryAuthorized: Bool = true
-    
     // Logic
     let loadCategoriesCommand = LoadCategoriesFromCDCommand()
     let saveCategoryCommand = AddNewCategoryCommand()
@@ -57,8 +54,7 @@ struct ManageCategoriesView: View {
                 ForEach(0..<viewModel.categories.count, id: \.self) { index in
                     ManageCategoryItem(
                         category: $viewModel.categories[index],
-                        viewModel: viewModel//,
-                        //categoryAuthorized: $viewModel.categoryAuthorized
+                        viewModel: viewModel
                     )
                 } // foreach
                 .listRowBackground(Color.clear)
@@ -100,6 +96,7 @@ struct ManageCategoriesView: View {
 struct ManageCategoryItem: View {
     @Binding var category: Category
     @StateObject var viewModel: ManageCategoriesViewModel
+    @State var unAuthorized: Bool = false
     
     var body: some View {
         ZStack {
@@ -112,7 +109,8 @@ struct ManageCategoryItem: View {
                 .toolbar {
                     CategoryToolBar(
                         viewModel: viewModel,
-                        category: $category
+                        category: $category,
+                        unAuthorized: unAuthorized
                     )
                 }
                 .sheet(isPresented: $viewModel.isPresentingEditCategoryView) {
@@ -125,9 +123,15 @@ struct ManageCategoryItem: View {
             }
             .opacity(0)
         }
-//        .onAppear {
-//            viewModel.checkAuthorization(category: category) // TODO: Need to fix that toolbar doesnt appear for default categories
-//        }
+        .onAppear {
+            DispatchQueue.main.async {
+                if let categoryId = Int(category.id!), (1...14).contains(categoryId) {
+                    self.unAuthorized = true
+                } else {
+                    self.unAuthorized = false
+                }
+            }
+        }
     }
 }
 

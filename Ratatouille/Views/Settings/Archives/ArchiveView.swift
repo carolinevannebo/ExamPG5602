@@ -15,7 +15,10 @@ class ArchiveViewModel: ObservableObject {
     
     @Published var listId: UUID?
     @Published var isSheetPresented: Bool = false
-    @Published var sheetToPresent: ArchiveSheetType? = nil
+    @Published var selectSheet: ArchiveSheetType? = nil
+    
+    @Published var passingIngredient: Ingredient?
+    @Published var passingArea: Area?
     
     @Published var shouldAlertError: Bool = false
     @Published var errorMessage: String = ""
@@ -44,9 +47,18 @@ class ArchiveViewModel: ObservableObject {
         case noIngredientsInArchives
     }
     
-    enum ArchiveSheetType {
+    enum ArchiveSheetType: Identifiable {
         case area
         case ingredient
+        
+        var id: String {
+            switch self {
+            case .area:
+                return "area"
+            case .ingredient:
+                return "ingredient"
+            }
+        }
     }
 }
 
@@ -60,7 +72,7 @@ struct ArchiveView: View {
                     ArchivedAreasList(viewModel: viewModel) // MARK: unpopulated atm
                     ArchivedCategoriesList(viewModel: viewModel)
                     ArchivedMealsList(viewModel: viewModel)
-                    ArchivedIngredientsList(viewModel: viewModel) // MARK: unpopulated atm
+                    ArchivedIngredientsList(viewModel: viewModel)
                 }
                 .padding(.top)
                 .padding(.horizontal)
@@ -74,24 +86,9 @@ struct ArchiveView: View {
             .navigationTitle("Arkiv")
             .background(Color.myBackgroundColor)
             .sheet(isPresented: $viewModel.isSheetPresented) {
-                switch(viewModel.sheetToPresent) {
-                case .area:
-                    Text("area sheet")
-                case .ingredient:
-                    Text("ingredient sheet")
-                case .none:
-                    Text("none?")
+                if let sheetType = viewModel.selectSheet {
+                    viewModel.sheet(for: sheetType)
                 }
-                // if isAreaSheetPresented
-                //      NavigationStack
-                //          ArchivedListItemView
-                //              .toolbar { ArchiveAreaToolBar }
-                
-                // if isIngredientSheetPresented
-                //      NavigationStack
-                //          ArchivedListItemView
-                //              .toolbar { ArchiveIngredientToolBar }
-                
             }
         }
         .onAppear {
@@ -130,6 +127,32 @@ struct ArchiveListItemView: View {
     }
 }
 
+struct AreaArchiveSheet: View {
+    @StateObject var viewModel: ArchiveViewModel
+    
+    var body: some View {
+        NavigationStack {
+            Text("area archive sheet")
+        }
+    }
+}
+
+struct IngredientArchiveSheet: View {
+    @StateObject var viewModel: ArchiveViewModel
+    @State var ingredient: Ingredient
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                Text("ingredient archive sheet")
+            }
+        }
+        .toolbar {
+            ArchiveIngredientToolBar(viewModel: viewModel, ingredient: $ingredient)
+        }
+    }
+}
+
 // now unused
 struct EmptyArchiveView: View {
     var body: some View {
@@ -151,5 +174,16 @@ struct EmptyArchiveView: View {
 struct ArchiveView_Previews: PreviewProvider {
     static var previews: some View {
         ArchiveView()
+    }
+}
+
+extension ArchiveViewModel { // TODO: refaktorer samme i recipebrowser sheets
+    func sheet(for sheetType: ArchiveSheetType) -> some View {
+        switch sheetType {
+        case .area:
+            return AnyView(AreaArchiveSheet(viewModel: self))
+        case .ingredient:
+            return AnyView(IngredientArchiveSheet(viewModel: self, ingredient: self.passingIngredient!))
+        }
     }
 }

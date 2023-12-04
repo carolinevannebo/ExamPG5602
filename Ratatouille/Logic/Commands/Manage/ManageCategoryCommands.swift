@@ -56,7 +56,7 @@ class AddNewCategoryCommand: ICommand {
             
         } catch {
             print("Unexpected error in AddNewCategoryCommand: \(error)")
-            return .failure(.savingError)
+            return .failure(error as! ManageCategoryError)
         }
     }
 }
@@ -72,10 +72,8 @@ class UpdateCategoryCommand: ICommand {
             }
             
             // Only allow user to update categories they have created
-            for i in 0..<14 {
-                if input.id == String(i+1) {
-                    throw ManageCategoryError.unauthorizedError
-                }
+            if let categoryId = Int(input.id!), (1...14).contains(categoryId) {
+                throw ManageCategoryError.unauthorizedError
             }
             
             let request: NSFetchRequest<Category> = Category.fetchRequest()
@@ -101,7 +99,7 @@ class UpdateCategoryCommand: ICommand {
             return result ?? .failure(.updateError)
         } catch {
             print("Unexpected error in UpdateCategoryCommand: \(error)")
-            return .failure(.updateError)
+            return .failure(error as! ManageCategoryError)
         }
     }
 }
