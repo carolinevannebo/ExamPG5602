@@ -19,6 +19,7 @@ struct ArchiveAreaToolBar: ToolbarContent {
             Button {
                 // restore
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.restoreArea(area: area)
                     await viewModel.loadAreasFromArchives()
                     dismiss()
@@ -30,6 +31,7 @@ struct ArchiveAreaToolBar: ToolbarContent {
             Button {
                 // delete permanently
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.deleteArea(area: area)
                     await viewModel.loadAreasFromArchives()
                     dismiss()
@@ -43,10 +45,22 @@ struct ArchiveAreaToolBar: ToolbarContent {
 
 struct AreaArchiveSheet: View {
     @StateObject var viewModel: ArchiveViewModel
+    @State var area: Area
     
     var body: some View {
         NavigationStack {
-            Text("area archive sheet")
+            VStack(alignment: .leading) {
+                        
+                // TODO: flag
+                Text(area.name)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .padding()
+            }
+            .padding(.horizontal)
+            .toolbar {
+                ArchiveAreaToolBar(viewModel: viewModel, area: $area)
+            }
         }
     }
 }

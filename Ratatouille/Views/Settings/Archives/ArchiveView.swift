@@ -155,7 +155,7 @@ extension ArchiveViewModel { // TODO: refaktorer samme i recipebrowser sheets
     func sheet(for sheetType: ArchiveSheetType) -> some View {
         switch sheetType {
         case .area:
-            return AnyView(AreaArchiveSheet(viewModel: self))
+            return AnyView(AreaArchiveSheet(viewModel: self, area: self.passingArea!))
         case .ingredient:
             return AnyView(IngredientArchiveSheet(viewModel: self, ingredient: self.passingIngredient!))
         }

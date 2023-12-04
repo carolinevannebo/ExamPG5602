@@ -14,10 +14,9 @@ class ManageAreasViewModel: ObservableObject {
     @Published var isPresentingAddAreaView: Bool = false
     @Published var isPresentingEditAreaView: Bool = false
     
-//    @Published var currentError: Error? = nil
-//    @Published var areaAuthorized: Bool = true
     @Published var errorMessage: String = ""
     @Published var shouldAlertError: Bool = false
+    @Published var areaAuthorized: Bool = true
     
     let loadAreasCommand = LoadAreasFromCDCommand()
     let saveAreaCommand = AddNewAreaCommand()

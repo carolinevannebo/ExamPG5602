@@ -76,6 +76,7 @@
 		E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */; };
 		E4EA26E52B1D0C60000E8EA6 /* AddIngredientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */; };
 		E4EA26E72B1D53B0000E8EA6 /* EditIngredientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */; };
+		E4EA26EA2B1D7EA0000E8EA6 /* AddAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26E92B1D7EA0000E8EA6 /* AddAreaView.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -176,6 +177,7 @@
 		E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageIngredientsView.swift; sourceTree = "<group>"; };
 		E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientView.swift; sourceTree = "<group>"; };
 		E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIngredientView.swift; sourceTree = "<group>"; };
+		E4EA26E92B1D7EA0000E8EA6 /* AddAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAreaView.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -256,11 +258,11 @@
 		E469629C2B1545E700D100E6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				E4EA26E32B1D0A41000E8EA6 /* IngredientsManagement */,
+				E4EA26E82B1D7E83000E8EA6 /* AreaManagement */,
+				E4EA26E32B1D0A41000E8EA6 /* IngredientManagement */,
 				E4EA26C12B1CB74B000E8EA6 /* Archives */,
 				E4A35DBA2B1BB15E00C4FC77 /* CategoryManagement */,
 				E406447C2B0EB94700028CBD /* SettingsView.swift */,
-				E48815A42B1A452000B00B55 /* ManageAreasView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -365,14 +367,23 @@
 			path = Commands;
 			sourceTree = "<group>";
 		};
-		E4EA26E32B1D0A41000E8EA6 /* IngredientsManagement */ = {
+		E4EA26E32B1D0A41000E8EA6 /* IngredientManagement */ = {
 			isa = PBXGroup;
 			children = (
 				E4EA26E12B1CFDB4000E8EA6 /* ManageIngredientsView.swift */,
 				E4EA26E42B1D0C60000E8EA6 /* AddIngredientView.swift */,
 				E4EA26E62B1D53B0000E8EA6 /* EditIngredientView.swift */,
 			);
-			path = IngredientsManagement;
+			path = IngredientManagement;
+			sourceTree = "<group>";
+		};
+		E4EA26E82B1D7E83000E8EA6 /* AreaManagement */ = {
+			isa = PBXGroup;
+			children = (
+				E48815A42B1A452000B00B55 /* ManageAreasView.swift */,
+				E4EA26E92B1D7EA0000E8EA6 /* AddAreaView.swift */,
+			);
+			path = AreaManagement;
 			sourceTree = "<group>";
 		};
 		E4EAFC1D2B023AF10095D10B = {
@@ -726,6 +737,7 @@
 				E4EA26E72B1D53B0000E8EA6 /* EditIngredientView.swift in Sources */,
 				E4A35DB92B1B976100C4FC77 /* CategoryDetailView.swift in Sources */,
 				E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */,
+				E4EA26EA2B1D7EA0000E8EA6 /* AddAreaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
