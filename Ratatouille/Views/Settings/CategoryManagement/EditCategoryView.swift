@@ -41,7 +41,7 @@ class EditCategoryViewModel: ObservableObject {
                     information = category.information!
                 }
                 
-                if ((base64Image?.isEmpty) != nil) {
+                if base64Image!.isEmpty {
                     base64Image = category.image
                 }
                 
