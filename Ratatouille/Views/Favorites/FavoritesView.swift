@@ -23,6 +23,7 @@ class FavoritesViewModel: ObservableObject {
     let loadCommand = LoadFavoritesCommand()
     let archiveCommand = ArchiveMealCommand() // TODO: refaktorer så favoriteitem bruker denne
     let updateCommand = UpdateMealCommand()
+    let addCommand = AddNewMealCommand()
     
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
@@ -41,7 +42,11 @@ struct FavoritesView: View {
                 if viewModel.hasFavorites {
                     FavoritesListContent(viewModel: viewModel)
                         .sheet(isPresented: $viewModel.isPresentingAddSheet) {
-                            Text("add new meal")
+                            AddMealView() { result in
+                                Task {
+                                    await viewModel.saveNewMeal(result: result)
+                                }
+                            }
                         }
 //                    ScrollView {
 //                        ForEach(0..<viewModel.meals.count, id: \.self) { index in
@@ -171,6 +176,40 @@ extension FavoritesViewModel {
             print("Unexpected error when loading favorites to View: \(error)")
         }
     }
+    
+    func saveNewMeal(result: Result<MealModel, Error>) async {
+            switch result {
+            case .success(let meal):
+                print("Meal with name \(meal.name) was passed")
+                
+                let saveToCDResult = await addCommand.execute(input: meal)
+                
+                switch saveToCDResult {
+                case .success(_):
+                    print("Meal was successfully passed and saved")
+                    
+                    DispatchQueue.main.async {
+                        self.isPresentingAddSheet = false
+                    }
+                    
+                    await loadFavoriteMeals()
+                    
+                case .failure(let error):
+                    print("Meal was passed, but not saved: \(error)")
+                    DispatchQueue.main.async {
+                        self.errorMessage = error.localizedDescription
+                        self.isShowingErrorAlert = true
+                    }
+                }
+                
+            case .failure(let error):
+                print("Category could not be passed: \(error)")
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    self.isShowingErrorAlert = true
+                }
+            }
+        }
     
     func updateMeal(result: Result<Meal, Error>) async {
             switch result {

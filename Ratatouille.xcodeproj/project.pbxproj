@@ -81,6 +81,7 @@
 		E4EA26EE2B1D918B000E8EA6 /* FavoriteToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26ED2B1D918B000E8EA6 /* FavoriteToolBar.swift */; };
 		E4EA26F02B1D9663000E8EA6 /* EditMealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26EF2B1D9663000E8EA6 /* EditMealView.swift */; };
 		E4EA26F22B1D9889000E8EA6 /* ManageMealCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26F12B1D9889000E8EA6 /* ManageMealCommand.swift */; };
+		E4EA26F42B1DAF22000E8EA6 /* AddMealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EA26F32B1DAF22000E8EA6 /* AddMealView.swift */; };
 		E4EAFC2A2B023AF10095D10B /* RatatouilleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */; };
 		E4EAFC2E2B023AF80095D10B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC2D2B023AF80095D10B /* Assets.xcassets */; };
 		E4EAFC312B023AF80095D10B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EAFC302B023AF80095D10B /* Preview Assets.xcassets */; };
@@ -186,6 +187,7 @@
 		E4EA26ED2B1D918B000E8EA6 /* FavoriteToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteToolBar.swift; sourceTree = "<group>"; };
 		E4EA26EF2B1D9663000E8EA6 /* EditMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMealView.swift; sourceTree = "<group>"; };
 		E4EA26F12B1D9889000E8EA6 /* ManageMealCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageMealCommand.swift; sourceTree = "<group>"; };
+		E4EA26F32B1DAF22000E8EA6 /* AddMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealView.swift; sourceTree = "<group>"; };
 		E4EAFC262B023AF10095D10B /* Ratatouille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ratatouille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EAFC292B023AF10095D10B /* RatatouilleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatatouilleApp.swift; sourceTree = "<group>"; };
 		E4EAFC2D2B023AF80095D10B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				E425252B2B19174200A099C1 /* FavoriteItemView.swift */,
 				E4EA26ED2B1D918B000E8EA6 /* FavoriteToolBar.swift */,
 				E4EA26EF2B1D9663000E8EA6 /* EditMealView.swift */,
+				E4EA26F32B1DAF22000E8EA6 /* AddMealView.swift */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";
@@ -754,6 +757,7 @@
 				E4EA26E22B1CFDB4000E8EA6 /* ManageIngredientsView.swift in Sources */,
 				E4EA26EA2B1D7EA0000E8EA6 /* AddAreaView.swift in Sources */,
 				E4EA26EC2B1D8501000E8EA6 /* EditAreaView.swift in Sources */,
+				E4EA26F42B1DAF22000E8EA6 /* AddMealView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
