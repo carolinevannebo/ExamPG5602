@@ -59,11 +59,15 @@ struct MealHeader<MealType: MealRepresentable>: View {
                 // Text boxes
                 HStack {
                     VStack (alignment: .leading) {
-                            CategoryButton(category: meal.wrappedValue.category!)
+                        if let category = meal.wrappedValue.category {
+                            CategoryButton(category: category)
                                 .onTapGesture {
                                     categoryIsPresented.wrappedValue = true
                                 }
-                        AreaTextBox(area: meal.wrappedValue.area!, backgroundColor: .myAccentColor, textColor: .mySubTitleColor)
+                        }
+                        if let area = meal.wrappedValue.area {
+                            AreaTextBox(area: area, backgroundColor: .myAccentColor, textColor: .mySubTitleColor)
+                        }
                         Spacer()
                         
                     }
