@@ -82,6 +82,7 @@ class UpdateAreaCommand: ICommand {
             
             try await managedObjectContext.perform {
                 if let fetchedArea = try managedObjectContext.fetch(request).first {
+                    // Only allow user to update areas they have created
                     fetchedArea.name = input.name
                     
                     result = .success(fetchedArea)

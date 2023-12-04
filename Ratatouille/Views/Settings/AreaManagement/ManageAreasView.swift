@@ -10,6 +10,7 @@ import SwiftUI
 
 class ManageAreasViewModel: ObservableObject {
     @Published var areas: [Area] = []
+    @Published var passingArea: Area?
     
     @Published var isPresentingAddAreaView: Bool = false
     @Published var isPresentingEditAreaView: Bool = false
@@ -36,13 +37,24 @@ struct ManageAreasView: View {
         NavigationStack {
             List {
                 ForEach(0..<viewModel.areas.count, id: \.self) { index in
+                    
                     AreaTextBox(area: viewModel.areas[index], backgroundColor: .myDiffusedColor, textColor: .myContrastColor)
-                    //TODO: sett editsheet til true ontap
                         .onTapGesture {
-                            Task {
+                            DispatchQueue.main.async {
+                                viewModel.passingArea = viewModel.areas[index]
                                 viewModel.isPresentingEditAreaView = true
                             }
                         }
+                        .swipeActions {
+                            Button {
+                                Task {
+                                    await viewModel.archiveArea(area: $viewModel.areas[index].wrappedValue)
+                                }
+                            } label: {
+                                Image(systemName: "archivebox.fill")
+                            }
+                        }
+                    
                 } // foreach
                 .listRowBackground(Color.clear)
                 .listRowSeparatorTint(Color.clear)
@@ -67,10 +79,18 @@ struct ManageAreasView: View {
             }
         }
         .sheet(isPresented: $viewModel.isPresentingAddAreaView) {
-            Text("Her skal du legge til nytt landområde")
+            AddAreaView() { result in
+                Task {
+                    await viewModel.saveNewArea(result: result)
+                }
+            }
         }
         .sheet(isPresented: $viewModel.isPresentingEditAreaView) {
-            Text("Her skal du redigere landområde")
+            EditAreaView(area: viewModel.passingArea!) { result in
+                Task {
+                    await viewModel.updateArea(result: result)
+                }
+            }
         }
         .onAppear {
             Task { await viewModel.loadAreas() }

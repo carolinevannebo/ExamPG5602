@@ -32,11 +32,13 @@ class DataController: ObservableObject {
     }
     
     func saveContext() {
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch let error as NSError {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+        managedObjectContext.performAndWait {
+            if managedObjectContext.hasChanges {
+                do {
+                    try managedObjectContext.save()
+                } catch let error as NSError {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
             }
         }
     }

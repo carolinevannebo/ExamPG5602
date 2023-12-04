@@ -18,6 +18,7 @@ struct ArchiveMealToolBar: ToolbarContent {
             Button {
                 // restore
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.restoreMeal(meal: meal)
                     await viewModel.loadMealsFromArchive()
                     dismiss()
@@ -29,6 +30,7 @@ struct ArchiveMealToolBar: ToolbarContent {
             Button {
                 // delete permanently
                 Task {
+                    viewModel.isSheetPresented = false
                     await viewModel.deleteMeal(meal: meal)
                     await viewModel.loadMealsFromArchive()
                     dismiss()
