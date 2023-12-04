@@ -12,7 +12,9 @@ class FavoritesViewModel: ObservableObject {
     @Published var meals: [Meal] = []
     @Published var hasFavorites: Bool = false
     @Published var listId: UUID = UUID()
-    @Published var isPresentingSheet: Bool = false
+    
+    @Published var isPresentingEditSheet: Bool = false
+    @Published var isPresentingAddSheet: Bool = false
     
     // Error messages
     @Published var isShowingErrorAlert: Bool = false
@@ -37,29 +39,36 @@ struct FavoritesView: View {
             VStack {
                 
                 if viewModel.hasFavorites {
-                    ScrollView {
-                        ForEach(0..<viewModel.meals.count, id: \.self) { index in
-                            NavigationLink {
-                                MealDetailView(meal: viewModel.meals[index])
-                                    .refreshable {
-                                        Task { await viewModel.loadFavoriteMeals() }
-                                    }
-                                    .toolbar {
-                                        FavoriteToolBar(
-                                            viewModel: viewModel,
-                                            meal: $viewModel.meals[index]
-                                        )
-                                    }
-                                    .sheet(isPresented: $viewModel.isPresentingSheet) {
-                                        EditMealView(meal: viewModel.meals[index]) { result in
-                                            Task { await viewModel.updateMeal(result: result)}
-                                        }
-                                    }
-                            } label: {
-                                FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
-                            }
-                        }.id(viewModel.listId)
-                    }
+                    FavoritesListContent(viewModel: viewModel)
+                        .sheet(isPresented: $viewModel.isPresentingAddSheet) {
+                            Text("add new meal")
+                        }
+//                    ScrollView {
+//                        ForEach(0..<viewModel.meals.count, id: \.self) { index in
+//                            NavigationLink {
+//                                MealDetailView(meal: viewModel.meals[index])
+//                                    .refreshable {
+//                                        Task { await viewModel.loadFavoriteMeals() }
+//                                    }
+//                                    .toolbar {
+//                                        FavoriteToolBar(
+//                                            viewModel: viewModel,
+//                                            meal: $viewModel.meals[index]
+//                                        )
+//                                    }
+//                                    .sheet(isPresented: $viewModel.isPresentingEditSheet) {
+//                                        EditMealView(meal: viewModel.meals[index]) { result in
+//                                            Task { await viewModel.updateMeal(result: result)}
+//                                        }
+//                                    }
+//                                    .sheet(isPresented: $viewModel.isPresentingAddSheet) {
+//                                        print("add new meal")
+//                                    }
+//                            } label: {
+//                                FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
+//                            }
+//                        }.id(viewModel.listId)
+//                    }
                 } else {
                     EmptyFavoritesView()
                 }
@@ -71,6 +80,17 @@ struct FavoritesView: View {
             } message: {
                 Text($viewModel.errorMessage.wrappedValue)
             }
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button {
+                        DispatchQueue.main.async {
+                            viewModel.isPresentingAddSheet = true
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
         .background(Color.myBackgroundColor)
         .environment(\.colorScheme, viewModel.isDarkMode ? .dark : .light)
@@ -79,6 +99,36 @@ struct FavoritesView: View {
         }
         .refreshable {
             Task { await viewModel.loadFavoriteMeals() }
+        }
+    }
+}
+
+struct FavoritesListContent: View {
+    @StateObject var viewModel: FavoritesViewModel
+    
+    var body: some View {
+        ScrollView {
+            ForEach(0..<viewModel.meals.count, id: \.self) { index in
+                NavigationLink {
+                    MealDetailView(meal: viewModel.meals[index])
+                        .refreshable {
+                            Task { await viewModel.loadFavoriteMeals() }
+                        }
+                        .toolbar {
+                            FavoriteToolBar(
+                                viewModel: viewModel,
+                                meal: $viewModel.meals[index]
+                            )
+                        }
+                        .sheet(isPresented: $viewModel.isPresentingEditSheet) {
+                            EditMealView(meal: viewModel.meals[index]) { result in
+                                Task { await viewModel.updateMeal(result: result)}
+                            }
+                        }
+                } label: {
+                    FavoriteItemView(meal: viewModel.meals[index]).padding(.horizontal)
+                }
+            }.id(viewModel.listId)
         }
     }
 }
@@ -134,7 +184,7 @@ extension FavoritesViewModel {
                     print("Meal was successfully passed and updated")
                     
                     DispatchQueue.main.async {
-                        self.isPresentingSheet = false
+                        self.isPresentingEditSheet = false
                     }
                     
                     await loadFavoriteMeals()

@@ -42,6 +42,8 @@ class RecipeBrowserViewModel: ObservableObject {
     let filterByCategoryCommand = FilterByCategoryCommand() // TODO: add loading stages
     let filterByIngredientCommand = FilterByIngredientCommand()
     
+    let saveCommand = SaveFavoriteCommand() // last minute add on
+    
     @AppStorage("isDarkMode") var isDarkMode: Bool = true
     
     enum RecipeBrowserViewModelError: Error, LocalizedError {

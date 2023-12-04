@@ -19,7 +19,7 @@ struct FavoriteToolBar: ToolbarContent {
             Button {
                 // edit
                 Task {
-                    viewModel.isPresentingSheet = true
+                    viewModel.isPresentingEditSheet = true
                 }
             } label: {
                 Image(systemName: "square.and.pencil")
